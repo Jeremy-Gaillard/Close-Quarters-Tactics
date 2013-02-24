@@ -18,6 +18,7 @@ namespace CQT
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
+		DebugToolbox debug;
 
 		public Game1()
 		{
@@ -34,7 +35,6 @@ namespace CQT
 		protected override void Initialize()
 		{
 			// TODO: Add your initialization logic here
-
 			base.Initialize();
 		}
 
@@ -46,6 +46,7 @@ namespace CQT
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
+			debug = new DebugToolbox(spriteBatch, graphics, GraphicsDevice);
 
 			// TODO: use this.Content to load your game content here
 		}
@@ -81,9 +82,8 @@ namespace CQT
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
-
 			// TODO: Add your drawing code here
+			debug.Draw();
 
 			base.Draw(gameTime);
 		}

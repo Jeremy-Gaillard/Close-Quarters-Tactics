@@ -2,13 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace CQT.Model
 {
 	class Sprite
 	{
-		void Draw();
+		public void Draw(SpriteBatch sb)
+		{
+			throw new NotImplementedException();
+		}
 
-		void Update();
+		public void Update(GameTime gameTime)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
