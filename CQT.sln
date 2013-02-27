@@ -1,9 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQT", "CQT\CQT\CQT.csproj", "{9C55B75B-A916-4E94-AE96-189BC832A1E5}"
-EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "CQTContent", "CQT\CQTContent\CQTContent.contentproj", "{9FB2A1B5-F1CA-4363-856B-8A671E58E0FB}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Desktop
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQT", "CQT\CQT.csproj", "{77EA4FF2-A11F-49F3-8846-0ED2A457E4C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +9,10 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9C55B75B-A916-4E94-AE96-189BC832A1E5}.Debug|x86.ActiveCfg = Debug|x86
-		{9C55B75B-A916-4E94-AE96-189BC832A1E5}.Debug|x86.Build.0 = Debug|x86
-		{9C55B75B-A916-4E94-AE96-189BC832A1E5}.Release|x86.ActiveCfg = Release|x86
-		{9C55B75B-A916-4E94-AE96-189BC832A1E5}.Release|x86.Build.0 = Release|x86
-		{9FB2A1B5-F1CA-4363-856B-8A671E58E0FB}.Debug|x86.ActiveCfg = Debug|x86
-		{9FB2A1B5-F1CA-4363-856B-8A671E58E0FB}.Release|x86.ActiveCfg = Release|x86
+		{77EA4FF2-A11F-49F3-8846-0ED2A457E4C3}.Debug|x86.ActiveCfg = Debug|x86
+		{77EA4FF2-A11F-49F3-8846-0ED2A457E4C3}.Debug|x86.Build.0 = Debug|x86
+		{77EA4FF2-A11F-49F3-8846-0ED2A457E4C3}.Release|x86.ActiveCfg = Release|x86
+		{77EA4FF2-A11F-49F3-8846-0ED2A457E4C3}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
