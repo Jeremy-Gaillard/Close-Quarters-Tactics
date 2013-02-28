@@ -72,14 +72,26 @@ namespace CQT
             */
 
             env.walls.Add(new Line(100, 450, 300, 150));
-            //env.walls.Add(new Line(300, 50, 500, 300));
+            env.walls.Add(new Line(300, 50, 500, 300));
             env.walls.Add(new Line(100, 250, 200, 200));
 
+            env.walls.Add(new Line(550, 250, 700, 200));
+            env.walls.Add(new Line(500, 400, 750, 500));
 
-            //env.walls.Add(new Line());
+            for (int i = 0; i < 5; i++)
+            {
+                const float siz = 80;
+                env.walls.Add(new Line(i * siz, 600, i * siz + (siz * .8f), 500));
+                //env.walls.Add(new Line(i * 20 + 18, 700, i * 20 + 20, 800));
+                //env.walls.Add(new Line(i * siz + (siz * .8f), 500, i * siz + (siz * 1f), 600));
+            }
 
 
-            r = new BasicEffect(GraphicsDevice);
+
+                //env.walls.Add(new Line());
+
+
+                r = new BasicEffect(GraphicsDevice);
             r.VertexColorEnabled = true;
 
         }
@@ -182,6 +194,7 @@ namespace CQT
             //debug.Draw();
 
             GraphicsDevice.Clear(Color.Black);
+
             /*
             Texture2D SimpleTexture = new Texture2D(GraphicsDevice, 1, 1, false,
                 SurfaceFormat.Color);
@@ -222,27 +235,40 @@ namespace CQT
             System.Console.WriteLine(p != null);
             */
 
+            /*
+            ///////////////////////////////////////////////////////////////////////////
             foreach (Line l in env.walls)
             {
                 debug.drawLine(l);
             }
             debug.drawLine(env.viewLine, Color.Blue);
             debug.drawLine(env.viewLine2, Color.Blue);
-            foreach (Line l in env.intermediateLines)
-            {
-                debug.drawLine(l, Color.Gray, 1);
-            }
-
+            //foreach (Line l in env.intermediateLines)
+            //    debug.drawLine(l, Color.Gray, 1);
+            for (int i = 0; i < env.intermediateLines.Count(); i += 2)
+                debug.drawLine(env.intermediateLines[i], Color.Gray, 1);
             for (int i = 0; i < env.lightPolygon.Count() - 1; i++)
             {
                 debug.drawLine(new Line(env.lightPolygon[i], env.lightPolygon[i + 1]), Color.Red);
             }
-
+            ///////////////////////////////////////////////////////////////////////////
+            */
 
             spriteBatch.End();
 
+            for (int i = 0; i < env.lightPolygon.Count() - 1; i++)
+            {
+                //debug.drawLine(new Line(env.lightPolygon[i], env.lightPolygon[i + 1]), Color.Red);
+                Render(GraphicsDevice, env.viewLine.p1, env.lightPolygon[i], env.lightPolygon[i + 1], Color.Red);//Color.DarkGray);
+            }
 
 
+            spriteBatch.Begin();
+            foreach (Line l in env.walls)
+            {
+                debug.drawLine(l);
+            }
+            spriteBatch.End();
 
 
             /*
@@ -358,11 +384,7 @@ namespace CQT
             {
             }*/
             //spriteBatch.Begin();
-            for (int i = 0; i < env.lightPolygon.Count()-1; i++)
-            {
-                //debug.drawLine(new Line(env.lightPolygon[i], env.lightPolygon[i + 1]), Color.Red);
-                //Render(GraphicsDevice, env.viewLine.p1, env.lightPolygon[i], env.lightPolygon[i+1], Color.Red);
-            }
+            
             //spriteBatch.End();
 
             base.Draw(gameTime);

@@ -58,7 +58,8 @@ namespace CQT.Model
             }
             //System.Console.WriteLine("Comp "+this);
             // Return true if the fields match:
-            return (X1 == l.Value.X1) && (Y1 == l.Value.Y1) && (X2 == l.Value.X2) && (Y2 == l.Value.Y2);
+            //return (X1 == l.Value.X1) && (Y1 == l.Value.Y1) && (X2 == l.Value.X2) && (Y2 == l.Value.Y2);
+            return p1.Equals(l.Value.p1) && p2.Equals(l.Value.p2);
         }
         
         public Point? Intersect(Line l)
@@ -66,7 +67,7 @@ namespace CQT.Model
             return Utils.LineIntersect(this, l);
         }
 
-        internal Line rotate(double angle)
+        internal Line rotated(float angle)
         {
             float currentAngle = (float)Math.Atan2(Y2 - Y1, X2 - X1);
             float dist = length; //Geometry.distance(p1,p2);
@@ -90,7 +91,7 @@ namespace CQT.Model
                 Y2 - (Y2 - Y1) / Math.Abs(Y2 - Y1) * float.Epsilon
             );
         }*/
-        public Line shorten()
+        public Line shortened()
         {
             return new Line(
                 X1,
@@ -100,7 +101,7 @@ namespace CQT.Model
             );
         }
 
-        public Line resize(float newLength)
+        public Line resized(float newLength)
         {
             float ratio = newLength / length;
             return new Line(
@@ -112,8 +113,11 @@ namespace CQT.Model
         }
 
         //private const float retractEpsilon = float.Epsilon*10;
-        private const float retractEpsilon = 0;
-
+        //private const float retractEpsilon = 0;
+        //private const float retractEpsilon = float.Epsilon * 1000;
+        //private const float retractEpsilon = 0.01f;
+        private const float retractEpsilon = 0.1f;
+        
         internal Point retractedP1()
         {
             return new Point(
