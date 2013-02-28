@@ -5,9 +5,9 @@ using System.Text;
 //using Microsoft.Xna.Framework;
 //uing System.Math;
 
-namespace CQT.Model.Geometry
+namespace CQT.Model
 {
-    class Geometry
+    class Utils
     {
         public static Point? LineIntersect(Line l1, Line l2)
         {
@@ -50,5 +50,28 @@ namespace CQT.Model.Geometry
             }
             return null;
         }
+
+        public static float distance(Point p1, Point p2)
+        {
+            return (float) Math.Sqrt(Math.Pow(p2.x - p1.x, 2) + Math.Pow(p2.y - p1.y, 2));
+        }
+
+        public static float angle(Point p1, Point p2)
+        {
+            return (float) Math.Atan2(p2.y - p1.y, p2.x - p1.x);
+        }
+
+        public static float angle(Line l)
+        {
+            //return angle(l.X1, l.X2, l.X2, l.Y2);
+            return angle(l.p1, l.p2);
+        }
+
+        public static float angle(Line l, Point p)
+        {
+            //return (float) Math.Atan2(l.Y1, l.X1);
+            return angle(l.p1, p) - angle(l);
+        }
+
     }
 }

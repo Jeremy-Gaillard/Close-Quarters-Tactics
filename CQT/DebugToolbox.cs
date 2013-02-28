@@ -16,11 +16,18 @@ namespace CQT
         private GraphicsDeviceManager graphics;
         private List<Sprite> sprites = new List<Sprite>();
 
+        Texture2D SimpleTexture;
+
         public DebugToolbox(SpriteBatch sb, GraphicsDeviceManager gm, GraphicsDevice gd)
         {
             spriteBatch = sb;
             graphics = gm;
             graphicDevice = gd;
+            SimpleTexture = new Texture2D(graphicDevice, 1, 1, false,
+               SurfaceFormat.Color);
+
+            Int32[] pixel = { 0xFFFFFF }; // White. 0xFF is Red, 0xFF0000 is Blue
+            SimpleTexture.SetData<Int32>(pixel, 0, SimpleTexture.Width * SimpleTexture.Height);
         }
 
         /// <summary>
@@ -57,31 +64,35 @@ namespace CQT
         }
 
 
-        public void drawLine(Line l)
+        /*public void drawLine(Line l)
         {
             drawLine(l, Color.White);
-        }
-        public void drawLine(Line l, Color c)
+        }*/
+
+        public void drawLine(Line l, Color? c = null, int width = 2)
         {
             drawLine((int)l.X1, (int)l.Y1, (int)l.X2, (int)l.Y2, c);
         }
 
-        public void drawLine(int x1, int y1, int x2, int y2, Color c)
+        public void drawLine(int x1, int y1, int x2, int y2, Color? c = null, int width = 2)
         {
-            Texture2D SimpleTexture = new Texture2D(graphicDevice, 1, 1, false,
+            if (c == null) c = Color.White;
+
+            /*Texture2D SimpleTexture = new Texture2D(graphicDevice, 1, 1, false,
                SurfaceFormat.Color);
 
             Int32[] pixel = { 0xFFFFFF }; // White. 0xFF is Red, 0xFF0000 is Blue
             SimpleTexture.SetData<Int32>(pixel, 0, SimpleTexture.Width * SimpleTexture.Height);
+            */
 
             double length = Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
             float angle = (float)Math.Atan2(y2 - y1, x2 - x1);
 
-            int width = 2;
+            //int width = 2;
 
             //spriteBatch.Draw(SimpleTexture, new Rectangle(x1, y1, (int)(x1 + length), width), null,
             spriteBatch.Draw(SimpleTexture, new Rectangle(x1, y1, (int)(length), width), null,
-               c, angle, new Vector2(0f, 0f), SpriteEffects.None, 1f);
+               c.Value, angle, new Vector2(0f, 0f), SpriteEffects.None, 1f);
         }
 
 
