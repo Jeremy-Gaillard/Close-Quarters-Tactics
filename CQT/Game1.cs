@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using CQT.Model.Geometry;
 using Geom = CQT.Model.Geometry;
 using CQT.Model;
+using CQT.Engine;
 
 namespace CQT
 {
@@ -27,6 +28,12 @@ namespace CQT
 
         GraphicsDeviceManager g;
         BasicEffect r;
+
+        GraphicCache graphicCache;
+
+        // temp
+        Sprite testSprite;
+        // end temp
 
         public Game1()
         {
@@ -93,6 +100,10 @@ namespace CQT
 
                 r = new BasicEffect(GraphicsDevice);
             r.VertexColorEnabled = true;
+
+
+            graphicCache = new GraphicCache(Content);
+            testSprite = new Sprite(graphicCache.getTexture("test"), new Vector2(200, 50), new Vector2(100, 100));
 
         }
 
@@ -176,10 +187,10 @@ namespace CQT
                 primitiveList[i].Color = Color.White;
             */
 
-            env.update();
+            //env.update();
 
 
-
+            debug.AddSprite(testSprite);
             base.Update(gameTime);
         }
 
@@ -191,7 +202,9 @@ namespace CQT
         {
             
             // TODO: Add your drawing code here
-            //debug.Draw();
+            debug.Draw();
+            base.Draw(gameTime);
+            return;
 
             GraphicsDevice.Clear(Color.Black);
 
