@@ -10,7 +10,7 @@ namespace CQT.Engine
     class InputManager
     {
         // TODO : change the place of this enum ?
-        public static enum Commands
+        public enum Commands
         {
             MoveUp,
             MoveDown,
