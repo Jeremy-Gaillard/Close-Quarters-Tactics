@@ -23,13 +23,14 @@ namespace CQT
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        DebugToolbox debug;
+        GraphicEngine graphicEngine;
+        GraphicCache graphicCache;
+        InputManager inputManager;
         GameEnvironment env;
 
         GraphicsDeviceManager g;
         BasicEffect r;
 
-        GraphicCache graphicCache;
 
         // temp
         Sprite testSprite;
@@ -63,7 +64,7 @@ namespace CQT
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            debug = new DebugToolbox(spriteBatch, graphics, GraphicsDevice);
+            graphicEngine = new GraphicEngine(spriteBatch, graphics, GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
 
@@ -101,7 +102,7 @@ namespace CQT
                 r = new BasicEffect(GraphicsDevice);
             r.VertexColorEnabled = true;
 
-
+            inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState());
             graphicCache = new GraphicCache(Content);
             testSprite = new Sprite(graphicCache.getTexture("test"), new Vector2(200, 50), new Vector2(100, 100));
 
@@ -126,6 +127,10 @@ namespace CQT
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+            inputManager.update(Mouse.GetState(), Keyboard.GetState());
+
+            graphicEngine.moveCamera(inputManager.getMouseMovement());
+            
 
             // TODO: Add your update logic here
 
@@ -190,7 +195,7 @@ namespace CQT
             //env.update();
 
 
-            debug.AddSprite(testSprite);
+            graphicEngine.AddSprite(testSprite);
             base.Update(gameTime);
         }
 
@@ -202,7 +207,7 @@ namespace CQT
         {
             
             // TODO: Add your drawing code here
-            debug.Draw();
+            graphicEngine.Draw();
             base.Draw(gameTime);
             return;
 
@@ -267,7 +272,7 @@ namespace CQT
             ///////////////////////////////////////////////////////////////////////////
             */
 
-            spriteBatch.End();
+            /*spriteBatch.End();
 
             for (int i = 0; i < env.lightPolygon.Count() - 1; i++)
             {
@@ -279,9 +284,9 @@ namespace CQT
             spriteBatch.Begin();
             foreach (Line l in env.walls)
             {
-                debug.drawLine(l);
+                graphicEngine.drawLine(l);
             }
-            spriteBatch.End();
+            spriteBatch.End();*/
 
 
             /*
