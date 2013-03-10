@@ -125,7 +125,7 @@ namespace CQT
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
             inputManager.update(Mouse.GetState(), Keyboard.GetState());
 
@@ -194,7 +194,7 @@ namespace CQT
 
             //env.update();
 
-
+            testSprite.Update(gameTime);
             graphicEngine.AddSprite(testSprite);
             base.Update(gameTime);
         }
