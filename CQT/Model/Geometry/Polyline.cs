@@ -7,7 +7,7 @@ namespace CQT.Model.Geometry
 {
     class Polyline
     {
-        private List<Line> lineList;
+        public readonly List<Line> lineList = new List<Line>();
   
         public Polyline(List<Point> _pointList)
         {
@@ -19,6 +19,17 @@ namespace CQT.Model.Geometry
                     lineList.Add(_line);
                 }              
             }  
+        }
+
+        public string ToString()
+        {
+            string description = "";
+            for (int i = 0; i < lineList.Count; i++)
+            {
+                description = description + "\nLigne du point " + lineList[i].p1.x + "," + lineList[i].p1.y + " au point " + lineList[i].p2.x + "," + lineList[i].p2.y;
+            }
+
+            return description;
         }
     }
 }
