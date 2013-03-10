@@ -22,12 +22,26 @@ namespace CQT
 
 
 		// WEAPON MANAGEMENT
+
+		/// <summary>
+		/// Reset character equipment to basic weapons.
+		/// </summary>
 		public void equipDefaultWeapons ()
 		{
-			//TODO : create a bunch of basic weapons, give it to the dude
-			currentWeapon = null;
+			//TODO: determine what is the basic equipment, unequip old one, equip new one
+			weapons = new List<Weapon> ();
+			
+			Weapon aGun = new Weapon (Constants.WeaponType.Gun);
+
+			pickUp (aGun);
+			switchTo (aGun);
 		}
 
+		/// <summary>
+		/// Allows this character to add a weapon to his stuff.
+		/// </summary>
+		/// <param name="w">The new weapon to add</param>
+		/// <returns>true if successful</param>
 		public bool pickUp (Weapon w)
 		{
 			if (weapons.Contains (w)) {
@@ -42,6 +56,11 @@ namespace CQT
 
 		}
 
+		/// <summary>
+		/// Makes this character equip the weapon he's told.
+		/// </summary>
+		/// <param name="w">The weapon to equip</param>
+		/// <returns>true if successful, false if weapon isn't part of his equipment</param>
 		public bool switchTo (Weapon w)
 			// TODO: add switchToNext, switchToBest?
 		{
@@ -52,6 +71,11 @@ namespace CQT
 			return false;
 		}
 
+		/// <summary>
+		/// Makes this character drop the weapon he's told.
+		/// </summary>
+		/// <param name="w">The weapon to drop</param>
+		/// <returns>true if successful, false if weapon isn't part of his equipment</param>
 		public bool drop (Weapon w)
 		{
 			if (weapons.Remove (w)) {
