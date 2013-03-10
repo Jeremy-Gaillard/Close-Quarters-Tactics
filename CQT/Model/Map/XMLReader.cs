@@ -9,14 +9,15 @@ namespace CQT.Model.Map
 {
     class XMLReader
     {
-        private Point lowerLeft;
-        private Point lowerRight;
-        private Point upperLeft;
-        private Point upperRight;
-        private List<TiltedObstacle> listObstacle = new List<TiltedObstacle>();
-        private List<Polyline> listWall = new List<Polyline>();
+        public readonly Point lowerRight;
+        public readonly Point upperLeft;
+        public readonly List<Obstacle> listObstacle = new List<Obstacle>();
+        public readonly List<Wall> listWall = new List<Wall>();
 
-
+        /// <summary>
+        /// Constructor and parser
+        /// </summary>
+        /// <param name="map">Path for the xml map</param>
         public XMLReader(string map)
         {
             XElement mapDocument = XElement.Load(map);
@@ -33,23 +34,15 @@ namespace CQT.Model.Map
                         //loop to define the frame
                         float x = (float)frameElement.Attribute("x");
                         float y = (float)frameElement.Attribute("y");
-
-                        if (frameElement.Name == "lowerLeft")
-                        {
-                            lowerLeft = new Point(x, y);
-                        }
-                        else if (frameElement.Name == "lowerRight")
+ 
+                        if (frameElement.Name == "lowerRight")
                         {
                             lowerRight = new Point(x, y);
                         }
                         else if (frameElement.Name == "upperLeft")
                         {
                             upperLeft = new Point(x, y);
-                        }
-                        else if (frameElement.Name == "upperRight")
-                        {
-                            upperRight = new Point(x, y);
-                        }                    
+                        }                 
                     }
                 }
 
@@ -73,7 +66,7 @@ namespace CQT.Model.Map
                                 pointList.Add(point);
                             }
                             Polyline polyline = new Polyline(pointList);
-                            TiltedObstacle obstacle = new TiltedObstacle(polyline, height);
+                            Obstacle obstacle = new Obstacle(polyline, height);
                             listObstacle.Add(obstacle);
                             
                         }
@@ -93,7 +86,8 @@ namespace CQT.Model.Map
                                 pointListWall.Add(point);
                             }
                             Polyline polyline = new Polyline(pointListWall);
-                            listWall.Add(polyline);
+                            Wall wall = new Wall(polyline);
+                            listWall.Add(wall);
                         }
                     }
                     

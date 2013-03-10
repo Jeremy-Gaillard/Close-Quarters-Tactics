@@ -75,6 +75,7 @@ namespace CQT
             XMLReader xmlTest = new XMLReader("../../../map.xml");
 
             // TODO: Add your initialization logic here
+            Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
             base.Initialize();
             
         }
