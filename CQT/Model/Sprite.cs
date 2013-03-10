@@ -15,11 +15,11 @@ namespace CQT.Model
         protected Single rotation;
         protected Vector2 spriteOrigin; // middle of the sprite
 
-        public Sprite(Texture2D texture, Vector2 position, Vector2 size)
+        public Sprite(Texture2D _texture, Vector2 _position, Vector2 _size)
         {
-            this.texture = texture;
-            this.position = position;
-            this.size = size;
+            texture = _texture;
+            position = _position;
+            size = _size;
             rotation = 0f;
             spriteOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
         }

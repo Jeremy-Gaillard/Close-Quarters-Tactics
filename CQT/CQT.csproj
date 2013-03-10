@@ -42,11 +42,14 @@
     <Compile Include="Engine\InputManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Model\Environment.cs" />
+    <Compile Include="Model\Geometry\Polyline.cs" />
     <Compile Include="Model\Geometry\Utils.cs" />
     <Compile Include="Model\Geometry\Line.cs" />
     <Compile Include="Model\Geometry\Point.cs" />
     <Compile Include="Model\Geometry\View.cs" />
     <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\Map\TiltedObstacle.cs" />
+    <Compile Include="Model\Map\XMLReader.cs" />
     <Compile Include="Model\Sprite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,6 +68,7 @@
     <Reference Include="Lidgren.Network">
       <HintPath>$(MSBuildExtensionsPath)\..\MonoGame\v3.0\Assemblies\WindowsGL\Lidgren.Network.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Tao.Sdl">
       <HintPath>$(MSBuildExtensionsPath)\..\MonoGame\v3.0\Assemblies\WindowsGL\Tao.Sdl.dll</HintPath>
     </Reference>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -9,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using CQT.Model.Geometry;
+using CQT.Model.Map;
 using Geom = CQT.Model.Geometry;
 using CQT.Model;
 using CQT.Engine;
@@ -52,8 +54,29 @@ namespace CQT
         /// </summary>
         protected override void Initialize()
         {
+            //Test for Polyline
+
+           /* List<Model.Point> points = new List<Model.Point>();
+
+            Model.Point point0 = new Model.Point(0,0);
+            Model.Point point1 = new Model.Point(1,1);
+            Model.Point point2 = new Model.Point(2,2);
+            Model.Point point3 = new Model.Point(3,3);
+
+            points.Add(point0);
+            points.Add(point1);
+            points.Add(point2);
+            points.Add(point3);
+
+            Polyline polyline = new Polyline(points);
+            System.Console.Write(polyline.ToString());*/
+
+            //file in CQT
+            XMLReader xmlTest = new XMLReader("../../../map.xml");
+
             // TODO: Add your initialization logic here
             base.Initialize();
+            
         }
 
         /// <summary>

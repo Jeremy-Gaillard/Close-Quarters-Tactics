@@ -9,17 +9,16 @@ namespace CQT.Model
     class Player
     {
         protected String name;
-        // TODO : change sprite to character
-        protected Sprite character = null;
+        protected Character character = null;
 
-        public Player(String name)
+        public Player(String _name)
         {
-            this.name = name;
+            name = _name;
         }
 
-        public void setCharacter(Sprite character)
+        public void setCharacter(Character _character)
         {
-            this.character = character;
+            character = _character;
         }
     }
 }
