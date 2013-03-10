@@ -40,10 +40,13 @@
     <Compile Include="Engine\GraphicCache.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Model\Environment.cs" />
+    <Compile Include="Model\Geometry\Polyline.cs" />
     <Compile Include="Model\Geometry\Utils.cs" />
     <Compile Include="Model\Geometry\Line.cs" />
     <Compile Include="Model\Geometry\Point.cs" />
     <Compile Include="Model\Geometry\View.cs" />
+    <Compile Include="Model\Map\TiltedObstacle.cs" />
+    <Compile Include="Model\Map\XMLReader.cs" />
     <Compile Include="Model\Sprite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
