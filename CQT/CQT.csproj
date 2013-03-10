@@ -46,6 +46,7 @@
     <Compile Include="Model\Geometry\Line.cs" />
     <Compile Include="Model\Geometry\Point.cs" />
     <Compile Include="Model\Geometry\View.cs" />
+    <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Sprite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
