@@ -20,10 +20,10 @@ namespace CQT.Model
             this.size = size;
         }
 
-        public void Draw(SpriteBatch sb)
+        public void Draw(SpriteBatch sb, Vector2 cameraOffset)
         {
-            Rectangle bounds = new Rectangle((int)Math.Round(position.X - size.X / 2), 
-                (int)Math.Round(position.Y - size.Y / 2), (int)Math.Round(size.X), (int)Math.Round(size.Y));
+            Rectangle bounds = new Rectangle((int)Math.Round(cameraOffset.X + position.X - size.X / 2),
+                (int)Math.Round(cameraOffset.Y + position.Y - size.Y / 2), (int)Math.Round(size.X), (int)Math.Round(size.Y));
             sb.Draw(texture, bounds, Color.White);
         }
 
