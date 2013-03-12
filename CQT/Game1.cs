@@ -83,7 +83,7 @@ namespace CQT
                 const float siz = 80;
                 env.walls.Add(new Line(i * siz, 600, i * siz + (siz * .8f), 500));
                 //env.walls.Add(new Line(i * 20 + 18, 700, i * 20 + 20, 800));
-                //env.walls.Add(new Line(i * siz + (siz * .8f), 500, i * siz + (siz * 1f), 600));
+                env.walls.Add(new Line(i * siz + (siz * .8f), 500, i * siz + (siz * 1f), 600));
             }
 
 

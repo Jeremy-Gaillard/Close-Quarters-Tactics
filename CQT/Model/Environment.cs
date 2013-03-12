@@ -211,8 +211,8 @@ namespace CQT.Model
             Line? wall = CollideWalls(ref left, ignoredWall);
             if (wall != null)
             {
-                Point p1 = wall.Value.retractedP1();
-                Point p2 = wall.Value.retractedP2();
+                Point p1 = wall.Value.p1;
+                Point p2 = wall.Value.p2;
                 Point p = Utils.angle(left, p1) > Utils.angle(left, p2) ? p1 : p2;
                 if (Utils.angle(left.p1, p) < right.angle)
                 {
@@ -260,10 +260,12 @@ namespace CQT.Model
                 //Console.WriteLine(left.p2.Equals(p1) + " " + left.p2.Equals(p2));
 
                 //Point p = (Utils.normalizedAngleDifference(Utils.angle(left, p1), Utils.angle(left, p2)) < 0 && !left.p2.Equals(p1)) ? p1 : p2;
-                Point p;
+                /*Point p;
                 if (left.p2.Equals(p1)) p = p2;
                 else if (left.p2.Equals(p2)) p = p1;
-                else p = Utils.normalizedAngleDifference(Utils.angle(left, p1), Utils.angle(left, p2)) < 0 ? p1 : p2;
+                else p = Utils.normalizedAngleDifference(Utils.angle(left, p1), Utils.angle(left, p2)) < 0 ? p1 : p2;*/
+                Point p = Utils.normalizedAngleDifference(Utils.angle(left, p1), Utils.angle(left, p2)) < 0 ? p1 : p2;
+                if (left.p2.Equals(p)) return ret;
 
                 //Console.WriteLine(Utils.normalizedAngleDifference(Utils.angle(left, p1), Utils.angle(left, p2)));
                 
@@ -314,6 +316,7 @@ namespace CQT.Model
                 //Point p2 = wall.Value.retractedP2();
                 //Point p = Utils.angle(right, p1) < Utils.angle(right, p2) ? p1 : p2;
                 Point p = Utils.normalizedAngleDifference(Utils.angle(right, p2), Utils.angle(right, p1)) < 0 ? p1 : p2;
+                if (right.p2.Equals(p)) return ret;
                 
                 //if (Utils.angle(right.p1, p) > left.angle) //Utils.angle(right))
                 if (Utils.normalizedAngleDifference(left.angle, Utils.angle(right.p1, p)) > 0)
