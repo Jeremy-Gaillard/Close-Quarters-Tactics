@@ -49,6 +49,6 @@ namespace CQT.Model.Map
         public List<Wall> getWalls()
         {
             return listWall;
-
+        }
     }
 }
