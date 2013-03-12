@@ -57,7 +57,7 @@ namespace CQT
             graphicDevice.Clear(Color.White);
             foreach (Sprite s in sprites)
             {
-                s.Draw(spriteBatch);
+                s.Draw(spriteBatch, new Vector2(0,0));
             }
             spriteBatch.End();
             sprites.Clear();

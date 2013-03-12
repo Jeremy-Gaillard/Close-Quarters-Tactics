@@ -9,14 +9,32 @@ namespace CQT.Model
 {
     class Sprite
     {
-        public void Draw(SpriteBatch sb)
+        protected Texture2D texture;
+        protected Vector2 position;
+        protected Vector2 size;
+        protected Single rotation;
+        protected Vector2 spriteOrigin; // middle of the sprite
+
+        public Sprite(Texture2D _texture, Vector2 _position, Vector2 _size)
         {
-            throw new NotImplementedException();
+            texture = _texture;
+            position = _position;
+            size = _size;
+            rotation = 0f;
+            spriteOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
+        }
+
+        public void Draw(SpriteBatch sb, Vector2 cameraOffset)
+        {
+            Rectangle bounds = new Rectangle((int)Math.Round(cameraOffset.X + position.X),
+                (int)Math.Round(cameraOffset.Y + position.Y), (int)Math.Round(size.X), (int)Math.Round(size.Y));
+
+            sb.Draw(texture, bounds, null, Color.White, rotation, spriteOrigin, SpriteEffects.None, 0);
         }
 
         public void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+
         }
     }
 }

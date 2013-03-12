@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -9,8 +10,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using CQT.Model.Geometry;
+using CQT.Model.Map;
 using Geom = CQT.Model.Geometry;
 using CQT.Model;
+using CQT.Engine;
 
 namespace CQT
 {
@@ -22,11 +25,18 @@ namespace CQT
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        DebugToolbox debug;
+        GraphicEngine graphicEngine;
+        GraphicCache graphicCache;
+        InputManager inputManager;
         GameEnvironment env;
 
         GraphicsDeviceManager g;
         BasicEffect r;
+
+
+        // temp
+        Sprite testSprite;
+        // end temp
 
         public Game1()
         {
@@ -44,8 +54,30 @@ namespace CQT
         /// </summary>
         protected override void Initialize()
         {
+            //Test for Polyline
+
+           /* List<Model.Point> points = new List<Model.Point>();
+
+            Model.Point point0 = new Model.Point(0,0);
+            Model.Point point1 = new Model.Point(1,1);
+            Model.Point point2 = new Model.Point(2,2);
+            Model.Point point3 = new Model.Point(3,3);
+
+            points.Add(point0);
+            points.Add(point1);
+            points.Add(point2);
+            points.Add(point3);
+
+            Polyline polyline = new Polyline(points);
+            System.Console.Write(polyline.ToString());*/
+
+            //file in CQT
+            XMLReader xmlTest = new XMLReader("../../../map.xml");
+
             // TODO: Add your initialization logic here
+            Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
             base.Initialize();
+            
         }
 
         /// <summary>
@@ -56,7 +88,7 @@ namespace CQT
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            debug = new DebugToolbox(spriteBatch, graphics, GraphicsDevice);
+            graphicEngine = new GraphicEngine(spriteBatch, graphics, GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
 
@@ -94,6 +126,10 @@ namespace CQT
                 r = new BasicEffect(GraphicsDevice);
             r.VertexColorEnabled = true;
 
+            inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState());
+            graphicCache = new GraphicCache(Content);
+            testSprite = new Sprite(graphicCache.getTexture("test"), new Vector2(200, 50), new Vector2(100, 100));
+
         }
 
         /// <summary>
@@ -113,8 +149,12 @@ namespace CQT
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
+            inputManager.update(Mouse.GetState(), Keyboard.GetState());
+
+            graphicEngine.moveCamera(inputManager.getMouseMovement());
+            
 
             // TODO: Add your update logic here
 
@@ -176,10 +216,10 @@ namespace CQT
                 primitiveList[i].Color = Color.White;
             */
 
-            env.update();
+            //env.update();
 
-
-
+            testSprite.Update(gameTime);
+            graphicEngine.AddSprite(testSprite);
             base.Update(gameTime);
         }
 
@@ -191,7 +231,9 @@ namespace CQT
         {
             
             // TODO: Add your drawing code here
-            //debug.Draw();
+            graphicEngine.Draw();
+            base.Draw(gameTime);
+            return;
 
             GraphicsDevice.Clear(Color.Black);
 
@@ -254,7 +296,7 @@ namespace CQT
             ///////////////////////////////////////////////////////////////////////////
             */
 
-            spriteBatch.End();
+            /*spriteBatch.End();
 
             for (int i = 0; i < env.lightPolygon.Count() - 1; i++)
             {
@@ -266,9 +308,9 @@ namespace CQT
             spriteBatch.Begin();
             foreach (Line l in env.walls)
             {
-                debug.drawLine(l);
+                graphicEngine.drawLine(l);
             }
-            spriteBatch.End();
+            spriteBatch.End();*/
 
 
             /*
