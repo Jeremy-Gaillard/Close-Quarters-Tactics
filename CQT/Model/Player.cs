@@ -10,6 +10,13 @@ namespace CQT.Model
     {
         protected String name;
         protected Character character = null;
+        public enum Commands
+        {
+            MoveForward,
+            MoveBackwards,
+            MoveLeft,
+            MoveRight
+        }
 
         public Player(String _name)
         {

@@ -36,5 +36,15 @@ namespace CQT.Model
         {
 
         }
+
+        public void setRotation(Single _rotation)
+        {
+            rotation = _rotation;
+        }
+
+        public Vector2 getPosition()
+        {
+            return position;
+        }
     }
 }

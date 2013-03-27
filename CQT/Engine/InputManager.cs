@@ -4,19 +4,14 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using CQT.Model;
 
 namespace CQT.Engine
 {
     class InputManager
     {
         // TODO : change the place of this enum ?
-        public enum Commands
-        {
-            MoveUp,
-            MoveDown,
-            MoveLeft,
-            MoveRight
-        }
+        
         protected MouseState previousMouseState;
         protected KeyboardState previousKeyboardState;
 
@@ -37,7 +32,7 @@ namespace CQT.Engine
         /// </summary>
         /// <param name="newMouseState">The new mouse state</param>
         /// <param name="newKeyboardState">The new keyboard state</param>
-        public void update(MouseState newMouseState, KeyboardState newKeyboardState)
+        public void Update(MouseState newMouseState, KeyboardState newKeyboardState)
         {
             previousKeyboardState = currentKeyboardState;
             previousMouseState = currentMouseState;
@@ -59,29 +54,34 @@ namespace CQT.Engine
         /// Gets the list of commands issued by the player
         /// </summary>
         /// <returns>The list of the player's commands</returns>
-        public List<Commands> getCommands()
+        public List<CQT.Model.Player.Commands> getCommands()
         {
-            List<Commands> commands = new List<Commands>();
+            List<CQT.Model.Player.Commands> commands = new List<CQT.Model.Player.Commands>();
 
             // TODO : mutually exclude move left/right up/down ?
             if(currentKeyboardState.IsKeyDown(Keys.Z))
             {
-                commands.Add(Commands.MoveUp);
+                commands.Add(CQT.Model.Player.Commands.MoveForward);
             }
             if(currentKeyboardState.IsKeyDown(Keys.S))
             {
-                commands.Add(Commands.MoveDown);
+                commands.Add(CQT.Model.Player.Commands.MoveBackwards);
             }
             if(currentKeyboardState.IsKeyDown(Keys.Q))
             {
-                commands.Add(Commands.MoveLeft);
+                commands.Add(CQT.Model.Player.Commands.MoveLeft);
             }
             if(currentKeyboardState.IsKeyDown(Keys.D))
             {
-                commands.Add(Commands.MoveRight);
+                commands.Add(CQT.Model.Player.Commands.MoveRight);
             }
 
             return commands;
+        }
+
+        public Vector2 getMousePosition()
+        {
+            return new Vector2(currentMouseState.X, currentMouseState.Y);
         }
     }
 }

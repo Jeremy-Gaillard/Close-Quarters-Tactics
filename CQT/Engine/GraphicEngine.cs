@@ -8,13 +8,20 @@ using CQT.Model;
 
 namespace CQT.Engine
 {
-    class GraphicEngine
+    class GraphicEngine : PositionWatcher
     {
         protected SpriteBatch spriteBatch;
         protected GraphicsDevice graphicDevice;
         protected GraphicsDeviceManager graphics;
         protected List<Sprite> sprites = new List<Sprite>();
         protected Vector2 cameraPosition;   // position relative to top-left corner of the screen
+
+        protected PositionNotifier watchedObject;
+
+        public void notifyMovement(Vector2 movement)
+        {
+            moveCamera(-movement);
+        }
 
         public GraphicEngine(SpriteBatch sb, GraphicsDeviceManager gm, GraphicsDevice gd)
         {
@@ -27,6 +34,19 @@ namespace CQT.Engine
         public void setCameraCenter(Vector2 position)
         {
             cameraPosition = position;
+        }
+
+        public void setFollowedCharacter(Character character)
+        {
+            if (watchedObject != null)
+            {
+                watchedObject.unWatch(this);
+            }
+            watchedObject = character;
+            watchedObject.watch(this);
+            cameraPosition = -character.getPosition();
+            cameraPosition.X += graphics.PreferredBackBufferWidth / 2;
+            cameraPosition.Y += graphics.PreferredBackBufferHeight / 2;
         }
 
         public void moveCamera(Vector2 offset)
@@ -65,6 +85,11 @@ namespace CQT.Engine
             }
             spriteBatch.End();
             sprites.Clear();
+        }
+
+        public Vector2 getCameraPosition()
+        {
+            return cameraPosition;
         }
     }
 }

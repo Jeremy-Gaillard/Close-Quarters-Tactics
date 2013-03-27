@@ -6,18 +6,33 @@ using System.Collections.Generic;
 
 namespace CQT
 {
-	class Character : Sprite
+	class Character : Sprite, PositionNotifier
 	{
+        public enum MovementDirection
+        {
+            Forwards,
+            ForwardsLeft,
+            Left,
+            BackwardsLeft,
+            Backwards,
+            BackwardsRight,
+            Right,
+            ForwardsRight
+        }
+
+        protected List<PositionWatcher> positionWatchers = new List<PositionWatcher>();
+
 		protected List<Weapon> weapons;
 		protected Weapon currentWeapon;
 
+        protected Single speed = 1.0f;  // TODO : use const
 		protected uint hitPoints;
 
 		public Character (Texture2D _texture, Vector2 _position, Vector2 _size)
 			: base(_texture, _position, _size)
 		{
 			hitPoints = Constants.MAX_HITPOINTS;
-			equipDefaultWeapons ();
+			//equipDefaultWeapons ();
 		}
 
 
@@ -84,5 +99,82 @@ namespace CQT
 			}
 			return false;
 		}
+
+        public void Update(GameTime gameTime, List<Player.Commands> commands)
+        {
+            if (commands.Contains(Player.Commands.MoveBackwards))
+            {
+                move(gameTime, MovementDirection.Backwards);
+            }
+            if (commands.Contains(Player.Commands.MoveForward))
+            {
+                move(gameTime, MovementDirection.Forwards);
+            }
+            if (commands.Contains(Player.Commands.MoveLeft))
+            {
+                move(gameTime, MovementDirection.Left);
+            }
+            if (commands.Contains(Player.Commands.MoveRight))
+            {
+                move(gameTime, MovementDirection.Right);
+            }
+        }
+
+        protected void move(GameTime gameTime, MovementDirection direction)
+        {
+            Console.Out.WriteLine("moving ! " + direction.ToString() );
+            Vector2 movement;
+            Single cos = (Single)Math.Cos(rotation);
+            Vector2 directionVector = new Vector2();
+            switch (direction)
+            {
+                case MovementDirection.Forwards:
+                    directionVector.X = (Single)Math.Cos(rotation);
+                    directionVector.Y = (Single)Math.Sin(rotation);
+                    break;
+                // +PI
+                case MovementDirection.Backwards: 
+                    directionVector.X = -(Single)Math.Cos(rotation); 
+                    directionVector.Y = -(Single)Math.Sin(rotation);
+                    break;
+                // +PI/2
+                case MovementDirection.Left:
+                    directionVector.X = -(Single)Math.Sin(rotation);
+                    directionVector.Y = (Single)Math.Cos(rotation);
+                    break;
+                // -PI/2
+                case MovementDirection.Right:
+                    directionVector.X = (Single)Math.Sin(rotation);
+                    directionVector.Y = -(Single)Math.Cos(rotation);
+                    break;
+                case MovementDirection.BackwardsLeft: directionVector *= -1; break;
+                case MovementDirection.BackwardsRight: directionVector *= -1; break;
+                case MovementDirection.ForwardsLeft: directionVector *= -1; break;
+                case MovementDirection.ForwardsRight: directionVector *= -1; break;
+            }
+            Console.Out.WriteLine(directionVector);
+            movement = directionVector * gameTime.ElapsedGameTime.Milliseconds * speed;
+            Console.Out.WriteLine(movement);
+            position += movement;
+            notifyMovement(movement);
+        }
+
+        public void watch(PositionWatcher watcher)
+        {
+            positionWatchers.Add(watcher);
+        }
+
+        public void unWatch(PositionWatcher watcher)
+        {
+            positionWatchers.Remove(watcher);
+        }
+
+        protected void notifyMovement(Vector2 movement)
+        {
+            foreach (PositionWatcher pw in positionWatchers)
+            {
+                pw.notifyMovement(movement);
+            }
+        }
 	}
 }

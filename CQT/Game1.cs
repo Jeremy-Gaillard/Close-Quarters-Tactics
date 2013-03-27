@@ -35,6 +35,7 @@ namespace CQT
 
 
         // temp
+        Character testCharacter;
         Sprite testSprite;
         // end temp
 
@@ -128,8 +129,9 @@ namespace CQT
 
             inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState());
             graphicCache = new GraphicCache(Content);
-            testSprite = new Sprite(graphicCache.getTexture("test"), new Vector2(200, 50), new Vector2(100, 100));
-
+            testCharacter = new Character(graphicCache.getTexture("test"), new Vector2(200, 100), new Vector2(100, 100));
+            testSprite = new Character(graphicCache.getTexture("test"), new Vector2(50, 200), new Vector2(100, 100));
+            graphicEngine.setFollowedCharacter(testCharacter);
         }
 
         /// <summary>
@@ -151,9 +153,9 @@ namespace CQT
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
-            inputManager.update(Mouse.GetState(), Keyboard.GetState());
+            inputManager.Update(Mouse.GetState(), Keyboard.GetState());
 
-            graphicEngine.moveCamera(inputManager.getMouseMovement());
+            //graphicEngine.moveCamera(inputManager.getMouseMovement());
             
 
             // TODO: Add your update logic here
@@ -217,8 +219,10 @@ namespace CQT
             */
 
             //env.update();
-
-            testSprite.Update(gameTime);
+            testCharacter.setRotation((float)Math.Atan2(inputManager.getMousePosition().Y-graphicEngine.getCameraPosition().Y-testCharacter.getPosition().Y,
+                inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - testCharacter.getPosition().X));
+            testCharacter.Update(gameTime, inputManager.getCommands());
+            graphicEngine.AddSprite(testCharacter);
             graphicEngine.AddSprite(testSprite);
             base.Update(gameTime);
         }

@@ -41,6 +41,8 @@
     <Compile Include="Engine\GraphicEngine.cs" />
     <Compile Include="Engine\InputManager.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Model\PositionNotifier.cs" />
+    <Compile Include="Model\PositionWatcher.cs" />
     <Compile Include="Model\Environment.cs" />
     <Compile Include="Model\Geometry\Polyline.cs" />
     <Compile Include="Model\Geometry\Utils.cs" />
