@@ -14,7 +14,7 @@ namespace CQT
         private SpriteBatch spriteBatch;
         private GraphicsDevice graphicDevice;
         private GraphicsDeviceManager graphics;
-        private List<Sprite> sprites = new List<Sprite>();
+        private List<Entity> sprites = new List<Entity>();
 
         Texture2D SimpleTexture;
 
@@ -34,7 +34,7 @@ namespace CQT
         /// Adds a sprite to be drawn on next Draw() call
         /// </summary>
         /// <param name="s">The sprite to draw</param>
-        public void AddSprite(Sprite s)
+        public void AddSprite(Entity s)
         {
             sprites.Add(s);
         }
@@ -43,7 +43,7 @@ namespace CQT
         /// Adds a sprite list to be drawn on next Draw() call
         /// </summary>
         /// <param name="sl">The sprites to draw</param>
-        public void AddSprite(List<Sprite> sl)
+        public void AddSprite(List<Entity> sl)
         {
             sprites.AddRange(sl);
         }
@@ -51,17 +51,17 @@ namespace CQT
         /// <summary>
         /// Draws the sprite previously added to the sprite list
         /// </summary>
-        public void Draw()
+        /*public void Draw()
         {
             spriteBatch.Begin();
             graphicDevice.Clear(Color.White);
-            foreach (Sprite s in sprites)
+            foreach (Entity s in sprites)
             {
                 s.Draw(spriteBatch, new Vector2(0,0));
             }
             spriteBatch.End();
             sprites.Clear();
-        }
+        }*/
 
 
         /*public void drawLine(Line l)

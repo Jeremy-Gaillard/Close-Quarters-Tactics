@@ -36,7 +36,7 @@ namespace CQT
 
         // temp
         Character testCharacter;
-        Sprite testSprite;
+        Entity testSprite;
         // end temp
 
         public Game1()
@@ -129,7 +129,7 @@ namespace CQT
 
             inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState());
             graphicCache = new GraphicCache(Content);
-            testCharacter = new Character(graphicCache.getTexture("test"), new Vector2(200, 100), new Vector2(100, 100));
+            testCharacter = new Character(graphicCache.getTexture("Bonhomme"), new Vector2(200, 100), new Vector2(100, 100));
             testSprite = new Character(graphicCache.getTexture("test"), new Vector2(50, 200), new Vector2(100, 100));
             graphicEngine.setFollowedCharacter(testCharacter);
         }
@@ -222,8 +222,8 @@ namespace CQT
             testCharacter.setRotation((float)Math.Atan2(inputManager.getMousePosition().Y-graphicEngine.getCameraPosition().Y-testCharacter.getPosition().Y,
                 inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - testCharacter.getPosition().X));
             testCharacter.Update(gameTime, inputManager.getCommands());
-            graphicEngine.AddSprite(testCharacter);
-            graphicEngine.AddSprite(testSprite);
+            graphicEngine.AddEntity(testCharacter);
+            graphicEngine.AddEntity(testSprite);
             base.Update(gameTime);
         }
 

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using CQT.Model;
+using CQT.View;
 
 namespace CQT.Engine
 {
@@ -13,7 +15,9 @@ namespace CQT.Engine
         protected SpriteBatch spriteBatch;
         protected GraphicsDevice graphicDevice;
         protected GraphicsDeviceManager graphics;
-        protected List<Sprite> sprites = new List<Sprite>();
+        protected EntityView entityView = new EntityView();
+
+        protected List<Entity> entities = new List<Entity>();
         protected Vector2 cameraPosition;   // position relative to top-left corner of the screen
 
         protected PositionNotifier watchedObject;
@@ -55,36 +59,36 @@ namespace CQT.Engine
         }
 
         /// <summary>
-        /// Adds a sprite to be drawn on next Draw() call
+        /// Adds an entity to be drawn on next Draw() call
         /// </summary>
-        /// <param name="s">The sprite to draw</param>
-        public void AddSprite(Sprite s)
+        /// <param name="s">The entity to draw</param>
+        public void AddEntity(Entity e)
         {
-            sprites.Add(s);
+            entities.Add(e);
         }
 
         /// <summary>
-        /// Adds a sprite list to be drawn on next Draw() call
+        /// Adds an entity list to be drawn on next Draw() call
         /// </summary>
-        /// <param name="sl">The sprites to draw</param>
-        public void AddSprite(List<Sprite> sl)
+        /// <param name="sl">The entities to draw</param>
+        public void AddEntities(List<Entity> el)
         {
-            sprites.AddRange(sl);
+            entities.AddRange(el);
         }
 
         /// <summary>
-        /// Draws the sprite previously added to the sprite list
+        /// Draws the entities previously added to the entity list
         /// </summary>
         public void Draw()
         {
             spriteBatch.Begin();
             graphicDevice.Clear(Color.White);
-            foreach (Sprite s in sprites)
+            foreach (Entity e in entities)
             {
-                s.Draw(spriteBatch, cameraPosition);
+                entityView.Draw(spriteBatch, cameraPosition,e);
             }
             spriteBatch.End();
-            sprites.Clear();
+            entities.Clear();
         }
 
         public Vector2 getCameraPosition()

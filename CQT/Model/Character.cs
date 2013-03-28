@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CQT
 {
-	class Character : Sprite, PositionNotifier
+	class Character : Entity, PositionNotifier
 	{
         public enum MovementDirection
         {
@@ -137,12 +137,12 @@ namespace CQT
                     directionVector.X = -(Single)Math.Cos(rotation); 
                     directionVector.Y = -(Single)Math.Sin(rotation);
                     break;
-                // +PI/2
+                // -PI/2
                 case MovementDirection.Left:
                     directionVector.X = (Single)Math.Sin(rotation);
                     directionVector.Y = -(Single)Math.Cos(rotation);
                     break;
-                // -PI/2
+                // +PI/2
                 case MovementDirection.Right:
                     directionVector.X = -(Single)Math.Sin(rotation);
                     directionVector.Y = (Single)Math.Cos(rotation);
