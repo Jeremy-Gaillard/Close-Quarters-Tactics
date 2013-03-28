@@ -122,7 +122,7 @@ namespace CQT
 
         protected void move(GameTime gameTime, MovementDirection direction)
         {
-            Console.Out.WriteLine("moving ! " + direction.ToString() );
+            //Console.Out.WriteLine("moving ! " + direction.ToString() );
             Vector2 movement;
             Single cos = (Single)Math.Cos(rotation);
             Vector2 directionVector = new Vector2();
@@ -139,22 +139,22 @@ namespace CQT
                     break;
                 // +PI/2
                 case MovementDirection.Left:
-                    directionVector.X = -(Single)Math.Sin(rotation);
-                    directionVector.Y = (Single)Math.Cos(rotation);
+                    directionVector.X = (Single)Math.Sin(rotation);
+                    directionVector.Y = -(Single)Math.Cos(rotation);
                     break;
                 // -PI/2
                 case MovementDirection.Right:
-                    directionVector.X = (Single)Math.Sin(rotation);
-                    directionVector.Y = -(Single)Math.Cos(rotation);
+                    directionVector.X = -(Single)Math.Sin(rotation);
+                    directionVector.Y = (Single)Math.Cos(rotation);
                     break;
                 case MovementDirection.BackwardsLeft: directionVector *= -1; break;
                 case MovementDirection.BackwardsRight: directionVector *= -1; break;
                 case MovementDirection.ForwardsLeft: directionVector *= -1; break;
                 case MovementDirection.ForwardsRight: directionVector *= -1; break;
             }
-            Console.Out.WriteLine(directionVector);
+            //Console.Out.WriteLine(directionVector);
             movement = directionVector * gameTime.ElapsedGameTime.Milliseconds * speed;
-            Console.Out.WriteLine(movement);
+            //Console.Out.WriteLine(movement);
             position += movement;
             notifyMovement(movement);
         }
