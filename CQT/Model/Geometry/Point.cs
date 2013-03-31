@@ -14,6 +14,16 @@ namespace CQT.Model
             this.y = y;
         }
 
+        public static bool operator ==(Point p1, Point p2)
+        {
+            return (p1.x == p2.x && p1.y == p2.y);
+        }
+
+        public static bool operator !=(Point p1, Point p2)
+        {
+            return (p1.x != p2.x || p1.y != p2.y);
+        }
+
         public override bool Equals(System.Object obj)
         {
             // If parameter is null return false.

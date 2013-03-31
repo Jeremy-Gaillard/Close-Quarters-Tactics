@@ -11,12 +11,7 @@ namespace CQT.View
 {
     class EntityView
     {
-        public EntityView()
-        {
-
-        }
-
-        public void Draw(SpriteBatch sb, Vector2 cameraOffset, Entity entity)
+        public static void Draw(SpriteBatch sb, Vector2 cameraOffset, Entity entity)
         {
             Vector2 position = entity.getPosition();
             Vector2 size = entity.getSize();
