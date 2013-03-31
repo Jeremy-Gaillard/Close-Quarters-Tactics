@@ -147,6 +147,12 @@ namespace CQT.Engine
             }
         }
 
+        /// <summary>
+        /// Adds a polygon that will be drawn on the next Draw() call.
+        /// A polygon is a filled shape.
+        /// </summary>
+        /// <param name="pl">The polyline that defines the polygon's border. Must not be closed</param>
+        /// <param name="color">The filling color</param>
         public void AddPolygon(Polyline pl, Color color)
         {
             List<Adjacency> pointList = new List<Adjacency>();
@@ -262,6 +268,14 @@ namespace CQT.Engine
             }
         }
 
+        /// <summary>
+        /// Adds a triangle that will be drawn on the next Draw() call.
+        /// A triangle is a filled shape.
+        /// </summary>
+        /// <param name="point1">The first point of the triangle</param>
+        /// <param name="point2">The seconde point of the triangle</param>
+        /// <param name="point3">The third point of the triangle</param>
+        /// <param name="color">The filling color</param>
         public void AddTriangle(Vector2 point1, Vector2 point2, Vector2 point3, Color color)
         {
             // partial cross product
@@ -280,6 +294,17 @@ namespace CQT.Engine
             triangles.Add(new VertexPositionColor(ToVector3(point3), color));
         }
 
+        /// <summary>
+        /// Adds a triangle that will be drawn on the next Draw() call.
+        /// A triangle is a filled shape.
+        /// The triangle is filled with a gradiant color between the three specified colors.
+        /// </summary>
+        /// <param name="point1">The first point of the triangle</param>
+        /// <param name="point2">The seconde point of the triangle</param>
+        /// <param name="point3">The third point of the triangle</param>
+        /// <param name="color1">The color emanating from the first point</param>
+        /// <param name="color2">The color emanating from the second point</param>
+        /// <param name="color3">The color emanating from the third point</param>
         public void AddTriangle(Vector2 point1, Vector2 point2, Vector2 point3, Color color1, Color color2, Color color3)
         {
             // partial cross product
@@ -298,6 +323,14 @@ namespace CQT.Engine
             triangles.Add(new VertexPositionColor(ToVector3(point3), color3));
         }
 
+        /// <summary>
+        /// Adds a triangle that will be drawn on the next Draw() call.
+        /// A triangle is a filled shape.
+        /// </summary>
+        /// <param name="point1">The first point of the triangle</param>
+        /// <param name="point2">The seconde point of the triangle</param>
+        /// <param name="point3">The third point of the triangle</param>
+        /// <param name="color">The filling color</param>
         public void AddTriangle(Model.Point point1, Model.Point point2, Model.Point point3, Color color)
         {
             // partial cross product
@@ -316,6 +349,17 @@ namespace CQT.Engine
             triangles.Add(new VertexPositionColor(ToVector3(point3), color));
         }
 
+        /// <summary>
+        /// Adds a triangle that will be drawn on the next Draw() call.
+        /// A triangle is a filled shape.
+        /// The triangle is filled with a gradiant color between the three specified colors.
+        /// </summary>
+        /// <param name="point1">The first point of the triangle</param>
+        /// <param name="point2">The seconde point of the triangle</param>
+        /// <param name="point3">The third point of the triangle</param>
+        /// <param name="color1">The color emanating from the first point</param>
+        /// <param name="color2">The color emanating from the second point</param>
+        /// <param name="color3">The color emanating from the third point</param>
         public void AddTriangle(Model.Point point1, Model.Point point2, Model.Point point3, Color color1, Color color2, Color color3)
         {
             // partial cross product
@@ -334,54 +378,108 @@ namespace CQT.Engine
             triangles.Add(new VertexPositionColor(ToVector3(point3), color3));
         }
 
+        /// <summary>
+        /// Adds a point to be drawn on the next Draw() call.
+        /// </summary>
+        /// <param name="point">The point</param>
+        /// <param name="color">The color of the point</param>
         public void AddPoint(Vector2 point, Color color)
         {
             lines.Add(new VertexPositionColor(ToVector3(point), color));
             lines.Add(new VertexPositionColor(ToVector3(point) + new Vector3(1,0,0), color));
         }
 
+        /// <summary>
+        /// Adds a point to be drawn on the next Draw() call.
+        /// </summary>
+        /// <param name="point">The point</param>
+        /// <param name="color">The color of the point</param>
         public void AddPoint(Model.Point point, Color color)
         {
             lines.Add(new VertexPositionColor(ToVector3(point), color));
             lines.Add(new VertexPositionColor(ToVector3(point) + new Vector3(1, 0, 0), color));
         }
 
+        /// <summary>
+        /// Adds a line to be drawn on the next Draw() call.
+        /// The color of the line is a gradiant between the two specified colors.
+        /// </summary>
+        /// <param name="point1">The first point of the line</param>
+        /// <param name="point2">The second point of the line</param>
+        /// <param name="color1">The color emanating from the first point</param>
+        /// <param name="color2">The color emanating from the second point</param>
         public void AddLine(Vector2 point1, Vector2 point2, Color color1, Color color2)
         {
             lines.Add(new VertexPositionColor(ToVector3(point1), color1));
             lines.Add(new VertexPositionColor(ToVector3(point2), color2));
         }
 
+        /// <summary>
+        /// Adds a line to be drawn on the next Draw() call.
+        /// </summary>
+        /// <param name="point1">The first point of the line</param>
+        /// <param name="point2">The second point of the line</param>
+        /// <param name="color">The color of the line</param>
         public void AddLine(Vector2 point1, Vector2 point2, Color color)
         {
             lines.Add(new VertexPositionColor(ToVector3(point1), color));
             lines.Add(new VertexPositionColor(ToVector3(point2), color));
         }
 
+        /// <summary>
+        /// Adds a line to be drawn on the next Draw() call.
+        /// The color of the line is a gradiant between the two specified colors.
+        /// </summary>
+        /// <param name="point1">The first point of the line</param>
+        /// <param name="point2">The second point of the line</param>
+        /// <param name="color1">The color emanating from the first point</param>
+        /// <param name="color2">The color emanating from the second point</param>
         public void AddLine(Model.Point point1, Model.Point point2, Color color1, Color color2)
         {
             lines.Add(new VertexPositionColor(ToVector3(point1), color1));
             lines.Add(new VertexPositionColor(ToVector3(point2), color2));
         }
 
+        /// <summary>
+        /// Adds a line to be drawn on the next Draw() call.
+        /// </summary>
+        /// <param name="point1">The first point of the line</param>
+        /// <param name="point2">The second point of the line</param>
+        /// <param name="color">The color of the line</param>
         public void AddLine(Model.Point point1, Model.Point point2, Color color)
         {
             lines.Add(new VertexPositionColor(ToVector3(point1), color));
             lines.Add(new VertexPositionColor(ToVector3(point2), color));
         }
 
+        /// <summary>
+        /// Adds a line to be drawn on the next Draw() call.
+        /// </summary>
+        /// <param name="line">The line to draw</param>
+        /// <param name="color1">The color emanating from the first point of the line</param>
+        /// <param name="color2">The color emanating from the second point of the line</param>
         public void AddLine(Line line, Color color1, Color color2)
         {
             lines.Add(new VertexPositionColor(ToVector3(line.p1), color1));
             lines.Add(new VertexPositionColor(ToVector3(line.p2), color2));
         }
 
+        /// <summary>
+        /// Adds a line to be drawn on the next Draw() call.
+        /// </summary>
+        /// <param name="line">The line to draw</param>
+        /// <param name="color">The color of the line</param>
         public void AddLine(Line line, Color color)
         {
             lines.Add(new VertexPositionColor(ToVector3(line.p1), color));
             lines.Add(new VertexPositionColor(ToVector3(line.p2), color));
         }
 
+        /// <summary>
+        /// adds a polyline to be drawn on the newt Draw() call.
+        /// </summary>
+        /// <param name="pl">The polyline to draw</param>
+        /// <param name="color">The color of the polyline</param>
         public void AddPolyline(Polyline pl, Color color)
         {
             List<VertexPositionColor> vertices = new List<VertexPositionColor>();
