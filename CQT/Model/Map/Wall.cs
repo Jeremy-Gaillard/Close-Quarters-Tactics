@@ -16,9 +16,9 @@ namespace CQT.Model.Map
             thickness = _thickness;
             List<Point> wallPoint = new List<Point>();
             //create the first segment perpendicular to the left
-            Point newPoint = Model.Utils.TranslationLeft(_polyline.lineList[0].p1, _polyline.lineList[0].angle, thickness);
+            Point firstPoint = Model.Utils.TranslationLeft(_polyline.lineList[0].p1, _polyline.lineList[0].angle, thickness);
             wallPoint.Add(_polyline.lineList[0].p1);
-            wallPoint.Add(newPoint);
+            wallPoint.Add(firstPoint);
             for (int i = 0; i < _polyline.lineList.Count - 2; i++)
             {
                 //Two line on the same angle
@@ -56,9 +56,13 @@ namespace CQT.Model.Map
                     Point intersection = (Point)line1.Intersect(line2);
                     wallPoint.Add(intersection);
                 }
-
             }
-
+            int indexLastLine = _polyline.lineList.Count - 1;
+            Point lastPoint = Model.Utils.TranslationLeft(_polyline.lineList[indexLastLine].p2, _polyline.lineList[indexLastLine].angle, thickness);
+            wallPoint.Add(lastPoint);
+            wallPoint.Add(_polyline.lineList[indexLastLine].p2);
+            
+            //TODO : add the right side of the wall
             polyline = _polyline;
         }
     }
