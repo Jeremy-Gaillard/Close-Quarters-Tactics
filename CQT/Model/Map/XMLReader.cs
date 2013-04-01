@@ -74,6 +74,7 @@ namespace CQT.Model.Map
                         if (frameObject.Name == "wall")
                         {
                             //loop for walls
+                            float thickness = (float)frameObject.Attribute("thickness");
                             List<Point> pointListWall = new List<Point>();
 
                             IEnumerable<XElement> framePoints = frameObject.Elements();
@@ -86,7 +87,7 @@ namespace CQT.Model.Map
                                 pointListWall.Add(point);
                             }
                             Polyline polyline = new Polyline(pointListWall);
-                            Wall wall = new Wall(polyline);
+                            Wall wall = new Wall(polyline, thickness);
                             listWall.Add(wall);
                         }
                     }

@@ -161,5 +161,19 @@ namespace CQT.Model
             return ((b1 == b2) && (b2 == b3));
         }
 
+        public static Point TranslationLeft(Point point, float currentAngle, float dist)
+        {
+            double angle = Math.PI/2;
+            Point newPoint = new Point(point.x + (float)Math.Cos(currentAngle + angle) * dist, point.y + (float)Math.Sin(currentAngle + angle) * dist);
+            return newPoint;
+        }
+
+        public static Point TranslationRight(Point point, float currentAngle, float dist)
+        {
+            double angle = - (Math.PI / 2);
+            Point newPoint = new Point(point.x + (float)Math.Cos(currentAngle + angle) * dist, point.y + (float)Math.Sin(currentAngle + angle) * dist);
+            return newPoint;
+        }
+
     }
 }
