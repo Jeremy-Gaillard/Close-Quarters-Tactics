@@ -7,11 +7,12 @@ namespace CQT
 {
 	class Weapon : Item
 	{
-		protected Character owner;
-		protected Constants.WeaponType type;
 
-		public Weapon (Constants.WeaponType _type)
-			: base(null, new Vector2(0,0), new Vector2(1,1)) // TODO: get these values from a function in Constants
+		protected Character owner;
+		protected WeaponInfo.Type type;
+
+		public Weapon (WeaponInfo.Type _type)
+			: base(null, new Vector2(0,0), new Vector2(1,1)) // TODO: get these values from somewhere else
 		{
 			owner = null;
 			type = _type;
