@@ -73,6 +73,16 @@ namespace CQT
             System.Console.Write(polyline.ToString());*/
 
             //file in CQT
+            Model.Point point0 = new Model.Point(0, 0);
+            Model.Point point1 = new Model.Point(1, 1);
+            System.Console.Write("angle : " + Model.Utils.angle(point0, point1)*180/3.14);
+            float angle = Model.Utils.angle(point0, point1);
+            point1 = Model.Utils.TranslationLeft(point0, angle, (float)1);
+            System.Console.Write("angle : " + Model.Utils.angle(point0, point1) * 180 / 3.14);
+            System.Console.Write("\n point 1 : " + point1.x +" " + point1.y);
+            System.Console.Write("\n YOOOO \n");
+            
+
             XMLReader xmlTest = new XMLReader("../../../map.xml");
 
             // TODO: Add your initialization logic here
