@@ -284,9 +284,12 @@ namespace CQT.Engine
                 List<Adjacency> insidePoints = new List<Adjacency>();
                 foreach (Adjacency q in pointList)
                 {
-                    if (Utils.PointInTriangle(q.point, a.adj1.point, a.point, a.adj2.point))
+                    if (q.point != a.adj1.point && q.point != a.adj2.point && q.point != a.point)
                     {
-                        insidePoints.Add(q);
+                        if (Utils.PointInTriangle(q.point, a.adj1.point, a.point, a.adj2.point))
+                        {
+                            insidePoints.Add(q);
+                        }
                     }
                 }
 
