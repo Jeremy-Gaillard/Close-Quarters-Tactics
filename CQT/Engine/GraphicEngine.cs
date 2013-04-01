@@ -151,6 +151,43 @@ namespace CQT.Engine
         /// Adds a polygon that will be drawn on the next Draw() call.
         /// A polygon is a filled shape.
         /// </summary>
+        /// <param name="pl">The polyline that defines the polygon's border. Must be closed</param>
+        /// <param name="color">The filling color</param>
+        public void AddCompletePolygon(Polyline pl, Color color)
+        {
+            List<Adjacency> pointList = new List<Adjacency>();
+            List<Line> lineList = pl.lineList;
+
+            if (lineList.Count != 0)
+            {
+                Adjacency prevAdjacency = new Adjacency();
+                Adjacency newAdjacency;
+                prevAdjacency.point = lineList[0].p1;
+                lineList.RemoveAt(0);
+                foreach (Line l in lineList)
+                {
+                    newAdjacency = new Adjacency();
+                    prevAdjacency.adj2 = newAdjacency;
+                    pointList.Add(prevAdjacency);
+                    newAdjacency.adj1 = prevAdjacency;
+                    newAdjacency.point = l.p1;
+                    prevAdjacency = newAdjacency;
+                }
+                // linking last point to first point
+                prevAdjacency.adj2 = pointList[0];
+                pointList.Add(prevAdjacency);
+                pointList[0].adj1 = prevAdjacency;
+
+                pointList.Sort(Adjacency.CompareX);
+
+                AddPolygon(pointList, color);
+            }
+        }
+
+        /// <summary>
+        /// Adds a polygon that will be drawn on the next Draw() call.
+        /// A polygon is a filled shape.
+        /// </summary>
         /// <param name="pl">The polyline that defines the polygon's border. Must not be closed</param>
         /// <param name="color">The filling color</param>
         public void AddPolygon(Polyline pl, Color color)
@@ -179,6 +216,7 @@ namespace CQT.Engine
                 pointList.Add(prevAdjacency);
                 newAdjacency.adj1 = prevAdjacency;
                 newAdjacency.point = lineList[lineList.Count - 1].p2;
+                // linking last point to first point
                 newAdjacency.adj2 = pointList[0];
                 pointList.Add(newAdjacency);
                 pointList[0].adj1 = newAdjacency;
