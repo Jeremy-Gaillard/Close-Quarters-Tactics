@@ -33,18 +33,23 @@ namespace CQT
 		public Character (Texture2D _texture, Vector2 _position, Vector2 _size)
 			: base(_texture, _position, _size)
 		{
-
+			type = CharacterInfo.Type.None;
+			initCharacter ();
 		}
 
 		public Character (CharacterInfo.Type _type, Texture2D _texture, Vector2 _position, Vector2 _size)
 			: base(_texture, _position, _size)
 		{
 			type = _type;
+			initCharacter ();
+		}
+
+		public void initCharacter ()
+		{
 			hitPoints = maxHP = CharacterInfo.getMaxHP (type);
 			speed = CharacterInfo.getSpeed (type);
 			//equipDefaultWeapons ();
 		}
-
 
 		// WEAPON MANAGEMENT
 
@@ -165,9 +170,9 @@ namespace CQT
 				directionVector *= -1;
 				break;
 			}
-			//Console.Out.WriteLine(directionVector);
+			//Console.Out.WriteLine (directionVector);
 			movement = directionVector * gameTime.ElapsedGameTime.Milliseconds * speed;
-			//Console.Out.WriteLine(movement);
+			//Console.Out.WriteLine (movement);
 			position += movement;
 			notifyMovement (movement);
 		}
