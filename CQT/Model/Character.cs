@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CQT
 {
-	class Character : Entity, PositionNotifier
+	class Character : Entity
 	{
 		public enum MovementDirection
 		{
@@ -21,7 +21,6 @@ namespace CQT
 		}
 		CharacterInfo.Type type;
 
-		protected List<PositionWatcher> positionWatchers = new List<PositionWatcher> ();
 
 		protected List<Weapon> weapons;
 		protected Weapon currentWeapon;
@@ -174,24 +173,6 @@ namespace CQT
 			movement = directionVector * gameTime.ElapsedGameTime.Milliseconds * speed;
 			//Console.Out.WriteLine (movement);
 			position += movement;
-			notifyMovement (movement);
-		}
-
-		public void watch (PositionWatcher watcher)
-		{
-			positionWatchers.Add (watcher);
-		}
-
-		public void unWatch (PositionWatcher watcher)
-		{
-			positionWatchers.Remove (watcher);
-		}
-
-		protected void notifyMovement (Vector2 movement)
-		{
-			foreach (PositionWatcher pw in positionWatchers) {
-				pw.notifyMovement (movement);
-			}
 		}
 	}
 }

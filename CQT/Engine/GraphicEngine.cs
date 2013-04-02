@@ -11,7 +11,7 @@ using CQT.View;
 
 namespace CQT.Engine
 {
-    class GraphicEngine : PositionWatcher
+    class GraphicEngine
     {
         protected SpriteBatch spriteBatch;
         protected GraphicsDevice graphicDevice;
@@ -24,7 +24,7 @@ namespace CQT.Engine
         protected List<VertexPositionColor> triangles;
         protected Vector2 cameraPosition;   // position relative to top-left corner of the screen
 
-        protected PositionNotifier watchedObject;
+        protected Character followedCharacter;
 
         public GraphicEngine(SpriteBatch sb, GraphicsDeviceManager gm, GraphicsDevice gd)
         {
@@ -45,9 +45,11 @@ namespace CQT.Engine
                 0, 1);                                        // near, far plane
         }
 
-        public void notifyMovement(Vector2 movement)
+        protected void updateCameraPosition()
         {
-            moveCamera(-movement);
+            cameraPosition = -followedCharacter.getPosition();
+            cameraPosition.X += graphics.PreferredBackBufferWidth / 2;
+            cameraPosition.Y += graphics.PreferredBackBufferHeight / 2;
         }
 
         public void setCameraCenter(Vector2 position)
@@ -57,13 +59,8 @@ namespace CQT.Engine
 
         public void setFollowedCharacter(Character character)
         {
-            // set the character as the new watched and followed object
-            if (watchedObject != null)
-            {
-                watchedObject.unWatch(this);
-            }
-            watchedObject = character;
-            watchedObject.watch(this);
+            // set the character as the new followed object
+            followedCharacter = character;
             // Centers view on the character
             cameraPosition = -character.getPosition();
             cameraPosition.X += graphics.PreferredBackBufferWidth / 2;
@@ -98,6 +95,7 @@ namespace CQT.Engine
         /// </summary>
         public void Draw()
         {
+            updateCameraPosition();
             spriteBatch.Begin();
             graphicDevice.Clear(Color.CornflowerBlue);
             // Drawing sprites
