@@ -57,12 +57,12 @@ namespace CQT
         {
             //Test for Polyline
 
-           /* List<Model.Point> points = new List<Model.Point>();
+            List<Model.Point> points = new List<Model.Point>();
 
             Model.Point point0 = new Model.Point(0,0);
-            Model.Point point1 = new Model.Point(1,1);
-            Model.Point point2 = new Model.Point(2,2);
-            Model.Point point3 = new Model.Point(3,3);
+            Model.Point point1 = new Model.Point(0,1);
+            Model.Point point2 = new Model.Point(0,2);
+            Model.Point point3 = new Model.Point(1,2);
 
             points.Add(point0);
             points.Add(point1);
@@ -70,19 +70,14 @@ namespace CQT
             points.Add(point3);
 
             Polyline polyline = new Polyline(points);
-            System.Console.Write(polyline.ToString());*/
+            //System.Console.Write(polyline.ToString());
+
+            Wall testWall = new Wall(polyline, (float)0.1);
+
+            System.Console.Write(testWall.polyline.ToString());
 
             //file in CQT
-            Model.Point point0 = new Model.Point(0, 0);
-            Model.Point point1 = new Model.Point(1, 1);
-            System.Console.Write("angle : " + Model.Utils.angle(point0, point1)*180/3.14);
-            float angle = Model.Utils.angle(point0, point1);
-            point1 = Model.Utils.TranslationLeft(point0, angle, (float)1);
-            System.Console.Write("angle : " + Model.Utils.angle(point0, point1) * 180 / 3.14);
-            System.Console.Write("\n point 1 : " + point1.x +" " + point1.y);
-            System.Console.Write("\n YOOOO \n");
             
-
             XMLReader xmlTest = new XMLReader("../../../map.xml");
 
             // TODO: Add your initialization logic here

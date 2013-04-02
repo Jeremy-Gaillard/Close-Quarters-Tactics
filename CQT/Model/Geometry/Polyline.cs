@@ -26,7 +26,7 @@ namespace CQT.Model.Geometry
             string description = "";
             for (int i = 0; i < lineList.Count; i++)
             {
-                description = description + "\nLigne du point " + lineList[i].p1.x + "," + lineList[i].p1.y + " au point " + lineList[i].p2.x + "," + lineList[i].p2.y;
+                description = description + "\nLigne du point " + lineList[i].p1.x + "," + lineList[i].p1.y + " au point " + lineList[i].p2.x + "," + lineList[i].p2.y +"\n";
             }
 
             return description;
