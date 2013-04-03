@@ -10,14 +10,14 @@ namespace CQT
 	{
 		public enum MovementDirection
 		{
-			Forwards,
-			ForwardsLeft,
+			Up,
+			UpLeft,
 			Left,
-			BackwardsLeft,
-			Backwards,
-			BackwardsRight,
+			DownLeft,
+			Down,
+			DownRight,
 			Right,
-			ForwardsRight
+			UpRight
 		}
 		CharacterInfo.Type type;
 
@@ -116,63 +116,90 @@ namespace CQT
 
 		public void Update (GameTime gameTime, List<Player.Commands> commands)
 		{
-			if (commands.Contains (Player.Commands.MoveBackwards)) {
-				move (gameTime, MovementDirection.Backwards);
+			if (commands.Contains (Player.Commands.MoveDown)) {
+                if(commands.Contains(Player.Commands.MoveLeft))
+                {
+                    move(gameTime, MovementDirection.DownLeft);
+                }
+                else if(commands.Contains(Player.Commands.MoveRight))
+                {
+                    move(gameTime, MovementDirection.DownRight);
+                }
+                else
+                {
+				    move(gameTime, MovementDirection.Down);
+                }
 			}
-			if (commands.Contains (Player.Commands.MoveForward)) {
-				move (gameTime, MovementDirection.Forwards);
+			else if (commands.Contains (Player.Commands.MoveUp)) {
+				if(commands.Contains(Player.Commands.MoveLeft))
+                {
+                    move(gameTime, MovementDirection.UpLeft);
+                }
+                else if(commands.Contains(Player.Commands.MoveRight))
+                {
+                    move(gameTime, MovementDirection.UpRight);
+                }
+                else
+                {
+				    move(gameTime, MovementDirection.Up);
+                }
 			}
-			if (commands.Contains (Player.Commands.MoveLeft)) {
-				move (gameTime, MovementDirection.Left);
+			else if (commands.Contains (Player.Commands.MoveLeft)) {
+				move(gameTime, MovementDirection.Left);
 			}
-			if (commands.Contains (Player.Commands.MoveRight)) {
-				move (gameTime, MovementDirection.Right);
+			else if (commands.Contains (Player.Commands.MoveRight)) {
+				move(gameTime, MovementDirection.Right);
 			}
 		}
 
-		protected void move (GameTime gameTime, MovementDirection direction)
-		{
-			//Console.Out.WriteLine("moving ! " + direction.ToString() );
-			Vector2 movement;
-			Single cos = (Single)Math.Cos (rotation);
-			Vector2 directionVector = new Vector2 ();
-			switch (direction) {
-			case MovementDirection.Forwards:
-				directionVector.X = (Single)Math.Cos (rotation);
-				directionVector.Y = (Single)Math.Sin (rotation);
-				break;
-			// +PI
-			case MovementDirection.Backwards: 
-				directionVector.X = -(Single)Math.Cos (rotation); 
-				directionVector.Y = -(Single)Math.Sin (rotation);
-				break;
-			// -PI/2
-			case MovementDirection.Left:
-				directionVector.X = (Single)Math.Sin (rotation);
-				directionVector.Y = -(Single)Math.Cos (rotation);
-				break;
-			// +PI/2
-			case MovementDirection.Right:
-				directionVector.X = -(Single)Math.Sin (rotation);
-				directionVector.Y = (Single)Math.Cos (rotation);
-				break;
-			case MovementDirection.BackwardsLeft:
-				directionVector *= -1;
-				break;
-			case MovementDirection.BackwardsRight:
-				directionVector *= -1;
-				break;
-			case MovementDirection.ForwardsLeft:
-				directionVector *= -1;
-				break;
-			case MovementDirection.ForwardsRight:
-				directionVector *= -1;
-				break;
-			}
-			//Console.Out.WriteLine (directionVector);
-			movement = directionVector * gameTime.ElapsedGameTime.Milliseconds * speed;
-			//Console.Out.WriteLine (movement);
-			position += movement;
-		}
+        protected void move(GameTime gameTime, MovementDirection direction)
+        {
+            //Console.Out.WriteLine("moving ! " + direction.ToString() );
+            Vector2 movement;
+            Single cos = (Single)Math.Cos(rotation);
+            switch (direction)
+            {
+                case MovementDirection.Up:
+                    movement.X = 0;
+                    movement.Y = -1;
+                    break;
+                case MovementDirection.Down:
+                    movement.X = 0;
+                    movement.Y = 1;
+                    break;
+                case MovementDirection.Left:
+                    movement.X = -1;
+                    movement.Y = 0;
+                    break;
+                case MovementDirection.Right:
+                    movement.X = 1;
+                    movement.Y = 0;
+                    break;
+                case MovementDirection.DownLeft:
+                    movement.X = -0.707f;
+                    movement.Y = 0.707f;
+                    break;
+                case MovementDirection.DownRight:
+                    movement.X = 0.707f;
+                    movement.Y = 0.707f;
+                    break;
+                case MovementDirection.UpLeft:
+                    movement.X = -0.707f;
+                    movement.Y = -0.707f;
+                    break;
+                case MovementDirection.UpRight:
+                    movement.X = 0.707f;
+                    movement.Y = -0.707f;
+                    break;
+                default:
+                    movement.X = 0;
+                    movement.Y = 0;
+                    break;
+            }
+            //Console.Out.WriteLine (directionVector);
+            movement = movement * gameTime.ElapsedGameTime.Milliseconds * speed;
+            //Console.Out.WriteLine (movement);
+            position += movement;
+        }
 	}
 }
