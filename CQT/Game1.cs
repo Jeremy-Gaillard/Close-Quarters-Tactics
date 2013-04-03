@@ -14,94 +14,97 @@ using CQT.Model.Map;
 using Geom = CQT.Model.Geometry;
 using CQT.Model;
 using CQT.Engine;
+using CQT.Command;
 
 namespace CQT
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game
-    {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+	/// <summary>
+	/// This is the main type for your game
+	/// </summary>
+	public class Game1 : Microsoft.Xna.Framework.Game
+	{
+		GraphicsDeviceManager graphics;
+		SpriteBatch spriteBatch;
 
-        GraphicEngine graphicEngine;
-        GraphicCache graphicCache;
-        InputManager inputManager;
-        GameEnvironment env;
+		GraphicEngine graphicEngine;
+		GraphicCache graphicCache;
+		InputManager inputManager;
+		GameEnvironment env;
 
-        GraphicsDeviceManager g;
-        BasicEffect r;
+		GraphicsDeviceManager g;
+		BasicEffect r;
 
+		Player player;
 
-        // temp
-        Character testCharacter;
-        Entity testSprite;
-        // end temp
+		// temp
+		Character testCharacter;
+		Entity testSprite;
+		// end temp
 
-        public Game1()
-        {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 600;
-        }
+		public Game1 ()
+		{
+			graphics = new GraphicsDeviceManager (this);
+			Content.RootDirectory = "Content";
+			graphics.PreferredBackBufferWidth = 800;
+			graphics.PreferredBackBufferHeight = 600;
+			player = new Player ("Champ");
+		}
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
-        protected override void Initialize()
-        {
-            //Test for Polyline
+		/// <summary>
+		/// Allows the game to perform any initialization it needs to before starting to run.
+		/// This is where it can query for any required services and load any non-graphic
+		/// related content.  Calling base.Initialize will enumerate through any components
+		/// and initialize them as well.
+		/// </summary>
+		protected override void Initialize ()
+		{
+			//Test for Polyline
 
-            List<Model.Point> points = new List<Model.Point>();
+			List<Model.Point> points = new List<Model.Point> ();
 
-            Model.Point point0 = new Model.Point(0,0);
-            Model.Point point1 = new Model.Point(0,1);
-            Model.Point point2 = new Model.Point(0,2);
-            Model.Point point3 = new Model.Point(1,2);
+			Model.Point point0 = new Model.Point (0, 0);
+			Model.Point point1 = new Model.Point (0, 1);
+			Model.Point point2 = new Model.Point (0, 2);
+			Model.Point point3 = new Model.Point (1, 2);
 
-            points.Add(point0);
-            points.Add(point1);
-            points.Add(point2);
-            points.Add(point3);
+			points.Add (point0);
+			points.Add (point1);
+			points.Add (point2);
+			points.Add (point3);
 
-            Polyline polyline = new Polyline(points);
-            //System.Console.Write(polyline.ToString());
+			Polyline polyline = new Polyline (points);
+			//System.Console.Write(polyline.ToString());
 
-            Wall testWall = new Wall(polyline, (float)0.1);
+			Wall testWall = new Wall (polyline, (float)0.1);
 
-            System.Console.Write(testWall.polyline.ToString());
+			System.Console.Write (testWall.polyline.ToString ());
 
-            //file in CQT
+			//file in CQT
             
-            XMLReader xmlTest = new XMLReader("../../../map.xml");
+			XMLReader xmlTest = new XMLReader ("../../../map.xml");
 
-            // TODO: Add your initialization logic here
-            Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
-            base.Initialize();
+			// TODO: Add your initialization logic here
+			Map map = new Map (xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
+			base.Initialize ();
             
-        }
+		}
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            graphicEngine = new GraphicEngine(spriteBatch, graphics, GraphicsDevice);
+		/// <summary>
+		/// LoadContent will be called once per game and is the place to load
+		/// all of your content.
+		/// </summary>
+		protected override void LoadContent ()
+		{
+			// Create a new SpriteBatch, which can be used to draw textures.
+			spriteBatch = new SpriteBatch (GraphicsDevice);
+			graphicEngine = new GraphicEngine (spriteBatch, graphics, GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+			// TODO: use this.Content to load your game content here
 
-            env = new GameEnvironment();
-            //env.walls.Add(new Line(200, 250, 300, 100));
+			env = new GameEnvironment ();
+			//env.walls.Add(new Line(200, 250, 300, 100));
 
-            /*
+			/*
             //env.walls.Add(new Line(100, 450, 300, 100));
             env.walls.Add(new Line(100, 450, 300, 150));
             env.walls.Add(new Line(300, 50, 500, 300));
@@ -109,66 +112,69 @@ namespace CQT
             env.walls.Add(new Line(100, 250, 200, 200));
             */
 
-            env.walls.Add(new Line(100, 450, 300, 150));
-            env.walls.Add(new Line(300, 50, 500, 300));
-            env.walls.Add(new Line(100, 250, 200, 200));
+			env.walls.Add (new Line (100, 450, 300, 150));
+			env.walls.Add (new Line (300, 50, 500, 300));
+			env.walls.Add (new Line (100, 250, 200, 200));
 
-            env.walls.Add(new Line(550, 250, 700, 200));
-            env.walls.Add(new Line(500, 400, 750, 500));
+			env.walls.Add (new Line (550, 250, 700, 200));
+			env.walls.Add (new Line (500, 400, 750, 500));
 
-            for (int i = 0; i < 5; i++)
-            {
-                const float siz = 80;
-                env.walls.Add(new Line(i * siz, 600, i * siz + (siz * .8f), 500));
-                //env.walls.Add(new Line(i * 20 + 18, 700, i * 20 + 20, 800));
-                env.walls.Add(new Line(i * siz + (siz * .8f), 500, i * siz + (siz * 1f), 600));
-            }
-
+			for (int i = 0; i < 5; i++) {
+				const float siz = 80;
+				env.walls.Add (new Line (i * siz, 600, i * siz + (siz * .8f), 500));
+				//env.walls.Add(new Line(i * 20 + 18, 700, i * 20 + 20, 800));
+				env.walls.Add (new Line (i * siz + (siz * .8f), 500, i * siz + (siz * 1f), 600));
+			}
 
 
-                //env.walls.Add(new Line());
+
+			//env.walls.Add(new Line());
 
 
-                r = new BasicEffect(GraphicsDevice);
-            r.VertexColorEnabled = true;
+			r = new BasicEffect (GraphicsDevice);
+			r.VertexColorEnabled = true;
 
-            inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState());
-            graphicCache = new GraphicCache(Content);
-            testCharacter = new Character(graphicCache.getTexture("Bonhomme"), new Vector2(200, 100), new Vector2(100, 100));
-            testSprite = new Character(graphicCache.getTexture("test"), new Vector2(50, 200), new Vector2(100, 100));
-            graphicEngine.setFollowedCharacter(testCharacter);
-        }
+			inputManager = new InputManager (Mouse.GetState (), Keyboard.GetState (), player);
+			graphicCache = new GraphicCache (Content);
+			testCharacter = new Character (graphicCache.getTexture ("Bonhomme"), new Vector2 (200, 100), new Vector2 (100, 100));
+			player.setCharacter (testCharacter);
+			testSprite = new Character (graphicCache.getTexture ("test"), new Vector2 (50, 200), new Vector2 (100, 100));
+			graphicEngine.setFollowedCharacter (testCharacter);
+		}
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
+		/// <summary>
+		/// UnloadContent will be called once per game and is the place to unload
+		/// all content.
+		/// </summary>
+		protected override void UnloadContent ()
+		{
+			// TODO: Unload any non ContentManager content here
+		}
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
-        {
-            // Allows the game to exit
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                this.Exit();
-            inputManager.Update(Mouse.GetState(), Keyboard.GetState());
-
-            //graphicEngine.moveCamera(inputManager.getMouseMovement());
+		/// <summary>
+		/// Allows the game to run logic such as updating the world,
+		/// checking for collisions, gathering input, and playing audio.
+		/// </summary>
+		/// <param name="gameTime">Provides a snapshot of timing values.</param>
+		protected override void Update (GameTime gameTime)
+		{
+			// Allows the game to exit
+			if (Keyboard.GetState ().IsKeyDown (Keys.Escape))
+				this.Exit ();
+			inputManager.Update (Mouse.GetState (), Keyboard.GetState ());
+			List<Command.Command> commands = inputManager.getCommands (gameTime);
+			foreach (Command.Command c in commands) {
+				c.execute ();
+			}
+			//graphicEngine.moveCamera(inputManager.getMouseMovement());
             
 
-            // TODO: Add your update logic here
+			// TODO: Add your update logic here
 
-            //System.Console.Write(gameTime);
-            //System.Console.WriteLine("HELLOOOOOOOOOOOOOOO "+gameTime.TotalGameTime);
+			//System.Console.Write(gameTime);
+			//System.Console.WriteLine("HELLOOOOOOOOOOOOOOO "+gameTime.TotalGameTime);
 
-            /*
+			/*
             int points = 10;
 
             VertexPositionColor[] primitiveList = new VertexPositionColor[points];
@@ -182,7 +188,7 @@ namespace CQT
                 }
             }*/
 
-            /*
+			/*
             // Initialize an array of indices of type short.
             short[] lineListIndices = new short[(points * 2) - 2];
 
@@ -204,7 +210,7 @@ namespace CQT
             );*/
 
 
-            /*
+			/*
             short[] lineStripIndices = new short[8] { 0, 1, 2, 3, 4, 5, 6, 7 };
 
             for (int i = 0; i < primitiveList.Length; i++)
@@ -223,38 +229,38 @@ namespace CQT
                 primitiveList[i].Color = Color.White;
             */
 
-            //env.update();
-            testCharacter.setRotation((float)Math.Atan2(inputManager.getMousePosition().Y-graphicEngine.getCameraPosition().Y-testCharacter.getPosition().Y,
-                inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - testCharacter.getPosition().X));
-            testCharacter.Update(gameTime, inputManager.getCommands());
-            graphicEngine.AddEntity(testCharacter);
-            graphicEngine.AddEntity(testSprite);
-            base.Update(gameTime);
-        }
+			//env.update();
+			testCharacter.setRotation ((float)Math.Atan2 (inputManager.getMousePosition ().Y - graphicEngine.getCameraPosition ().Y - testCharacter.getPosition ().Y,
+                inputManager.getMousePosition ().X - graphicEngine.getCameraPosition ().X - testCharacter.getPosition ().X));
+			//testCharacter.Update (gameTime, inputManager.getCommands ());
+			graphicEngine.AddEntity (testCharacter);
+			graphicEngine.AddEntity (testSprite);
+			base.Update (gameTime);
+		}
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
+		/// <summary>
+		/// This is called when the game should draw itself.
+		/// </summary>
+		/// <param name="gameTime">Provides a snapshot of timing values.</param>
+		protected override void Draw (GameTime gameTime)
+		{
             
-            // TODO: Add your drawing code here
-            graphicEngine.Draw();
-            base.Draw(gameTime);
-            return;
+			// TODO: Add your drawing code here
+			graphicEngine.Draw ();
+			base.Draw (gameTime);
+			return;
 
-            GraphicsDevice.Clear(Color.Black);
+			GraphicsDevice.Clear (Color.Black);
 
-            /*
+			/*
             Texture2D SimpleTexture = new Texture2D(GraphicsDevice, 1, 1, false,
                 SurfaceFormat.Color);
 
             Int32[] pixel = { 0xFFFFFF }; // White. 0xFF is Red, 0xFF0000 is Blue
             SimpleTexture.SetData<Int32>(pixel, 0, SimpleTexture.Width * SimpleTexture.Height);
             */
-            spriteBatch.Begin();
-            /*
+			spriteBatch.Begin ();
+			/*
             // Paint a 100x1 line starting at 20, 50
             this.spriteBatch.Draw(SimpleTexture, new Rectangle(20, 50, 100, 1), Color.White);
 
@@ -262,11 +268,11 @@ namespace CQT
                 Color.Blue, -(float)Math.PI / 4, new Vector2(0f, 0f), SpriteEffects.None, 1f);
             */
 
-            //drawLine(50,50,200,100);
+			//drawLine(50,50,200,100);
 
-            //drawLine(0, 0, Mouse.GetState().X, Mouse.GetState().Y);
+			//drawLine(0, 0, Mouse.GetState().X, Mouse.GetState().Y);
 
-            /*
+			/*
             //Line A = new Line(50, 50, 200, 100);
             Line A = new Line(300, 50, 150, 100);
             Line B = new Line(50, 50, Mouse.GetState().X, Mouse.GetState().Y);
@@ -286,7 +292,7 @@ namespace CQT
             System.Console.WriteLine(p != null);
             */
 
-            /*
+			/*
             ///////////////////////////////////////////////////////////////////////////
             foreach (Line l in env.walls)
             {
@@ -305,7 +311,7 @@ namespace CQT
             ///////////////////////////////////////////////////////////////////////////
             */
 
-            /*spriteBatch.End();
+			/*spriteBatch.End();
 
             for (int i = 0; i < env.lightPolygon.Count() - 1; i++)
             {
@@ -322,13 +328,13 @@ namespace CQT
             spriteBatch.End();*/
 
 
-            /*
+			/*
             RasterizerState rasterizerState1 = new RasterizerState();
             rasterizerState1.CullMode = CullMode.None;
             graphics.GraphicsDevice.RasterizerState = rasterizerState1;
             */
 
-            /*
+			/*
             int points = 10;
 
             VertexPositionColor[] primitiveList = new VertexPositionColor[points];
@@ -367,12 +373,12 @@ namespace CQT
                 7   // number of primitives to draw
             );
             */
-            //GraphicsDevice.Clear(Color.White);
+			//GraphicsDevice.Clear(Color.White);
 
-            //env.lightPolygon;
+			//env.lightPolygon;
 
 
-            /*
+			/*
             //int width = 10, height = 10;
             int width = GraphicsDevice.Viewport.Width, height = GraphicsDevice.Viewport.Height;
             
@@ -406,7 +412,7 @@ namespace CQT
 
 
 
-            /*
+			/*
             //GraphicsDevice.RenderState.CullMode = CullMode.None; // don't discard
             // triangles that are ccw.  d3d has opposite winding order (cw) than openGL.
             GraphicsDevice.RasterizerState = new RasterizerState { CullMode = Microsoft.Xna.Framework.Graphics.CullMode.CullClockwiseFace };
@@ -429,63 +435,63 @@ namespace CQT
             r.End();
             */
 
-            //Render(GraphicsDevice, env.viewLine.p1, env.viewLine.p2, env.viewLine2.p2, Color.Red);
-            /*
+			//Render(GraphicsDevice, env.viewLine.p1, env.viewLine.p2, env.viewLine2.p2, Color.Red);
+			/*
             foreach (var p in env.lightPolygon)
             {
             }*/
-            //spriteBatch.Begin();
+			//spriteBatch.Begin();
             
-            //spriteBatch.End();
+			//spriteBatch.End();
 
-            base.Draw(gameTime);
-        }
+			base.Draw (gameTime);
+		}
 
-        private void drawLine(int x1, int y1, int x2, int y2)
-        {
-            Texture2D SimpleTexture = new Texture2D(GraphicsDevice, 1, 1, false,
+		private void drawLine (int x1, int y1, int x2, int y2)
+		{
+			Texture2D SimpleTexture = new Texture2D (GraphicsDevice, 1, 1, false,
                SurfaceFormat.Color);
 
-            Int32[] pixel = { 0xFFFFFF }; // White. 0xFF is Red, 0xFF0000 is Blue
-            SimpleTexture.SetData<Int32>(pixel, 0, SimpleTexture.Width * SimpleTexture.Height);
+			Int32[] pixel = { 0xFFFFFF }; // White. 0xFF is Red, 0xFF0000 is Blue
+			SimpleTexture.SetData<Int32> (pixel, 0, SimpleTexture.Width * SimpleTexture.Height);
 
-            double length = Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
-            float angle = (float) Math.Atan2(y2 - y1, x2 - x1);
+			double length = Math.Sqrt (Math.Pow (x2 - x1, 2) + Math.Pow (y2 - y1, 2));
+			float angle = (float)Math.Atan2 (y2 - y1, x2 - x1);
 
-            int width = 2;
+			int width = 2;
 
-            spriteBatch.Draw(SimpleTexture, new Rectangle(x1, y1, (int)(x1+length), width), null,
-                Color.Blue, angle, new Vector2(0f, 0f), SpriteEffects.None, 1f);
-        }
+			spriteBatch.Draw (SimpleTexture, new Rectangle (x1, y1, (int)(x1 + length), width), null,
+                Color.Blue, angle, new Vector2 (0f, 0f), SpriteEffects.None, 1f);
+		}
         
-        //float x = 0;
-        public void Render(GraphicsDevice device, CQT.Model.Point p1, CQT.Model.Point p2, CQT.Model.Point p3, Color color)
-        {
-            BasicEffect _effect = new BasicEffect(device);
-            _effect.Texture = ColorToTexture(device, color, 1, 1);
-            _effect.TextureEnabled = true;
-            //_effect.VertexColorEnabled = true;
+		//float x = 0;
+		public void Render (GraphicsDevice device, CQT.Model.Point p1, CQT.Model.Point p2, CQT.Model.Point p3, Color color)
+		{
+			BasicEffect _effect = new BasicEffect (device);
+			_effect.Texture = ColorToTexture (device, color, 1, 1);
+			_effect.TextureEnabled = true;
+			//_effect.VertexColorEnabled = true;
 
-            VertexPositionTexture[] _vertices = new VertexPositionTexture[3];
-            /*
+			VertexPositionTexture[] _vertices = new VertexPositionTexture[3];
+			/*
             _vertices[0].Position = new Vector3(10,10,0); // triangle.A;
             _vertices[1].Position = new Vector3(13,16,0);
             _vertices[2].Position = new Vector3(18,12,0);*/
-            //_vertices[0].Position = new Vector3(.10f, .10f, 0); // triangle.A;
-            //x += 0.01f;
+			//_vertices[0].Position = new Vector3(.10f, .10f, 0); // triangle.A;
+			//x += 0.01f;
 
-            /*
+			/*
             _vertices[0].Position = new Vector3(0, 0, 0); // triangle.A;
             _vertices[1].Position = new Vector3(.13f, .16f, 0);
             _vertices[2].Position = new Vector3(1f, .12f, 0);
             */
-            //Console.WriteLine(_vertices[0].Position);
+			//Console.WriteLine(_vertices[0].Position);
             
-            _vertices[0].Position = PointToVector3(ref p1);
-            _vertices[1].Position = PointToVector3(ref p2);
-            _vertices[2].Position = PointToVector3(ref p3);
+			_vertices [0].Position = PointToVector3 (ref p1);
+			_vertices [1].Position = PointToVector3 (ref p2);
+			_vertices [2].Position = PointToVector3 (ref p3);
 
-            /*
+			/*
             Vector3 v = PointToVector3(ref p2);
             _vertices[1].Position = v;
             v = PointToVector3(ref p3);
@@ -493,26 +499,25 @@ namespace CQT
             _vertices[2].Position = v2;
             */
 
-            //_vertices[1].Position = new Vector3(p2.x / graphics.PreferredBackBufferWidth, p2.y / graphics.PreferredBackBufferHeight, 0);
-            //_vertices[2].Position = new Vector3(p3.x / graphics.PreferredBackBufferWidth, p3.y / graphics.PreferredBackBufferHeight, 0);
+			//_vertices[1].Position = new Vector3(p2.x / graphics.PreferredBackBufferWidth, p2.y / graphics.PreferredBackBufferHeight, 0);
+			//_vertices[2].Position = new Vector3(p3.x / graphics.PreferredBackBufferWidth, p3.y / graphics.PreferredBackBufferHeight, 0);
 
-            //_vertices[2].Position.X = p3.x / graphics.PreferredBackBufferWidth;
-            //Console.WriteLine(_vertices[2].Position.X);
+			//_vertices[2].Position.X = p3.x / graphics.PreferredBackBufferWidth;
+			//Console.WriteLine(_vertices[2].Position.X);
 
 
-            //Console.WriteLine(_vertices[0].Position);
-            //Console.WriteLine(PointToVector3(ref p2));
-            /*Vector3 v3 = PointToVector3(ref p2);
+			//Console.WriteLine(_vertices[0].Position);
+			//Console.WriteLine(PointToVector3(ref p2));
+			/*Vector3 v3 = PointToVector3(ref p2);
             Console.WriteLine(v3);
             _vertices[0].Position = v3;*/
-            //Console.WriteLine(_vertices[1].Position); Console.WriteLine("---");
+			//Console.WriteLine(_vertices[1].Position); Console.WriteLine("---");
 
             
-            foreach (var pass in _effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
+			foreach (var pass in _effect.CurrentTechnique.Passes) {
+				pass.Apply ();
 
-                device.DrawUserIndexedPrimitives<VertexPositionTexture>
+				device.DrawUserIndexedPrimitives<VertexPositionTexture>
                 (
                     PrimitiveType.TriangleStrip, // same result with TriangleList
                     _vertices,
@@ -521,32 +526,32 @@ namespace CQT
                     new int[] { 0, 1, 2 },
                     0,
                     1
-                );
-            }
+				);
+			}
 
-        }
+		}
 
-        public Vector3 PointToVector3(ref CQT.Model.Point p)
-        {
-            //Console.WriteLine(p.x / graphics.PreferredBackBufferWidth + " " + p.y / graphics.PreferredBackBufferHeight);
-            return new Vector3(
+		public Vector3 PointToVector3 (ref CQT.Model.Point p)
+		{
+			//Console.WriteLine(p.x / graphics.PreferredBackBufferWidth + " " + p.y / graphics.PreferredBackBufferHeight);
+			return new Vector3 (
                 //(p.x - graphics.PreferredBackBufferWidth / 2) / graphics.PreferredBackBufferWidth,
                 (p.x * 2 - graphics.PreferredBackBufferWidth) / graphics.PreferredBackBufferWidth,
                 -(p.y * 2 - graphics.PreferredBackBufferHeight) / graphics.PreferredBackBufferHeight,
                 0
-            );
-            //Vector3 ret = new Vector3(p.x / graphics.PreferredBackBufferWidth, p.y / graphics.PreferredBackBufferHeight, 0);
-            //Console.WriteLine(ret);
-            //return ret;
-        }
+			);
+			//Vector3 ret = new Vector3(p.x / graphics.PreferredBackBufferWidth, p.y / graphics.PreferredBackBufferHeight, 0);
+			//Console.WriteLine(ret);
+			//return ret;
+		}
 
-        public static Texture2D ColorToTexture(GraphicsDevice device, Color color, int width, int height)
-        {
-            Texture2D texture = new Texture2D(device, 1, 1);
-            texture.SetData<Color>(new Microsoft.Xna.Framework.Color[] { color });
+		public static Texture2D ColorToTexture (GraphicsDevice device, Color color, int width, int height)
+		{
+			Texture2D texture = new Texture2D (device, 1, 1);
+			texture.SetData<Color> (new Microsoft.Xna.Framework.Color[] { color });
 
-            return texture;
-        }
+			return texture;
+		}
 
-    }
+	}
 }

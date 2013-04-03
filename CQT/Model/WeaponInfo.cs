@@ -1,6 +1,6 @@
 using System;
 
-namespace CQT
+namespace CQT.Model
 {
 	public static class WeaponInfo
 	{
