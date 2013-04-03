@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using CQT.Model;
+using CQT.Model.Map;
 using CQT.Model.Geometry;
 using CQT.View;
 
@@ -18,6 +19,7 @@ namespace CQT.Engine
         protected GraphicsDeviceManager graphics;
         protected BasicEffect basicEffect;
 
+        protected Map map = null;
         protected List<Entity> entities;
         protected List<VertexPositionColor> lines;
         protected List<List<VertexPositionColor>> polylines;
@@ -50,6 +52,11 @@ namespace CQT.Engine
             cameraPosition = -followedCharacter.getPosition();
             cameraPosition.X += graphics.PreferredBackBufferWidth / 2;
             cameraPosition.Y += graphics.PreferredBackBufferHeight / 2;
+        }
+
+        public void setMap(Map _map)
+        {
+            map = _map;
         }
 
         public void setCameraCenter(Vector2 position)
@@ -98,6 +105,13 @@ namespace CQT.Engine
             updateCameraPosition();
             spriteBatch.Begin();
             graphicDevice.Clear(Color.CornflowerBlue);
+
+            // Drawing map
+            if (map != null)
+            {
+                MapView.Draw(map, this);
+            }
+
             // Drawing sprites
             foreach (Entity e in entities)
             {
@@ -156,13 +170,13 @@ namespace CQT.Engine
             List<Adjacency> pointList = new List<Adjacency>();
             List<Line> lineList = pl.lineList;
 
-            if (lineList.Count != 0)
+            if (lineList.Count > 2)
             {
                 Adjacency prevAdjacency = new Adjacency();
                 Adjacency newAdjacency;
                 prevAdjacency.point = lineList[0].p1;
-                lineList.RemoveAt(0);
-                foreach (Line l in lineList)
+                //lineList.RemoveAt(0);
+                foreach (Line l in lineList.GetRange(1, lineList.Count-1))
                 {
                     newAdjacency = new Adjacency();
                     prevAdjacency.adj2 = newAdjacency;
@@ -193,13 +207,13 @@ namespace CQT.Engine
             List<Adjacency> pointList = new List<Adjacency>();
             List<Line> lineList = pl.lineList;
 
-            if (lineList.Count != 0)
+            if (lineList.Count > 1)
             {
                 Adjacency prevAdjacency = new Adjacency();
                 Adjacency newAdjacency;
                 prevAdjacency.point = lineList[0].p1;
-                lineList.RemoveAt(0);
-                foreach (Line l in lineList)
+                //lineList.RemoveAt(0);
+                foreach (Line l in lineList.GetRange(1, lineList.Count - 1))
                 {
                     newAdjacency = new Adjacency();
                     prevAdjacency.adj2 = newAdjacency;

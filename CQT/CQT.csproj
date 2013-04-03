@@ -61,6 +61,7 @@
     <Compile Include="Model\Item.cs" />
     <Compile Include="Model\Weapon.cs" />
     <Compile Include="View\EntityView.cs" />
+    <Compile Include="View\MapView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
