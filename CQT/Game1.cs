@@ -68,26 +68,7 @@ namespace CQT
 
 
 
-            //Test for Polyline
-
-            List<Model.Point> points = new List<Model.Point>();
-
-            Model.Point point0 = new Model.Point(0,0);
-            Model.Point point1 = new Model.Point(0,1);
-            Model.Point point2 = new Model.Point(0,2);
-            Model.Point point3 = new Model.Point(1,2);
-
-            points.Add(point0);
-            points.Add(point1);
-            points.Add(point2);
-            points.Add(point3);
-
-            Polyline polyline = new Polyline(points);
-            //System.Console.Write(polyline.ToString());
-
-            Wall testWall = new Wall(polyline, (float)0.1);
-
-            System.Console.Write(testWall.polyline.ToString());
+            
 
             //file in CQT
             

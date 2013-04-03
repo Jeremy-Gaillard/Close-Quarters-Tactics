@@ -35,17 +35,41 @@ namespace CQT.Network
 
         protected void listen()
         {
-            Console.Out.WriteLine("Server listening at port " + serverPort);
+            Console.Out.WriteLine("Server listening to port " + serverPort);
             while (true) // TODO : change
             {
                 IPEndPoint sender = new IPEndPoint(IPAddress.Any, serverPort);
                 byte[] byteArray;
                 byteArray = listener.Receive(ref sender);
                 String message = Encoding.ASCII.GetString(byteArray, 0, byteArray.Length);
-                Console.Out.WriteLine("Server received : " + message.ToString());
+                Console.Out.WriteLine("Server received : " + message.ToString() + " from " + sender.Address.ToString()
+                    + ":" + sender.Port.ToString());
+
+                //if (message.Equals("Hello"))
+                {
+                    sender.Port = int.Parse(message);
+                    Thread.Sleep(1000);
+                    Console.Out.WriteLine("Adding new client");
+                    addClient(sender);
+                    send("I love u bro", sender);
+                }
             }
         }
         
+        protected bool addClient(IPEndPoint newClient)
+        {
+            foreach(IPEndPoint client in clients)
+            {
+                if( client == newClient )
+                {
+                    Console.Out.WriteLine("Client " + client.Address.ToString() + ":" + client.Port.ToString() + " already registered");
+                    return false;
+                }
+            }
+            clients.Add(newClient);
+            return true;
+        }
+
         protected bool addClient(IPAddress clientIp, int clientPort)
         {
             foreach (IPEndPoint client in clients)
