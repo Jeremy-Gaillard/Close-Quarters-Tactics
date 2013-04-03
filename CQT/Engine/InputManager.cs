@@ -61,11 +61,11 @@ namespace CQT.Engine
             // TODO : mutually exclude move left/right up/down ?
             if(currentKeyboardState.IsKeyDown(Keys.Z))
             {
-                commands.Add(CQT.Model.Player.Commands.MoveForward);
+                commands.Add(CQT.Model.Player.Commands.MoveUp);
             }
             if(currentKeyboardState.IsKeyDown(Keys.S))
             {
-                commands.Add(CQT.Model.Player.Commands.MoveBackwards);
+                commands.Add(CQT.Model.Player.Commands.MoveDown);
             }
             if(currentKeyboardState.IsKeyDown(Keys.Q))
             {

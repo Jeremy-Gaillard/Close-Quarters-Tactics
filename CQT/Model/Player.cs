@@ -12,8 +12,8 @@ namespace CQT.Model
         protected Character character = null;
         public enum Commands
         {
-            MoveForward,
-            MoveBackwards,
+            MoveUp,
+            MoveDown,
             MoveLeft,
             MoveRight
         }
