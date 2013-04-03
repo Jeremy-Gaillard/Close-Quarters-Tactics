@@ -96,8 +96,6 @@ namespace CQT.Model.Map
             Point lastPoint = Model.Utils.TranslationLeft(_polyline.lineList[indexLastLine].p2, _polyline.lineList[indexLastLine].angle, thickness);
             wallPoint.Add(lastPoint);
                        
-            //TODO : add the left side of the wall
-
             for (int i = _polyline.lineList.Count - 1; i >= 0; i--)
             {
                 wallPoint.Add(_polyline.lineList[i].p2);

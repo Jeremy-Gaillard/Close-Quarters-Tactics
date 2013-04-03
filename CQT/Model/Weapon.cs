@@ -3,9 +3,9 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace CQT
+namespace CQT.Model
 {
-	class Weapon : Item
+	public class Weapon : Item
 	{
 
 		protected Character owner;

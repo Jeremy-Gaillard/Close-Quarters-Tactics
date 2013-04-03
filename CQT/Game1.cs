@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -14,6 +14,7 @@ using CQT.Model.Map;
 using Geom = CQT.Model.Geometry;
 using CQT.Model;
 using CQT.Engine;
+using CQT.Command;
 
 namespace CQT
 {
@@ -33,6 +34,7 @@ namespace CQT
         GraphicsDeviceManager g;
         BasicEffect r;
 
+        Player player;
 
         // temp
         Character testCharacter;
@@ -45,6 +47,7 @@ namespace CQT
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 600;
+            player = new Player("Champ");
         }
 
         /// <summary>
@@ -59,31 +62,31 @@ namespace CQT
 
             List<Model.Point> points = new List<Model.Point>();
 
-            Model.Point point0 = new Model.Point(20, 20);
-            Model.Point point1 = new Model.Point(20, -500);
-            Model.Point point2 = new Model.Point(-500, -500);
-            //Model.Point point3 = new Model.Point(100, 0);
+            Model.Point point0 = new Model.Point(0, 0);
+            Model.Point point1 = new Model.Point(0, 1);
+            Model.Point point2 = new Model.Point(0, 2);
+            Model.Point point3 = new Model.Point(1, 2);
 
             points.Add(point0);
             points.Add(point1);
             points.Add(point2);
-            //points.Add(point3);
+            points.Add(point3);
 
             Polyline polyline = new Polyline(points);
             //System.Console.Write(polyline.ToString());
 
-            Wall testWall = new Wall(polyline, (float)30);
+            Wall testWall = new Wall(polyline, (float)0.1);
 
             System.Console.Write(testWall.polyline.ToString());
 
             //file in CQT
-            
+
             XMLReader xmlTest = new XMLReader("../../../map.xml");
 
             // TODO: Add your initialization logic here
             Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
             base.Initialize();
-            
+
         }
 
         /// <summary>
@@ -126,15 +129,16 @@ namespace CQT
 
 
 
-                //env.walls.Add(new Line());
+            //env.walls.Add(new Line());
 
 
-                r = new BasicEffect(GraphicsDevice);
+            r = new BasicEffect(GraphicsDevice);
             r.VertexColorEnabled = true;
 
-            inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState());
+            inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState(), player);
             graphicCache = new GraphicCache(Content);
             testCharacter = new Character(graphicCache.getTexture("Bonhomme"), new Vector2(200, 100), new Vector2(100, 100));
+            player.setCharacter(testCharacter);
             testSprite = new Character(graphicCache.getTexture("test"), new Vector2(50, 200), new Vector2(100, 100));
             graphicEngine.setFollowedCharacter(testCharacter);
         }
@@ -159,9 +163,13 @@ namespace CQT
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
             inputManager.Update(Mouse.GetState(), Keyboard.GetState());
-
+            List<Command.Command> commands = inputManager.getCommands(gameTime);
+            foreach (Command.Command c in commands)
+            {
+                c.execute();
+            }
             //graphicEngine.moveCamera(inputManager.getMouseMovement());
-            
+
 
             // TODO: Add your update logic here
 
@@ -222,9 +230,6 @@ namespace CQT
             for (int i = 0; i < primitiveList.Length; i++)
                 primitiveList[i].Color = Color.White;
             */
-
-            //env.update();
-
             //test perpendicular wall
             List<Model.Point> points = new List<Model.Point>();
 
@@ -284,10 +289,10 @@ namespace CQT
             Wall testWall3 = new Wall(polyline3, (float)20);
 
             graphicEngine.AddPolyline(testWall3.polyline, Color.White);
-
-            testCharacter.setRotation((float)Math.Atan2(inputManager.getMousePosition().Y-graphicEngine.getCameraPosition().Y-testCharacter.getPosition().Y,
+            //env.update();
+            testCharacter.setRotation((float)Math.Atan2(inputManager.getMousePosition().Y - graphicEngine.getCameraPosition().Y - testCharacter.getPosition().Y,
                 inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - testCharacter.getPosition().X));
-            testCharacter.Update(gameTime, inputManager.getCommands());
+            //testCharacter.Update (gameTime, inputManager.getCommands ());
             graphicEngine.AddEntity(testCharacter);
             graphicEngine.AddEntity(testSprite);
             base.Update(gameTime);
@@ -299,7 +304,7 @@ namespace CQT
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            
+
             // TODO: Add your drawing code here
             graphicEngine.Draw();
             base.Draw(gameTime);
@@ -496,7 +501,7 @@ namespace CQT
             {
             }*/
             //spriteBatch.Begin();
-            
+
             //spriteBatch.End();
 
             base.Draw(gameTime);
@@ -511,14 +516,14 @@ namespace CQT
             SimpleTexture.SetData<Int32>(pixel, 0, SimpleTexture.Width * SimpleTexture.Height);
 
             double length = Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
-            float angle = (float) Math.Atan2(y2 - y1, x2 - x1);
+            float angle = (float)Math.Atan2(y2 - y1, x2 - x1);
 
             int width = 2;
 
-            spriteBatch.Draw(SimpleTexture, new Rectangle(x1, y1, (int)(x1+length), width), null,
+            spriteBatch.Draw(SimpleTexture, new Rectangle(x1, y1, (int)(x1 + length), width), null,
                 Color.Blue, angle, new Vector2(0f, 0f), SpriteEffects.None, 1f);
         }
-        
+
         //float x = 0;
         public void Render(GraphicsDevice device, CQT.Model.Point p1, CQT.Model.Point p2, CQT.Model.Point p3, Color color)
         {
@@ -541,7 +546,7 @@ namespace CQT
             _vertices[2].Position = new Vector3(1f, .12f, 0);
             */
             //Console.WriteLine(_vertices[0].Position);
-            
+
             _vertices[0].Position = PointToVector3(ref p1);
             _vertices[1].Position = PointToVector3(ref p2);
             _vertices[2].Position = PointToVector3(ref p3);
@@ -568,7 +573,7 @@ namespace CQT
             _vertices[0].Position = v3;*/
             //Console.WriteLine(_vertices[1].Position); Console.WriteLine("---");
 
-            
+
             foreach (var pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
