@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Net;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -16,6 +17,7 @@ using CQT.Model.Map;
 using Geom = CQT.Model.Geometry;
 using CQT.Model;
 using CQT.Engine;
+using CQT.Network;
 
 namespace CQT
 {
@@ -57,6 +59,15 @@ namespace CQT
         /// </summary>
         protected override void Initialize()
         {
+            // Test network
+
+            Server server = new Server(1337);
+            server.Launch();
+            Client client = new Client();
+            client.InitializeConnection(IPAddress.Parse("127.0.0.1"), 1337, 147);
+
+
+
             //Test for Polyline
 
             List<Model.Point> points = new List<Model.Point>();
