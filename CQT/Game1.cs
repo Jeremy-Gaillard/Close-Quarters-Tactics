@@ -77,7 +77,7 @@ namespace CQT
 
             Wall testWall = new Wall(polyline, (float)0.1);
 
-            System.Console.Write(testWall.polyline.ToString());
+            //System.Console.Write(testWall.polyline.ToString());
 
             //file in CQT
 
