@@ -12,7 +12,7 @@ namespace CQT.Model
 		protected WeaponInfo.Type type;
 
 		public Weapon (WeaponInfo.Type _type)
-			: base(null, new Vector2(0,0), new Vector2(1,1)) // TODO: get these values from somewhere else
+			: base(null, new Vector2(1,1)) // TODO: get these values from somewhere else
 		{
 			owner = null;
 			type = _type;

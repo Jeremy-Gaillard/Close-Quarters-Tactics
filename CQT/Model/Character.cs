@@ -3,6 +3,7 @@ using CQT.Model;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using CQT.Model.Physics;
 
 namespace CQT.Model
 {
@@ -30,24 +31,30 @@ namespace CQT.Model
 		protected uint hitPoints;
 		protected uint maxHP;
 
-		public Character (Texture2D _texture, Vector2 _position, Vector2 _size)
-			: base(_texture, _position, _size)
+        Body body = new Body();
+
+        public Character (Texture2D _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+			: base(_texture, _size)
 		{
 			type = CharacterInfo.Type.None;
-			initCharacter ();
+            initCharacter();
+            body.setPosition(_position);
+            engine.AddBody(body);
 		}
 
-		public Character (CharacterInfo.Type _type, Texture2D _texture, Vector2 _position, Vector2 _size)
-			: base(_texture, _position, _size)
+		public Character (CharacterInfo.Type _type, Texture2D _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+			: base(_texture, _size)
 		{
 			type = _type;
 			initCharacter ();
+            body.setPosition(_position);
+            engine.AddBody(body);
 		}
 
 		public void initCharacter ()
 		{
 			hitPoints = maxHP = CharacterInfo.getMaxHP (type);
-			speed = CharacterInfo.getSpeed (type);
+			speed = CharacterInfo.getSpeed (type) * 2; // TODO: remove this (but currently chars are too slow)
 			//equipDefaultWeapons ();
 		}
 
@@ -141,7 +148,7 @@ namespace CQT.Model
 //
 //		}
 
-		public void move (int milliseconds, MovementDirection direction)
+		public void move (int milliseconds, MovementDirection direction) // TODO rm useless param "millisecond"
 		{
 			//Console.Out.WriteLine("moving ! " + direction.ToString() );
 			Vector2 movement;
@@ -164,7 +171,7 @@ namespace CQT.Model
 				movement.Y = 0;
 				break;
 			case MovementDirection.DownLeft:
-				movement.X = -0.707f;
+				movement.X = -0.707f; // LOL c'est quoi ça ?? pk c'est pas dans une constante ?!
 				movement.Y = 0.707f;
 				break;
 			case MovementDirection.DownRight:
@@ -185,9 +192,16 @@ namespace CQT.Model
 				break;
 			}
 			//Console.Out.WriteLine (directionVector);
-			movement = movement * milliseconds * speed;
+			///movement = movement * milliseconds * speed; // ce n'est pas à Character de faire ce genre de trucs
 			//Console.Out.WriteLine (movement);
-			position += movement;
+			///position += movement;
+            body.tryMove(movement * speed);
 		}
+
+        public override Vector2 getPosition()
+        {
+            return body.getPosition();
+        }
+
 	}
 }

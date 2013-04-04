@@ -6,7 +6,7 @@ using CQT.Model.Geometry;
 
 namespace CQT.Model.Map
 {
-    class Map
+    public class Map
     {
         private Point lowerRight;
         private Point upperLeft;

@@ -8,15 +8,9 @@ using Microsoft.Xna.Framework;
 
 namespace CQT.Model.Map
 {
-    class Wall
+    public class Wall
     {
         public readonly Polyline polyline;
-        float a1;
-        float b1;
-        float a2;
-        float b2;
-        float nextX;
-        float nextY;
 
 
         public Wall(Polyline _polyline, float thickness)

@@ -43,5 +43,11 @@ namespace CQT.Model
             return (x == p.Value.x) && (y == p.Value.y);
         }
 
+        public override string ToString()
+        {
+            //return "Pt{"+x+","+y+"}";
+            return "{" + x + "," + y + "}";
+        }
+
     }
 }

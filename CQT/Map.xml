@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <map nom ="firstMap">
 	<frame>
 		<lowerLeft x="0" y="0"/>
@@ -18,8 +18,8 @@
 			<point x="800" y="600"/>
 		</obstacle>
 		<wall thickness="5">
-			<point x="0" y="0"/>
-			<point x="0" y="800"/>
+			<point x="100" y="0"/>
+			<point x="100" y="800"/>
 			<point x="1100" y="800"/>
 			<point x="900" y="0"/>
 		</wall>
