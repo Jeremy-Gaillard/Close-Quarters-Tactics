@@ -248,7 +248,8 @@ namespace CQT.Engine
             List<Adjacency> polygon2 = new List<Adjacency>();
 
             bool firstPolygon = true;
-            foreach (Adjacency a in pointList)
+            Adjacency a = pointList[0];
+            for( int i = 0; i < pointList.Count; i++)
             {
                 if (firstPolygon)
                 {
@@ -283,6 +284,8 @@ namespace CQT.Engine
                 {
                     polygon2.Add(a);
                 }
+                // running through the polygon
+                a = a.adj2;
             }
             AddPolygon(polygon1, color);
             AddPolygon(polygon2, color);            
