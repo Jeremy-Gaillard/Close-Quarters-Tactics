@@ -28,7 +28,7 @@ namespace CQT.Model.Map
             wallPoint.Add(firstPoint);
             for (int i = 0; i < _polyline.lineList.Count - 1; i++)
             {
-                System.Console.Write(Math.Abs(_polyline.lineList[i].angle + _polyline.lineList[i + 1].angle));
+                ///System.Console.Write(Math.Abs(_polyline.lineList[i].angle + _polyline.lineList[i + 1].angle));
                 //Two line on the same angle
                 if (_polyline.lineList[i].angle == _polyline.lineList[i + 1].angle)
                 {

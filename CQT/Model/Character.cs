@@ -54,7 +54,7 @@ namespace CQT.Model
 		public void initCharacter ()
 		{
 			hitPoints = maxHP = CharacterInfo.getMaxHP (type);
-			//speed = CharacterInfo.getSpeed (type);
+			speed = CharacterInfo.getSpeed (type) * 2; // TODO: remove this (but currently chars are too slow)
 			//equipDefaultWeapons ();
 		}
 
@@ -195,7 +195,7 @@ namespace CQT.Model
 			///movement = movement * milliseconds * speed; // ce n'est pas à Character de faire ce genre de trucs
 			//Console.Out.WriteLine (movement);
 			///position += movement;
-            body.tryMove(movement);
+            body.tryMove(movement * speed);
 		}
 
         public override Vector2 getPosition()

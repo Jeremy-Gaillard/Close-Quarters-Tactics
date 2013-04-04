@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using CQT.Model.Map;
 using CQT.Model;
+using Microsoft.Xna.Framework;
 
 namespace CQT.Model.Physics
 {
@@ -29,13 +30,24 @@ namespace CQT.Model.Physics
                 {
                     foreach (Line l in w.polyline.lineList)
                     {
-                        if (traj.Intersect(l).HasValue)
-                            System.Console.WriteLine("OK");
+                        //Console.WriteLine(l);
+                        Point? interPt = traj.Intersect(l);
+                        if (interPt.HasValue)
+                        {
+                            //System.Console.WriteLine("OK");
+                            traj = new Line(traj.p1, interPt.Value);
+                            //traj = traj.resized();
+                            //System.Console.WriteLine(traj);
+                            traj = traj.shortened(.1f);
+                            //System.Console.WriteLine(traj);
+                        }
                     }
                 }
+                //Console.WriteLine(b.position);
                 //Console.WriteLine(b.nextPosition - b.position);
                 //b.position = b.nextPosition;
-                b.position += b.nextDisplacement;
+                //b.position += b.nextDisplacement;
+                b.position += new Vector2(traj.p2.x-traj.p1.x, traj.p2.y-traj.p1.y);
                 b.ReinitPosition();
             }
         }

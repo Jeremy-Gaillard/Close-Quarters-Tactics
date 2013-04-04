@@ -36,12 +36,15 @@ namespace CQT
         GraphicsDeviceManager g;
         BasicEffect r;
 
+        Map map;
+
         Player player;
 
         // temp
         Character testCharacter;
         Entity testSprite;
         // end temp
+
 
         public Game1()
         {
@@ -105,7 +108,8 @@ namespace CQT
 
             XMLReader xmlTest = new XMLReader("../../../map.xml");
 
-            Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
+            //Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
+            map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
 
             pengine = new PhysicsEngine(map);
 
@@ -181,7 +185,7 @@ namespace CQT
             pengine.Refresh();
 
 
-
+            /*
             //test perpendicular wall
             List<Model.Point> points = new List<Model.Point>();
 
@@ -241,13 +245,17 @@ namespace CQT
             Wall testWall3 = new Wall(polyline3, (float)20);
 
             graphicEngine.AddPolyline(testWall3.polyline, Color.White);
+            */
+
+            graphicEngine.setMap(map);
+
             //env.update();
             testCharacter.setRotation((float)Math.Atan2(inputManager.getMousePosition().Y - graphicEngine.getCameraPosition().Y - testCharacter.getPosition().Y,
                 inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - testCharacter.getPosition().X));
             //testCharacter.Update (gameTime, inputManager.getCommands ());
             graphicEngine.AddEntity(testCharacter);
             graphicEngine.AddEntity(testSprite);
-
+            
 
             base.Update(gameTime);
         }

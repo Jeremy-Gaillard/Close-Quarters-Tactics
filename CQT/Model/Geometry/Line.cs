@@ -93,11 +93,15 @@ namespace CQT.Model
         }*/
         public Line shortened()
         {
+            return shortened(10);
+        }
+        public Line shortened(float epsilon)
+        {
             return new Line(
                 X1,
                 Y1,
-                X2 - (X2 - X1) / Math.Abs(X2 - X1) * 10, // TODO float.Epsilon
-                Y2 - (Y2 - Y1) / Math.Abs(Y2 - Y1) * 10
+                X2 - (X2 == X1 ? 0 : (X2 - X1) / Math.Abs(X2 - X1) * epsilon), // TODO float.Epsilon
+                Y2 - (Y2 == Y1 ? 0 : (Y2 - Y1) / Math.Abs(Y2 - Y1) * epsilon)
             );
         }
 
@@ -132,6 +136,11 @@ namespace CQT.Model
                 X2 - (X2 - X1) / Math.Abs(X2 - X1) * retractEpsilon,
                 Y2 - (Y2 - Y1) / Math.Abs(Y2 - Y1) * retractEpsilon
             );
+        }
+
+        public override string ToString()
+        {
+            return "Line "+p1.ToString()+"--"+p2.ToString();
         }
 
     }
