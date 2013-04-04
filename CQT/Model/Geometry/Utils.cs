@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CQT.Model
 {
-    class Utils
+    public class Utils
     {
         public static Point? LineIntersect(Line l1, Line l2)
         {

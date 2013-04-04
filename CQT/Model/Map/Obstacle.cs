@@ -6,7 +6,7 @@ using CQT.Model.Geometry;
 
 namespace CQT.Model.Map
 {
-    class Obstacle
+    public class Obstacle
     {
         public readonly Polyline polyline;
         public readonly float height;

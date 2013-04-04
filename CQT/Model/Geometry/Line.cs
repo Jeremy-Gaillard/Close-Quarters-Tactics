@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CQT.Model
 {
-    struct Line
+    public struct Line
     {
         private float _length;
         private float? _angle;

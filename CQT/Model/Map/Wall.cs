@@ -6,7 +6,7 @@ using CQT.Model.Geometry;
 
 namespace CQT.Model.Map
 {
-    class Wall
+    public class Wall
     {
         public readonly Polyline polyline;
         private float thickness;
