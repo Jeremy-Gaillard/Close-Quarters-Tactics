@@ -1,23 +1,10 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <map nom ="firstMap">
 	<frame>
 		<lowerLeft x="0" y="0"/>
 		<upperRight x="800" y="600"/>
 	</frame>
 	<object>
-		<obstacle height="5">
-			<point x="50" y="50"/>
-			<point x="70" y="70"/>
-			<point x="50" y="70"/>
-			<point x="50" y="50"/>
-		</obstacle>
-		<obstacle height="5">
-			<point x="100" y="200"/>
-			<point x="200" y="200"/>
-			<point x="300" y="150"/>
-			<point x="100" y="120"/>
-			<point x="100" y="200"/>
-		</obstacle>
 		<obstacle height="5">
 			<point x="400" y="40"/>
 			<point x="300" y="30"/>
@@ -30,9 +17,16 @@
 			<point x="600" y="600"/>
 			<point x="800" y="600"/>
 		</obstacle>
-		<wall thickness="1">
-			<point x="10" y="10"/>
-			<point x="10" y="5"/>
+		<wall thickness="5">
+			<point x="0" y="0"/>
+			<point x="0" y="800"/>
+			<point x="1100" y="800"/>
+			<point x="900" y="0"/>
+		</wall>
+		<wall thickness="5">
+			<point x="200" y="200"/>
+			<point x="300" y="400"/>
+			<point x="500" y="0"/>
 		</wall>
 	</object>
 </map>
