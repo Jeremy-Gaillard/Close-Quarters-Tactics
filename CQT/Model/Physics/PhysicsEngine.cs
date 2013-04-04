@@ -31,7 +31,9 @@ namespace CQT.Model.Physics
                     foreach (Line l in w.polyline.lineList)
                     {
                         //Console.WriteLine(l);
-                        Point? interPt = traj.Intersect(l);
+                        //new List<int>(1,2,3);
+                        //l = l.translate(traj);
+                        /*Point? interPt = traj.Intersect(l);
                         if (interPt.HasValue)
                         {
                             //System.Console.WriteLine("OK");
@@ -40,7 +42,18 @@ namespace CQT.Model.Physics
                             //System.Console.WriteLine(traj);
                             traj = traj.shortened(.1f);
                             //System.Console.WriteLine(traj);
+                        }*/
+                        //Console.WriteLine(l + "  T:  " + l.translatePerpendicular(b.size));
+                        foreach (Line tl in new Line[] { l.translatePerpendicular(b.size/2), l.translatePerpendicular(-b.size/2) })
+                        {
+                            Point? interPt = traj.Intersect(tl);
+                            if (interPt.HasValue)
+                            {
+                                traj = new Line(traj.p1, interPt.Value);
+                                traj = traj.shortened(.1f);
+                            }
                         }
+
                     }
                 }
                 //Console.WriteLine(b.position);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -138,10 +139,25 @@ namespace CQT.Model
             );
         }
 
+
+        internal Line translatePerpendicular(float ratio)
+        {
+            Vector2 normal = new Vector2(p1.y - p2.y, p2.x - p1.x);
+            normal.Normalize();
+            return translate(normal*ratio);
+        }
+        
+        internal Line translate(Vector2 displacement)
+        {
+            return new Line(p1.translate(displacement), p2.translate(displacement));
+        }
+        
+
         public override string ToString()
         {
             return "Line "+p1.ToString()+"--"+p2.ToString();
         }
+
 
     }
 }

@@ -11,6 +11,14 @@ namespace CQT.Model.Physics
         //internal Vector2 position, nextPosition;
         internal Vector2 position;
         internal Vector2 nextDisplacement;
+        internal float size;
+
+        public Body(float _size, Vector2 _position)
+        {
+            size = _size;
+            position = _position;
+            //Console.WriteLine("S: "+size);
+        }
 
         internal void tryMove(Vector2 movement)
         {

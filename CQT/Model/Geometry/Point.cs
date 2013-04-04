@@ -46,8 +46,13 @@ namespace CQT.Model
         public override string ToString()
         {
             //return "Pt{"+x+","+y+"}";
-            return "{" + x + "," + y + "}";
+            return "{" + x + ";" + y + "}";
         }
 
+
+        internal Point translate(Microsoft.Xna.Framework.Vector2 displacement)
+        {
+            return new Point(x+displacement.X, y+displacement.Y);
+        }
     }
 }
