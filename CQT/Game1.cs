@@ -39,6 +39,7 @@ namespace CQT
         // temp
         Character testCharacter;
         Entity testSprite;
+        Map map;
         // end temp
 
         public Game1()
@@ -58,33 +59,12 @@ namespace CQT
         /// </summary>
         protected override void Initialize()
         {
-            //Test for Polyline
-
-            List<Model.Point> points = new List<Model.Point>();
-
-            Model.Point point0 = new Model.Point(0, 0);
-            Model.Point point1 = new Model.Point(0, 1);
-            Model.Point point2 = new Model.Point(0, 2);
-            Model.Point point3 = new Model.Point(1, 2);
-
-            points.Add(point0);
-            points.Add(point1);
-            points.Add(point2);
-            points.Add(point3);
-
-            Polyline polyline = new Polyline(points);
-            //System.Console.Write(polyline.ToString());
-
-            Wall testWall = new Wall(polyline, (float)0.1);
-
-            System.Console.Write(testWall.polyline.ToString());
-
             //file in CQT
 
             XMLReader xmlTest = new XMLReader("../../../map.xml");
 
             // TODO: Add your initialization logic here
-            Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
+            map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
             base.Initialize();
 
         }
@@ -141,6 +121,7 @@ namespace CQT
             player.setCharacter(testCharacter);
             testSprite = new Character(graphicCache.getTexture("test"), new Vector2(50, 200), new Vector2(100, 100));
             graphicEngine.setFollowedCharacter(testCharacter);
+            graphicEngine.setMap(map);
         }
 
         /// <summary>
@@ -168,127 +149,7 @@ namespace CQT
             {
                 c.execute();
             }
-            //graphicEngine.moveCamera(inputManager.getMouseMovement());
-
-
-            // TODO: Add your update logic here
-
-            //System.Console.Write(gameTime);
-            //System.Console.WriteLine("HELLOOOOOOOOOOOOOOO "+gameTime.TotalGameTime);
-
-            /*
-            int points = 10;
-
-            VertexPositionColor[] primitiveList = new VertexPositionColor[points];
-
-            for (int x = 0; x < points / 2; x++)
-            {
-                for (int y = 0; y < 2; y++)
-                {
-                    primitiveList[(x * 2) + y] = new VertexPositionColor(
-                        new Vector3(x * 100, y * 100, 0), Color.White);
-                }
-            }*/
-
-            /*
-            // Initialize an array of indices of type short.
-            short[] lineListIndices = new short[(points * 2) - 2];
-
-            // Populate the array with references to indices in the vertex buffer
-            for (int i = 0; i < points - 1; i++)
-            {
-                lineListIndices[i * 2] = (short)(i);
-                lineListIndices[(i * 2) + 1] = (short)(i + 1);
-            }
-
-            GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
-                PrimitiveType.LineList,
-                primitiveList,
-                0,  // vertex buffer offset to add to each element of the index buffer
-                8,  // number of vertices in pointList
-                lineListIndices,  // the index buffer
-                0,  // first index element to read
-                7   // number of primitives to draw
-            );*/
-
-
-            /*
-            short[] lineStripIndices = new short[8] { 0, 1, 2, 3, 4, 5, 6, 7 };
-
-            for (int i = 0; i < primitiveList.Length; i++)
-                primitiveList[i].Color = Color.Red;
-
-            GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
-                PrimitiveType.LineStrip,
-                primitiveList,
-                0,   // vertex buffer offset to add to each element of the index buffer
-                8,   // number of vertices to draw
-                lineStripIndices,
-                0,   // first index element to read
-                7    // number of primitives to draw
-            );
-            for (int i = 0; i < primitiveList.Length; i++)
-                primitiveList[i].Color = Color.White;
-            */
-            //test perpendicular wall
-            List<Model.Point> points = new List<Model.Point>();
-
-            Model.Point point0 = new Model.Point(0, 0);
-            Model.Point point1 = new Model.Point(0, -100);
-            Model.Point point2 = new Model.Point(-100, -100);
-            Model.Point point3 = new Model.Point(-200, -100);
-
-            points.Add(point0);
-            points.Add(point1);
-            points.Add(point2);
-            points.Add(point3);
-
-            Polyline polyline = new Polyline(points);
-            Wall testWall = new Wall(polyline, (float)30);
-
-            graphicEngine.AddPolyline(testWall.polyline, Color.White);
-
-            //test other perpendicular wall
-            List<Model.Point> points2 = new List<Model.Point>();
-
-            Model.Point point20 = new Model.Point(0, 0);
-            Model.Point point21 = new Model.Point(200, 200);
-            Model.Point point22 = new Model.Point(0, 400);
-            //Model.Point point23 = new Model.Point(60, 140);
-
-            points2.Add(point20);
-            points2.Add(point21);
-            points2.Add(point22);
-            //points2.Add(point23);
-
-            Polyline polyline2 = new Polyline(points2);
-            Wall testWall2 = new Wall(polyline2, (float)10);
-
-            graphicEngine.AddPolyline(testWall2.polyline, Color.White);
-
-            //test other wall
-            List<Model.Point> points3 = new List<Model.Point>();
-
-            Model.Point point30 = new Model.Point(-100, 200);
-            Model.Point point31 = new Model.Point(-70, 200);
-            Model.Point point32 = new Model.Point(-50, 140);
-            Model.Point point33 = new Model.Point(-50, 50);
-            Model.Point point34 = new Model.Point(-10, 100);
-            Model.Point point35 = new Model.Point(-50, 100);
-            //Model.Point point23 = new Model.Point(60, 140);
-
-            points3.Add(point30);
-            points3.Add(point31);
-            points3.Add(point32);
-            points2.Add(point33);
-            points3.Add(point34);
-            points3.Add(point35);
-
-
-            Polyline polyline3 = new Polyline(points3);
-            Wall testWall3 = new Wall(polyline3, (float)20);
-
-            graphicEngine.AddPolyline(testWall3.polyline, Color.White);
+            
             //env.update();
             testCharacter.setRotation((float)Math.Atan2(inputManager.getMousePosition().Y - graphicEngine.getCameraPosition().Y - testCharacter.getPosition().Y,
                 inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - testCharacter.getPosition().X));
