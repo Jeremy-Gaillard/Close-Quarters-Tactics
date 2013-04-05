@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using CQT.Model.Map;
 using CQT.Model;
+using Microsoft.Xna.Framework;
 
 namespace CQT.Model.Physics
 {
