@@ -51,6 +51,8 @@
     <Compile Include="Model\Map\Map.cs" />
     <Compile Include="Model\Map\Obstacle.cs" />
     <Compile Include="Model\Map\Wall.cs" />
+    <Compile Include="Model\Physics\Body.cs" />
+    <Compile Include="Model\Physics\PhysicsEngine.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Map\XMLReader.cs" />
     <Compile Include="Model\Entity.cs" />
@@ -62,7 +64,7 @@
     <Compile Include="Model\Weapon.cs" />
     <Compile Include="View\EntityView.cs" />
     <Compile Include="View\MapView.cs" />
-	<Compile Include="Command\Command.cs" />
+    <Compile Include="Command\Command.cs" />
     <Compile Include="Command\Move.cs" />
   </ItemGroup>
   <ItemGroup>
