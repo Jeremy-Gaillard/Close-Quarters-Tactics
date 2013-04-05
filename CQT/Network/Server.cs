@@ -8,19 +8,15 @@ using System.Threading;
 
 namespace CQT.Network
 {
-    class Server
+    class Server : PacketProcessor
     {
         Thread listeningThread;
-        Socket serverSocket;
         List<IPEndPoint> clients;
-        int serverPort;
-        UdpClient listener;
+        UdpCommunication communicator;
 
         public Server(int port)
         {
-            serverPort = port;
-            listener = new UdpClient(port);
-            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            communicator = new UdpCommunication(port, this);
             clients = new List<IPEndPoint>();
         }
 
@@ -29,31 +25,8 @@ namespace CQT.Network
         /// </summary>
         public void Launch()
         {
-            listeningThread = new Thread(this.listen);
+            listeningThread = new Thread(communicator.Listen);
             listeningThread.Start();
-        }
-
-        protected void listen()
-        {
-            Console.Out.WriteLine("Server listening to port " + serverPort);
-            while (true) // TODO : change
-            {
-                IPEndPoint sender = new IPEndPoint(IPAddress.Any, serverPort);
-                byte[] byteArray;
-                byteArray = listener.Receive(ref sender);
-                String message = Encoding.ASCII.GetString(byteArray, 0, byteArray.Length);
-                Console.Out.WriteLine("Server received : " + message.ToString() + " from " + sender.Address.ToString()
-                    + ":" + sender.Port.ToString());
-
-                //if (message.Equals("Hello"))
-                {
-                    sender.Port = int.Parse(message);
-                    Thread.Sleep(1000);
-                    Console.Out.WriteLine("Adding new client");
-                    addClient(sender);
-                    send("I love u bro", sender);
-                }
-            }
         }
         
         protected bool addClient(IPEndPoint newClient)
@@ -93,14 +66,20 @@ namespace CQT.Network
         {
             foreach (IPEndPoint client in clients)
             {
-                send(message, client);
+               communicator.Send(message, client);
             }
         }
 
-        protected void send(String message, IPEndPoint client)
+        public void ProcessMessage(IPEndPoint sender, String message)
         {
-            byte[] buffer = Encoding.ASCII.GetBytes(message);
-            serverSocket.SendTo(buffer, client);
+            //if (message.Equals("Hello"))
+            {
+                sender.Port = int.Parse(message);
+                Thread.Sleep(1000);
+                Console.Out.WriteLine("Adding new client");
+                addClient(sender);
+                communicator.Send("I love u bro", sender);
+            }
         }
     }
 }

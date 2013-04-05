@@ -8,19 +8,15 @@ using System.Threading;
 
 namespace CQT.Network
 {
-    class Client
+    class Client : PacketProcessor
     {
         IPEndPoint serverAddress;
-        Socket sendingSocket;
-        UdpClient listener;
         Thread listeningThread;
-        int listeningPort;
+        UdpCommunication communicator;
 
         public Client()
         {
             serverAddress = null;
-            sendingSocket = null;
-            listeningPort = 0;
         }
 
         /// <summary>
@@ -30,46 +26,25 @@ namespace CQT.Network
         /// <param name="serverPort">The server's port</param>
         /// <param name="listeningPort">The port listend by the client</param>
         /// <returns></returns>
-        public bool InitializeConnection(IPAddress serverIP, int serverPort, int _listeningPort)
+        public bool InitializeConnection(IPAddress serverIP, int serverPort, int listeningPort)
         {
-            listeningPort = _listeningPort;
             serverAddress = new IPEndPoint(serverIP, serverPort);
-            sendingSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            communicator = new UdpCommunication(listeningPort, this);
 
             Console.Out.WriteLine("Client sending message");
-            // TODO : UDP can lose messages, repeat until timeout/answer from server
-            send(listeningPort.ToString());
 
-            // TODO : check for answer before entering loop
-            listener = new UdpClient(listeningPort);
-            listeningThread = new Thread(this.listen);
-            listeningThread.Start();
-            
-            
-
+            if (communicator.SecureSend(listeningPort.ToString(), serverAddress))
+            {
+                listeningThread = new Thread(communicator.Listen);
+                listeningThread.Start();
+                return true;
+            }
             return false;
         }
 
-        protected void listen()
+        public void ProcessMessage(IPEndPoint sender, String message)
         {
-            Console.Out.WriteLine("Client listening to port " + listeningPort);
-            while (true) // TODO : change
-            {
-                IPEndPoint sender = new IPEndPoint(IPAddress.Any, serverAddress.Port);
-                byte[] byteArray;
-                byteArray = listener.Receive(ref sender);
-                String message = Encoding.ASCII.GetString(byteArray, 0, byteArray.Length);
-                Console.Out.WriteLine("Client received : " + message.ToString() + " from " + sender.Address.ToString()
-                    + ":" + sender.Port.ToString());
-
-                // TODO : handle message
-            }
-        }
-
-        protected void send(String message)
-        {
-            byte[] buffer = Encoding.ASCII.GetBytes(message);
-            sendingSocket.SendTo(buffer, serverAddress);
+            
         }
     }
 }
