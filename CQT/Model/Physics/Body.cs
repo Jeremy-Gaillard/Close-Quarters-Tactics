@@ -26,10 +26,19 @@ namespace CQT.Model.Physics
             nextDisplacement += movement;
         }
 
-        internal Line Trajectory()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="milliseconds">The number or milliseconds elapsed during the previous frame</param>
+        /// <returns></returns>
+        internal Line Trajectory(int milliseconds)
         {
+            //Console.WriteLine(milliseconds);
+
+            float multiplier = milliseconds;
+
             //return new Line(position.X, position.Y, nextPosition.X, nextPosition.Y);
-            return new Line(position.X, position.Y, position.X + nextDisplacement.X, position.Y + nextDisplacement.Y);
+            return new Line(position.X, position.Y, position.X + nextDisplacement.X * multiplier, position.Y + nextDisplacement.Y * multiplier);
         }
 
         internal void ReinitPosition()
