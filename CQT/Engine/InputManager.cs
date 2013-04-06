@@ -89,9 +89,9 @@ namespace CQT.Engine
 			if (d != Character.MovementDirection.None) {
 				commands.Add (new Command.Move (Command.Command.Type.Move, d, currentChar, gameTime.ElapsedGameTime.Milliseconds));
 			}
-			//			if (currentMouseState.LeftButton == ButtonState.Pressed) {
-			//				commands.Add (CQT.Model.Player.Commands.Shoot);
-			//			}
+			if (currentMouseState.LeftButton == ButtonState.Pressed) {
+				commands.Add (new Command.Shoot(Command.Command.Type.Shoot, currentChar));
+			}
 
 			return commands;
 		}

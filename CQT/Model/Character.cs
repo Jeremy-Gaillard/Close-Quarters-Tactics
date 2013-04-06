@@ -124,6 +124,17 @@ namespace CQT.Model
 			return false;
 		}
 
+		public void shoot () {
+			if (currentWeapon != null/* && currentWeapon.canShoot(CharacterInfo.getROTBonus(), now) */) {
+				currentWeapon.shoot(rotation);
+			}
+			else {
+				//TODO (exception?)
+			}
+		}
+
+		// END (WEAPON MANAGEMENT)
+
 //		public void Update (GameTime gameTime, List<Player.Commands> commands)
 //		{
 //			if (commands.Contains (Player.Commands.MoveDown)) {
@@ -197,7 +208,7 @@ namespace CQT.Model
 			///movement = movement * milliseconds * speed; // ce n'est pas à Character de faire ce genre de trucs
 			//Console.Out.WriteLine (movement);
 			///position += movement;
-            body.tryMove(movement * speed);
+            body.tryMove(movement);
 		}
 
         public override Vector2 getPosition()
