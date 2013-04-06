@@ -1,6 +1,6 @@
 using System;
 
-namespace CQT
+namespace CQT.Model
 {
 	public static class WeaponInfo
 	{
@@ -48,6 +48,19 @@ namespace CQT
 				return "Shotgun";
 			default:
 				return "Pea shooter";
+			}
+		}
+		public static uint getMagSize(Type t)
+		{
+			switch (t) {
+			case Type.Assault:
+				return 100;
+			case Type.Gun:
+				return 20;
+			case Type.Shotgun:
+				return 10;
+			default:
+				return 1;
 			}
 		}
 	}

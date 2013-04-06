@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CQT.Model.Geometry
 {
-    class Polyline
+    public class Polyline
     {
         public readonly List<Line> lineList = new List<Line>();
   

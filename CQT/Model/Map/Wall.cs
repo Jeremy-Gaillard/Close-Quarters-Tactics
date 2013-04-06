@@ -4,80 +4,71 @@ using System.Linq;
 using System.Text;
 using CQT.Model.Geometry;
 
+using Microsoft.Xna.Framework;
+
 namespace CQT.Model.Map
 {
-    class Wall
+    public class Wall
     {
         public readonly Polyline polyline;
-        private float thickness;
 
-        public Wall(Polyline _polyline, float _thickness)
+
+        public Wall(Polyline _polyline, float thickness)
         {
-            thickness = _thickness;
-            List<Point> wallPoint = new List<Point>();
-            //create the first segment perpendicular to the left
-            Point firstPoint = Model.Utils.TranslationLeft(_polyline.lineList[0].p1, _polyline.lineList[0].angle, thickness);
-            wallPoint.Add(_polyline.lineList[0].p1);
-            wallPoint.Add(firstPoint);
-            for (int i = 0; i < _polyline.lineList.Count - 1; i++)
+            List<Model.Point> points = new List<Model.Point>();
+            Vector2 perpendicularVector = new Vector2(_polyline.lineList[0].p2.y - _polyline.lineList[0].p1.y, 
+                -(_polyline.lineList[0].p2.x - _polyline.lineList[0].p1.x));
+            perpendicularVector.Normalize();
+            perpendicularVector *= thickness/2;
+            // point translation
+            Model.Point p11 = new Point(_polyline.lineList[0].p1.x + perpendicularVector.X, _polyline.lineList[0].p1.y + perpendicularVector.Y);
+            Model.Point p12 = new Point(_polyline.lineList[0].p1.x - perpendicularVector.X, _polyline.lineList[0].p1.y - perpendicularVector.Y); 
+            Model.Point p21 = new Point(_polyline.lineList[0].p2.x + perpendicularVector.X, _polyline.lineList[0].p2.y + perpendicularVector.Y);
+            Model.Point p22 = new Point(_polyline.lineList[0].p2.x - perpendicularVector.X, _polyline.lineList[0].p2.y - perpendicularVector.Y);
+
+            // adding two first points
+            points.Add(p11);
+            points.Add(p12);
+            Line line11 = new Line(p11, p21);
+            Line line12 = new Line(p12, p22);
+            ///Vector2 line12 = new Vector2(p12.x - p22.x, p21.y - p22.y);
+            foreach (Line l in _polyline.lineList.GetRange(1, _polyline.lineList.Count-1))
             {
-                //Two line on the same angle
-                if (_polyline.lineList[i].angle == _polyline.lineList[i + 1].angle)
+                perpendicularVector = new Vector2(l.p2.y - l.p1.y, -(l.p2.x - l.p1.x));
+                perpendicularVector.Normalize();
+                perpendicularVector *= thickness/2;
+                // point translation
+                p11 = new Point(l.p1.x + perpendicularVector.X, l.p1.y + perpendicularVector.Y);
+                p12 = new Point(l.p1.x - perpendicularVector.X, l.p1.y - perpendicularVector.Y);
+                p21 = new Point(l.p2.x + perpendicularVector.X, l.p2.y + perpendicularVector.Y);
+                p22 = new Point(l.p2.x - perpendicularVector.X, l.p2.y - perpendicularVector.Y);
+
+                Line line21 = new Line(p11, p21);
+                Line line22 = new Line(p12, p22);
+
+                // line intersection
+                Model.Point? intersect1 = Utils.InfiniteLineIntersect(line11, line21);
+                Model.Point? intersect2 = Utils.InfiniteLineIntersect(line12, line22);
+
+                if (intersect1.HasValue)
                 {
-                    Point pointP1 = Model.Utils.TranslationLeft(_polyline.lineList[i].p2, _polyline.lineList[i].angle, thickness);
-                    wallPoint.Add(pointP1);
+                    points.Insert(0, intersect1.Value);
                 }
-                //Angle like this _/
-                else if (_polyline.lineList[i].angle - _polyline.lineList[i + 1].angle < 0)
+                if (intersect2.HasValue)
                 {
-                    Point pointP3 = Model.Utils.TranslationLeft(_polyline.lineList[i].p2, _polyline.lineList[i].angle, thickness);
-                    Point pointP2 = Model.Utils.TranslationLeft(_polyline.lineList[i + 1].p1, _polyline.lineList[i + 1].angle, thickness);
-                    Point pointP4 = Model.Utils.TranslationLeft(_polyline.lineList[i + 1].p2, _polyline.lineList[i + 1].angle, thickness);
-
-                    Line line1 = new Line(wallPoint.Last(), pointP2);
-                    Line line2 = new Line(pointP3, pointP4);
-
-                    Point intersection = (Point)line1.Intersect(line2);
-                    wallPoint.Add(intersection);
+                    points.Add(intersect2.Value);
                 }
 
-                //angle on the other side
-                else if (_polyline.lineList[i].angle - _polyline.lineList[i + 1].angle > 0)
-                {
-                    Point pointP2 = Model.Utils.TranslationLeft(_polyline.lineList[i].p2, _polyline.lineList[i].angle, thickness);
-                    Point pointP3 = Model.Utils.TranslationLeft(_polyline.lineList[i + 1].p1, _polyline.lineList[i + 1].angle, thickness);
-                    Point pointP4 = Model.Utils.TranslationLeft(_polyline.lineList[i + 1].p2, _polyline.lineList[i + 1].angle, thickness);
+                line11 = line21;
+                line12 = line22;
 
-
-
-                    Line line1 = new Line(wallPoint.Last(), pointP2);
-                    line1.resized(line1.length + thickness * 10); //TODO : Improve this measure
-
-                    Line line2 = new Line(pointP4, pointP3);
-                    line2.resized(line2.length + thickness * 10); //TODO : Improve this measure
-             
-                    Point? testIntersection = line1.Intersect(line2);
-                    if (testIntersection != null)
-                    {
-                        Point intersection = (Point)testIntersection;
-                        wallPoint.Add(intersection);
-                    }
-                }
             }
-            int indexLastLine = _polyline.lineList.Count - 1;
-            Point lastPoint = Model.Utils.TranslationLeft(_polyline.lineList[indexLastLine].p2, _polyline.lineList[indexLastLine].angle, thickness);
-            wallPoint.Add(lastPoint);
-                       
-            //TODO : add the right side of the wall
+            // adding two last points
+            points.Insert(0, p21);
+            points.Add(p22);
+            points.Add(p21);
 
-            for (int i = _polyline.lineList.Count - 1; i >= 0; i--)
-            {
-                wallPoint.Add(_polyline.lineList[i].p2);
-            }
-            wallPoint.Add(_polyline.lineList[0].p1);
-
-            Polyline wallLine = new Polyline(wallPoint);
-            polyline = wallLine;
+            polyline = new Polyline(points);
         }
     }
 }

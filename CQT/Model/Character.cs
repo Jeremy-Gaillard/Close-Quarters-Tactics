@@ -3,13 +3,15 @@ using CQT.Model;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using CQT.Model.Physics;
 
-namespace CQT
+namespace CQT.Model
 {
-	class Character : Entity
+	public class Character : Entity
 	{
 		public enum MovementDirection
 		{
+			None,
 			Up,
 			UpLeft,
 			Left,
@@ -29,24 +31,32 @@ namespace CQT
 		protected uint hitPoints;
 		protected uint maxHP;
 
-		public Character (Texture2D _texture, Vector2 _position, Vector2 _size)
-			: base(_texture, _position, _size)
+        Body body;
+
+        public Character (Texture2D _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+			: base(_texture, _size)
 		{
 			type = CharacterInfo.Type.None;
-			initCharacter ();
+            initCharacter();
+            //body.setPosition(_position);
+            body = new Body(_size.X, _position); // TODO: size as a FLOAT instead?!
+            engine.AddBody(body);
 		}
 
-		public Character (CharacterInfo.Type _type, Texture2D _texture, Vector2 _position, Vector2 _size)
-			: base(_texture, _position, _size)
+		public Character (CharacterInfo.Type _type, Texture2D _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+			: base(_texture, _size)
 		{
 			type = _type;
 			initCharacter ();
+            //body.setPosition(_position);
+            body = new Body(_size.X, _position); // TODO: size as a FLOAT instead?!
+            engine.AddBody(body);
 		}
 
 		public void initCharacter ()
 		{
 			hitPoints = maxHP = CharacterInfo.getMaxHP (type);
-			speed = CharacterInfo.getSpeed (type);
+			speed = CharacterInfo.getSpeed (type); // TODO: remove this (but currently chars are too slow)
 			//equipDefaultWeapons ();
 		}
 
@@ -114,92 +124,97 @@ namespace CQT
 			return false;
 		}
 
-		public void Update (GameTime gameTime, List<Player.Commands> commands)
-		{
-			if (commands.Contains (Player.Commands.MoveDown)) {
-                if(commands.Contains(Player.Commands.MoveLeft))
-                {
-                    move(gameTime, MovementDirection.DownLeft);
-                }
-                else if(commands.Contains(Player.Commands.MoveRight))
-                {
-                    move(gameTime, MovementDirection.DownRight);
-                }
-                else
-                {
-				    move(gameTime, MovementDirection.Down);
-                }
+		public void shoot () {
+			if (currentWeapon != null/* && currentWeapon.canShoot(CharacterInfo.getROTBonus(), now) */) {
+				currentWeapon.shoot(rotation);
 			}
-			else if (commands.Contains (Player.Commands.MoveUp)) {
-				if(commands.Contains(Player.Commands.MoveLeft))
-                {
-                    move(gameTime, MovementDirection.UpLeft);
-                }
-                else if(commands.Contains(Player.Commands.MoveRight))
-                {
-                    move(gameTime, MovementDirection.UpRight);
-                }
-                else
-                {
-				    move(gameTime, MovementDirection.Up);
-                }
-			}
-			else if (commands.Contains (Player.Commands.MoveLeft)) {
-				move(gameTime, MovementDirection.Left);
-			}
-			else if (commands.Contains (Player.Commands.MoveRight)) {
-				move(gameTime, MovementDirection.Right);
+			else {
+				//TODO (exception?)
 			}
 		}
 
-        protected void move(GameTime gameTime, MovementDirection direction)
+		// END (WEAPON MANAGEMENT)
+
+//		public void Update (GameTime gameTime, List<Player.Commands> commands)
+//		{
+//			if (commands.Contains (Player.Commands.MoveDown)) {
+//				if (commands.Contains (Player.Commands.MoveLeft)) {
+//					move (gameTime, MovementDirection.DownLeft);
+//				} else if (commands.Contains (Player.Commands.MoveRight)) {
+//					move (gameTime, MovementDirection.DownRight);
+//				} else {
+//					move (gameTime, MovementDirection.Down);
+//				}
+//			} else if (commands.Contains (Player.Commands.MoveUp)) {
+//				if (commands.Contains (Player.Commands.MoveLeft)) {
+//					move (gameTime, MovementDirection.UpLeft);
+//				} else if (commands.Contains (Player.Commands.MoveRight)) {
+//					move (gameTime, MovementDirection.UpRight);
+//				} else {
+//					move (gameTime, MovementDirection.Up);
+//				}
+//			} else if (commands.Contains (Player.Commands.MoveLeft)) {
+//				move (gameTime, MovementDirection.Left);
+//			} else if (commands.Contains (Player.Commands.MoveRight)) {
+//				move (gameTime, MovementDirection.Right);
+//			}
+//
+//		}
+
+		public void move (int milliseconds, MovementDirection direction) // TODO rm useless param "millisecond"
+		{
+			//Console.Out.WriteLine("moving ! " + direction.ToString() );
+			Vector2 movement;
+			Single cos = (Single)Math.Cos (rotation);
+			switch (direction) {
+			case MovementDirection.Up:
+				movement.X = 0;
+				movement.Y = -1;
+				break;
+			case MovementDirection.Down:
+				movement.X = 0;
+				movement.Y = 1;
+				break;
+			case MovementDirection.Left:
+				movement.X = -1;
+				movement.Y = 0;
+				break;
+			case MovementDirection.Right:
+				movement.X = 1;
+				movement.Y = 0;
+				break;
+			case MovementDirection.DownLeft:
+				movement.X = -0.707f; // LOL c'est quoi ça ?? pk c'est pas dans une constante ?!
+				movement.Y = 0.707f;
+				break;
+			case MovementDirection.DownRight:
+				movement.X = 0.707f;
+				movement.Y = 0.707f;
+				break;
+			case MovementDirection.UpLeft:
+				movement.X = -0.707f;
+				movement.Y = -0.707f;
+				break;
+			case MovementDirection.UpRight:
+				movement.X = 0.707f;
+				movement.Y = -0.707f;
+				break;
+			default:
+				movement.X = 0;
+				movement.Y = 0;
+				break;
+			}
+			//Console.Out.WriteLine (directionVector);
+			///movement = movement * milliseconds * speed; // ce n'est pas à Character de faire ce genre de trucs (millisecond)
+			//Console.Out.WriteLine (movement);
+			///position += movement;
+            body.tryMove(movement * speed);
+		}
+
+        public override Vector2 getPosition()
         {
-            //Console.Out.WriteLine("moving ! " + direction.ToString() );
-            Vector2 movement;
-            Single cos = (Single)Math.Cos(rotation);
-            switch (direction)
-            {
-                case MovementDirection.Up:
-                    movement.X = 0;
-                    movement.Y = -1;
-                    break;
-                case MovementDirection.Down:
-                    movement.X = 0;
-                    movement.Y = 1;
-                    break;
-                case MovementDirection.Left:
-                    movement.X = -1;
-                    movement.Y = 0;
-                    break;
-                case MovementDirection.Right:
-                    movement.X = 1;
-                    movement.Y = 0;
-                    break;
-                case MovementDirection.DownLeft:
-                    movement.X = -0.707f;
-                    movement.Y = 0.707f;
-                    break;
-                case MovementDirection.DownRight:
-                    movement.X = 0.707f;
-                    movement.Y = 0.707f;
-                    break;
-                case MovementDirection.UpLeft:
-                    movement.X = -0.707f;
-                    movement.Y = -0.707f;
-                    break;
-                case MovementDirection.UpRight:
-                    movement.X = 0.707f;
-                    movement.Y = -0.707f;
-                    break;
-                default:
-                    movement.X = 0;
-                    movement.Y = 0;
-                    break;
-            }
-            //Console.Out.WriteLine (directionVector);
-            movement = movement * gameTime.ElapsedGameTime.Milliseconds * speed;
-            //Console.Out.WriteLine (movement);
-            position += movement;
+            return body.getPosition();
         }
+
 	}
 }

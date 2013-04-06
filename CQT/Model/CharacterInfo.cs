@@ -1,6 +1,6 @@
 using System;
 
-namespace CQT
+namespace CQT.Model
 {
 	public static class CharacterInfo
 	{
@@ -26,15 +26,16 @@ namespace CQT
 		}
 		public static Single getSpeed (Type t)
 		{
+            const Single standardSpeed = .5f;
 			switch (t) {
 			case Type.Commando:
-				return 1.15f;
+                    return 1.15f * standardSpeed;
 			case Type.Medic:
-				return 1.0f;
+                return 1.0f * standardSpeed;
 			case Type.Support:
-				return 0.75f;
+                return 0.75f * standardSpeed;
 			default:
-				return 1.00f;
+                return 1.00f * standardSpeed;
 			}
 		}
 		public static string getName (Type t)
