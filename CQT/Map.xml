@@ -28,5 +28,9 @@
 			<point x="300" y="400"/>
 			<point x="500" y="0"/>
 		</wall>
+		<wall thickness="100">
+			<point x="50" y="0"/>
+			<point x="50" y="200"/>
+		</wall>
 	</object>
 </map>

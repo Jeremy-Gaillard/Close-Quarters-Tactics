@@ -26,7 +26,7 @@ namespace CQT.Model.Physics
             nextDisplacement += movement;
         }
 
-        internal Line trajectory()
+        internal Line Trajectory()
         {
             //return new Line(position.X, position.Y, nextPosition.X, nextPosition.Y);
             return new Line(position.X, position.Y, position.X + nextDisplacement.X, position.Y + nextDisplacement.Y);

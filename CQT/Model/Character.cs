@@ -56,7 +56,7 @@ namespace CQT.Model
 		public void initCharacter ()
 		{
 			hitPoints = maxHP = CharacterInfo.getMaxHP (type);
-			speed = CharacterInfo.getSpeed (type) * 2; // TODO: remove this (but currently chars are too slow)
+			speed = CharacterInfo.getSpeed (type) * 4; // TODO: remove this (but currently chars are too slow)
 			//equipDefaultWeapons ();
 		}
 

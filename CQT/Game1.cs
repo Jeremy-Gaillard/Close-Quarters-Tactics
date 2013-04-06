@@ -127,7 +127,9 @@ namespace CQT
             graphicCache = new GraphicCache(Content);
             testCharacter = new Character(graphicCache.getTexture("Bonhomme"), pengine, new Vector2(200, 100), new Vector2(100, 100));
             player.setCharacter(testCharacter);
+            /*
             testSprite = new Character(graphicCache.getTexture("test"), pengine, new Vector2(50, 200), new Vector2(100, 100));
+            */
             graphicEngine.setFollowedCharacter(testCharacter);
             graphicEngine.setMap(map);
         }
@@ -168,8 +170,11 @@ namespace CQT
                 inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - testCharacter.getPosition().X));
             //testCharacter.Update (gameTime, inputManager.getCommands ());
             graphicEngine.AddEntity(testCharacter);
+
+            /*
             graphicEngine.AddEntity(testSprite);
-            
+            */
+
 
             base.Update(gameTime);
         }

@@ -13,12 +13,23 @@ namespace CQT.Model.Map
         private List<Obstacle> listObstacle = new List<Obstacle>();
         private List<Wall> listWall = new List<Wall>();
 
+        private List<Line> listCollisionLines;
+
+
         public Map(Point _lowerRight, Point _upperLeft, List<Obstacle> _listObstacle, List<Wall> _listWall)
         {
             lowerRight = _lowerRight;
             upperLeft = _upperLeft;
             listObstacle = _listObstacle;
             listWall = _listWall;
+
+            listCollisionLines = new List<Line>();
+            foreach (Wall w in listWall)
+                foreach (Line l in w.polyline.lineList)
+                    listCollisionLines.Add(l);
+            foreach (Obstacle obs in listObstacle)
+                foreach (Line l in obs.polyline.lineList)
+                    listCollisionLines.Add(l);
         }
 
         /// <summary>
@@ -49,6 +60,11 @@ namespace CQT.Model.Map
         public List<Wall> getWalls()
         {
             return listWall;
+        }
+
+        internal List<Line> getCollisionLines()
+        {
+            return listCollisionLines;
         }
     }
 }
