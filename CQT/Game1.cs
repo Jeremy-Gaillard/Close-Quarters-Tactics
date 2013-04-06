@@ -31,7 +31,6 @@ namespace CQT
         PhysicsEngine pengine;
         GraphicCache graphicCache;
         InputManager inputManager;
-        GameEnvironment env;
 
         GraphicsDeviceManager g;
         BasicEffect r;
@@ -63,35 +62,8 @@ namespace CQT
         /// </summary>
         protected override void Initialize()
         {
-            //Test for Polyline
-
-            List<Model.Point> points = new List<Model.Point>();
-
-            Model.Point point0 = new Model.Point(0, 0);
-            Model.Point point1 = new Model.Point(0, 1);
-            Model.Point point2 = new Model.Point(0, 2);
-            Model.Point point3 = new Model.Point(1, 2);
-
-            points.Add(point0);
-            points.Add(point1);
-            points.Add(point2);
-            points.Add(point3);
-
-            Polyline polyline = new Polyline(points);
-            //System.Console.Write(polyline.ToString());
-
-            Wall testWall = new Wall(polyline, (float)0.1);
-
-            //System.Console.Write(testWall.polyline.ToString());
-
-            //file in CQT
-
             // TODO: Add your initialization logic here
 
-            /*
-            XMLReader xmlTest = new XMLReader("../../../map.xml");
-            Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
-            */
             base.Initialize();
         }
 
@@ -113,28 +85,6 @@ namespace CQT
             pengine = new PhysicsEngine(map);
 
             // TODO: use this.Content to load your game content here
-
-            env = new GameEnvironment();
-            //env.walls.Add(new Line(200, 250, 300, 100));
-
-            env.walls.Add(new Line(100, 450, 300, 150));
-            env.walls.Add(new Line(300, 50, 500, 300));
-            env.walls.Add(new Line(100, 250, 200, 200));
-
-            env.walls.Add(new Line(550, 250, 700, 200));
-            env.walls.Add(new Line(500, 400, 750, 500));
-
-            for (int i = 0; i < 5; i++)
-            {
-                const float siz = 80;
-                env.walls.Add(new Line(i * siz, 600, i * siz + (siz * .8f), 500));
-                //env.walls.Add(new Line(i * 20 + 18, 700, i * 20 + 20, 800));
-                env.walls.Add(new Line(i * siz + (siz * .8f), 500, i * siz + (siz * 1f), 600));
-            }
-
-
-
-            //env.walls.Add(new Line());
 
 
             r = new BasicEffect(GraphicsDevice);
@@ -174,6 +124,12 @@ namespace CQT
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
             inputManager.Update(Mouse.GetState(), Keyboard.GetState());
+
+
+            testCharacter.setRotation((float)Math.Atan2(inputManager.getMousePosition().Y - graphicEngine.getCameraPosition().Y - testCharacter.getPosition().Y,
+                inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - testCharacter.getPosition().X));
+            // TODO : change this horror
+
             List<Command.Command> commands = inputManager.getCommands(gameTime);
             foreach (Command.Command c in commands)
             {
@@ -185,71 +141,8 @@ namespace CQT
 
             pengine.Refresh();
 
-            /*
-            //test perpendicular wall
-            List<Model.Point> points = new List<Model.Point>();
+            
 
-            Model.Point point0 = new Model.Point(0, 0);
-            Model.Point point1 = new Model.Point(0, -100);
-            Model.Point point2 = new Model.Point(-100, -100);
-            Model.Point point3 = new Model.Point(-200, -100);
-
-            points.Add(point0);
-            points.Add(point1);
-            points.Add(point2);
-            points.Add(point3);
-
-            Polyline polyline = new Polyline(points);
-            Wall testWall = new Wall(polyline, (float)30);
-
-            graphicEngine.AddPolyline(testWall.polyline, Color.White);
-
-            //test other perpendicular wall
-            List<Model.Point> points2 = new List<Model.Point>();
-
-            Model.Point point20 = new Model.Point(0, 0);
-            Model.Point point21 = new Model.Point(200, 200);
-            Model.Point point22 = new Model.Point(0, 400);
-            //Model.Point point23 = new Model.Point(60, 140);
-
-            points2.Add(point20);
-            points2.Add(point21);
-            points2.Add(point22);
-            //points2.Add(point23);
-
-            Polyline polyline2 = new Polyline(points2);
-            Wall testWall2 = new Wall(polyline2, (float)10);
-
-            graphicEngine.AddPolyline(testWall2.polyline, Color.White);
-
-            //test other wall
-            List<Model.Point> points3 = new List<Model.Point>();
-
-            Model.Point point30 = new Model.Point(-100, 200);
-            Model.Point point31 = new Model.Point(-70, 200);
-            Model.Point point32 = new Model.Point(-50, 140);
-            Model.Point point33 = new Model.Point(-50, 50);
-            Model.Point point34 = new Model.Point(-10, 100);
-            Model.Point point35 = new Model.Point(-50, 100);
-            //Model.Point point23 = new Model.Point(60, 140);
-
-            points3.Add(point30);
-            points3.Add(point31);
-            points3.Add(point32);
-            points2.Add(point33);
-            points3.Add(point34);
-            points3.Add(point35);
-
-
-            Polyline polyline3 = new Polyline(points3);
-            Wall testWall3 = new Wall(polyline3, (float)20);
-
-            graphicEngine.AddPolyline(testWall3.polyline, Color.White);
-            */
-            //env.update();
-            testCharacter.setRotation((float)Math.Atan2(inputManager.getMousePosition().Y - graphicEngine.getCameraPosition().Y - testCharacter.getPosition().Y,
-                inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - testCharacter.getPosition().X));
-            //testCharacter.Update (gameTime, inputManager.getCommands ());
             graphicEngine.AddEntity(testCharacter);
 
             /*
@@ -271,12 +164,6 @@ namespace CQT
             graphicEngine.Draw();
             base.Draw(gameTime);
             return;
-
-            GraphicsDevice.Clear(Color.Black);
-
-            spriteBatch.Begin();
-
-            base.Draw(gameTime);
         }
 
     }
