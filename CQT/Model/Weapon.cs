@@ -10,13 +10,14 @@ namespace CQT.Model
 
 		protected Character owner;
 		protected WeaponInfo.Type type;
-		protected int lastShotTime;
+		protected int lastShotTime; // milliseconds
 
 		public Weapon (WeaponInfo.Type _type)
-			: base(null, new Vector2(1,1)) // TODO: get these values from somewhere else
+			: base(null, new Vector2(1,1)) // TODO: get real values
 		{
 			owner = null;
 			type = _type;
+			lastShotTime = 0;
 		}
 
 		/// <summary>
@@ -37,13 +38,25 @@ namespace CQT.Model
 			// TODO?: some more stuff to leave it lying on the map...
 		}
 
+		// currentTime = milliseconds
 		public bool canShoot(float rotBonus, int currentTime) {
 			// TODO
-			return true;
+			// - check ROT
+			// - check ammo in magazine
+
+			float msPerShot = 60000 / (rotBonus * WeaponInfo.getROT(type));
+			int nextShot = lastShotTime + (int)msPerShot;
+
+			if (nextShot <= currentTime) {
+				lastShotTime = currentTime;
+				return true;
+			}
+			//Console.WriteLine ("msPerShot: "+msPerShot+"\nlastShotTime: "+lastShotTime+"\nnextShot: "+nextShot+"\ncurrentTime: "+currentTime);
+			return false;
 		}
 
 		public void shoot(float direction) {
-			System.Console.WriteLine ("Weapon.shoot(): "+WeaponInfo.getName (type)+" shooting!");
+			//System.Console.WriteLine ("Weapon.shoot(): "+WeaponInfo.getName (type)+" shooting at angle "+direction);
 			//TODO
 		}
 	}

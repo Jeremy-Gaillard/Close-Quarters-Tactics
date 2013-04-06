@@ -90,7 +90,7 @@ namespace CQT.Engine
 				commands.Add (new Command.Move (Command.Command.Type.Move, d, currentChar, gameTime.ElapsedGameTime.Milliseconds));
 			}
 			if (currentMouseState.LeftButton == ButtonState.Pressed) {
-				commands.Add (new Command.Shoot(Command.Command.Type.Shoot, currentChar));
+				commands.Add (new Command.Shoot(Command.Command.Type.Shoot, currentChar, (int)gameTime.TotalGameTime.TotalMilliseconds));
 			}
 
 			return commands;

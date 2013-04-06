@@ -22,7 +22,8 @@ namespace CQT.Model
 			//position = _position;
 			size = _size;
 			rotation = 0f;
-			spriteOrigin = new Vector2 (texture.Width / 2, texture.Height / 2);
+			spriteOrigin = (_texture != null ? new Vector2 (texture.Width / 2, texture.Height / 2)
+			                : new Vector2(0,0));
 		}
 
         
