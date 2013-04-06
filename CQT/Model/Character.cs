@@ -54,7 +54,7 @@ namespace CQT.Model
 		public void initCharacter ()
 		{
 			hitPoints = maxHP = CharacterInfo.getMaxHP (type);
-			//speed = CharacterInfo.getSpeed (type);
+			speed = CharacterInfo.getSpeed (type);
 			//equipDefaultWeapons ();
 		}
 
@@ -121,6 +121,17 @@ namespace CQT.Model
 			}
 			return false;
 		}
+
+		public void shoot () {
+			if (currentWeapon != null/* && currentWeapon.canShoot(CharacterInfo.getROTBonus(), now) */) {
+				currentWeapon.shoot(rotation);
+			}
+			else {
+				//TODO (exception?)
+			}
+		}
+
+		// END (WEAPON MANAGEMENT)
 
 //		public void Update (GameTime gameTime, List<Player.Commands> commands)
 //		{

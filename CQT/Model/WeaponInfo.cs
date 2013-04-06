@@ -50,6 +50,19 @@ namespace CQT.Model
 				return "Pea shooter";
 			}
 		}
+		public static uint getMagSize(Type t)
+		{
+			switch (t) {
+			case Type.Assault:
+				return 100;
+			case Type.Gun:
+				return 20;
+			case Type.Shotgun:
+				return 10;
+			default:
+				return 1;
+			}
+		}
 	}
 }
 

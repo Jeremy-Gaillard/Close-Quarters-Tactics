@@ -10,6 +10,7 @@ namespace CQT.Model
 
 		protected Character owner;
 		protected WeaponInfo.Type type;
+		protected int lastShotTime;
 
 		public Weapon (WeaponInfo.Type _type)
 			: base(null, new Vector2(1,1)) // TODO: get these values from somewhere else
@@ -33,7 +34,17 @@ namespace CQT.Model
 		public void drop ()
 		{
 			setOwner (null);
-			// TODO: some more stuff to leave it lying on the map...
+			// TODO?: some more stuff to leave it lying on the map...
+		}
+
+		public bool canShoot(float rotBonus, int currentTime) {
+			// TODO
+			return true;
+		}
+
+		public void shoot(float direction) {
+			System.Console.WriteLine ("Weapon.shoot(): "+WeaponInfo.getName (type)+" shooting!");
+			//TODO
 		}
 	}
 }
