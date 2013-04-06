@@ -61,10 +61,11 @@ namespace CQT
         {
             // Test network
 
-            Server server = new Server(1337);
+            ENetServer server = new ENetServer(1337, 8);
             server.Launch();
-            Client client = new Client();
-            client.InitializeConnection(IPAddress.Parse("127.0.0.1"), 1337, 147);
+            ENetClient client = new ENetClient();
+            client.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1337));
+            client.Send("Hello !");
 
 
 
