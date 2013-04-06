@@ -5,7 +5,6 @@ using System.Text;
 using CQT.Model.Map;
 using CQT.Model;
 using Microsoft.Xna.Framework;
-using System.Diagnostics;
 
 namespace CQT.Model.Physics
 {
@@ -13,25 +12,19 @@ namespace CQT.Model.Physics
     {
         Map.Map map;
         List<Body> bodies = new List<Body>();
-        Stopwatch stopWatch = new Stopwatch();
 
         public PhysicsEngine(Map.Map m)
         {
             map = m;
-            stopWatch.Start();
         }
 
-        public void Refresh()
+        public void Refresh(GameTime gameTime)
         //public void Refresh(List<Wall> walls)
         {
             // TODO make real-time displacements (taking into account the framerate)
 
-            //stopWatch.Stop();
-            TimeSpan ts = stopWatch.Elapsed;
-            stopWatch.Reset();
-            stopWatch.Start();
+            TimeSpan ts = gameTime.ElapsedGameTime;
 
-            //Console.WriteLine(ts);
 
             //const float epsilon = .1f;
             const float epsilon = .001f;
