@@ -108,6 +108,7 @@ namespace CQT
             XMLReader xmlTest = new XMLReader("../../../map.xml");
 
 
+            map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
 
             pengine = new PhysicsEngine(map);
 
@@ -184,7 +185,7 @@ namespace CQT
 
             pengine.Refresh();
 
-
+            /*
             //test perpendicular wall
             List<Model.Point> points = new List<Model.Point>();
 
@@ -244,7 +245,7 @@ namespace CQT
             Wall testWall3 = new Wall(polyline3, (float)20);
 
             graphicEngine.AddPolyline(testWall3.polyline, Color.White);
-
+            */
             //env.update();
             testCharacter.setRotation((float)Math.Atan2(inputManager.getMousePosition().Y - graphicEngine.getCameraPosition().Y - testCharacter.getPosition().Y,
                 inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - testCharacter.getPosition().X));

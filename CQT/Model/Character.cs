@@ -205,10 +205,10 @@ namespace CQT.Model
 				break;
 			}
 			//Console.Out.WriteLine (directionVector);
-			///movement = movement * milliseconds * speed; // ce n'est pas à Character de faire ce genre de trucs
+			///movement = movement * milliseconds * speed; // ce n'est pas à Character de faire ce genre de trucs (millisecond)
 			//Console.Out.WriteLine (movement);
 			///position += movement;
-            body.tryMove(movement);
+            body.tryMove(movement * speed);
 		}
 
         public override Vector2 getPosition()
