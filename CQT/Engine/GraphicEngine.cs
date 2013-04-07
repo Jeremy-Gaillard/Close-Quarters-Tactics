@@ -122,7 +122,7 @@ namespace CQT.Engine
 
 
             // Drawing vision cone
-            VisionView.Draw(spriteBatch, graphics, cameraPosition, new CQT.Model.Point(followedCharacter.body.position), map.getVisionBlockingLines());
+           // VisionView.Draw(spriteBatch, graphics, cameraPosition, new CQT.Model.Point(followedCharacter.body.position), map.getVisionBlockingLines());
 
 
 
