@@ -33,12 +33,30 @@ namespace CQT
         InputManager inputManager;
         GameEnvironment environment;
 
-        public Game1()
+        GameEngine gengine;
+
+        public Game1(ServerEngine eng)
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 600;
+            gengine = eng;
+            environment = gengine.getEnvironment();
+        }
+
+        public Game1(ClientEngine eng)
+        {
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 600;
+            gengine = eng;
+            while (!eng.ready)
+            {
+                // horrible   
+            }
+            environment = gengine.getEnvironment();
         }
 
         /// <summary>
@@ -64,21 +82,21 @@ namespace CQT
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
             graphicEngine = new GraphicEngine(spriteBatch, graphics, GraphicsDevice);
 
-            XMLReader xmlTest = new XMLReader("../../../map.xml");
+            /*XMLReader xmlTest = new XMLReader("../../../map.xml");
 
 
             Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
             Player player = new Player("Champ");
 
-            environment = new GameEnvironment(map, player);
+            environment = new GameEnvironment(map, player);*/
             pengine = new PhysicsEngine(environment.map);
 
             // TODO: use this.Content to load your game content here
 
-            inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState(), player);
+            inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState(), environment.localPlayer);
             graphicCache = new GraphicCache(Content);
             Character testCharacter = new Character(graphicCache.getTexture("Bonhomme"), pengine, new Vector2(200, 100), new Vector2(100, 100));
-            player.setCharacter(testCharacter);
+            environment.localPlayer.setCharacter(testCharacter);
             graphicEngine.setFollowedCharacter(environment.localPlayer.getCharacter());
             graphicEngine.setMap(environment.map);
         }
@@ -101,7 +119,10 @@ namespace CQT
         {
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                gengine.Exit();
                 this.Exit();
+            }
             inputManager.Update(Mouse.GetState(), Keyboard.GetState());
             
 

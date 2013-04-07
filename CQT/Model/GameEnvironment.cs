@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CQT.Model
 {
-    class GameEnvironment
+    public class GameEnvironment
     {
         public readonly Map.Map map;
         public readonly Player localPlayer;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.Serialization;
 using CQT.Model.Geometry;
 
 namespace CQT.Model.Map
@@ -78,6 +79,61 @@ namespace CQT.Model.Map
         internal List<Line> getVisionBlockingLines()
         {
             return visionBlockingLines;
+        }
+
+        public string Serialize()
+        {
+            String value = lowerRight.Serialize() + "|" + upperLeft.Serialize() + "|";
+            
+            foreach (Obstacle o in listObstacle)
+            {
+                value += "[" + o.Serialize() + "]";
+            }
+            value += "|";
+            foreach (Wall w in listWall)
+            {
+                value += "[" + w.Serialize() + "]";
+            }
+
+            return value;
+        }
+
+        static public Map Unserialize(string s)
+        {
+            Point lr;
+            Point ul;
+            List<Obstacle> obstacles = new List<Obstacle>();
+            List<Wall> walls = new List<Wall>();
+            
+            // First point
+            int index = 0;
+            int nextIndex = s.IndexOf('|');
+            lr = Point.Unserialize(s.Substring(index, nextIndex-index));
+            // Second point
+            index = nextIndex + 1;
+            nextIndex = s.IndexOf('|', index);
+            ul = Point.Unserialize(s.Substring(index, nextIndex-index));
+            // Obstacles
+            index = nextIndex + 2;
+            nextIndex = s.IndexOf("]");
+            int limitIndex = s.IndexOf('|', nextIndex);
+            while (nextIndex < limitIndex)
+            {
+                string sub = s.Substring(index, nextIndex - index);
+                obstacles.Add(Obstacle.Unserialize(sub));
+                index = nextIndex + 2;
+                nextIndex = s.IndexOf(']', index-1);
+            }
+            // Walls
+            index++;
+            while (nextIndex != -1)
+            {
+                string sub = s.Substring(index, nextIndex - index);
+                walls.Add(Wall.Unserialize(sub));
+                index = nextIndex + 2;
+                nextIndex = s.IndexOf(']', index - 1);
+            }
+            return new Map(lr, ul, obstacles, walls);
         }
 
     }

@@ -6,7 +6,7 @@ using CQT.Model;
 
 namespace CQT.Model
 {
-	class Player
+	public class Player
 	{
 		protected String name;
 		protected Character character = null;

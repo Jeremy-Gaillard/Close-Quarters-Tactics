@@ -7,12 +7,16 @@ using System.Net;
 
 using ENet;
 
+using CQT.Engine;
+
 namespace CQT.Network
 {
-    class ENetClient
+    public class ENetClient
     {
         protected const int TIMEOUT = 1000;
         protected const int CONNECTIONTIMEOUT = 10000;
+
+        protected ClientEngine engine;
 
         protected Thread listeningThread;
         protected ENet.Peer server;
@@ -20,8 +24,9 @@ namespace CQT.Network
 
         protected bool end = false;
 
-        public ENetClient()
+        public ENetClient(ClientEngine ce)
         {
+            engine = ce;
             client = new ENet.Host();
             client.InitializeClient(2); // 2 channels per client
         }
@@ -65,7 +70,7 @@ namespace CQT.Network
                         break;
                     case ENet.EventType.Receive:
                         String message = new String((sbyte*)e.Packet.Data.ToPointer(), 0, e.Packet.Length);
-                        processMessage(message);
+                        engine.ProcessMessage(message);
                         break;
                     case ENet.EventType.None:
                         break;

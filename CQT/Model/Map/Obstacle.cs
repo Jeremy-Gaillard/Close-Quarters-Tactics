@@ -20,5 +20,22 @@ namespace CQT.Model.Map
               height = _height;
             }
         }
+
+        // TODO : used for testing purpose, remove or rework
+        public Obstacle(Polyline _polyline)
+        {
+            polyline = _polyline;
+            height = -1;
+        }
+
+        public string Serialize()
+        {
+            return polyline.Serialize();
+        }
+
+        static public Obstacle Unserialize(string s)
+        {
+            return new Obstacle(Polyline.Unserialize(s));
+        }
     }
 }

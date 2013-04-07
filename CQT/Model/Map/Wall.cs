@@ -70,5 +70,20 @@ namespace CQT.Model.Map
 
             polyline = new Polyline(points);
         }
+
+        public Wall(Polyline _polyline)
+        {
+            polyline = _polyline;
+        }
+
+        public string Serialize()
+        {
+            return polyline.Serialize();
+        }
+
+        static public Wall Unserialize(string s)
+        {
+            return new Wall(Polyline.Unserialize(s));
+        }
     }
 }

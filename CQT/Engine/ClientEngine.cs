@@ -6,27 +6,34 @@ using System.Net;
 
 using Microsoft.Xna.Framework;
 
+using CQT.Network;
 using CQT.Command;
+using CQT.Model;
+using CQT.Model.Map;
 
-namespace CQT.Network
+namespace CQT.Engine
 {
-    class ClientInterface : NetworkInterface
+    public class ClientEngine : GameEngine
     {
         protected const int POSITIONREFRESHTIME = 50;
 
         protected ENetClient communication;
         protected int elapsedTime;
         protected List<Command.Command> commands;
+        protected GameEnvironment environment;
 
-        public ClientInterface(IPEndPoint server/*environment*/)
+        public bool ready { get; protected set; }
+
+        public ClientEngine(IPEndPoint server/*player info*/)
         {
             elapsedTime = 0;
             commands = new List<Command.Command>();
-            communication = new ENetClient();
+            communication = new ENetClient(this);
             if (!communication.Connect(server))
             {
                 throw new Exception("Unable to connect to server");
             }
+            ready = false;
         }
 
         public void Update(GameTime gameTime)
@@ -35,7 +42,7 @@ namespace CQT.Network
 
             foreach (Command.Command c in commands)
             {
-                //communication.Send(c.Serialize());
+                //communication.SendReliable(c.Serialize());
             }
             if (elapsedTime > POSITIONREFRESHTIME)
             {
@@ -48,6 +55,32 @@ namespace CQT.Network
         public void SendCommand(Command.Command command)
         {
             commands.Add(command);
+        }
+
+        public void setEnvironment(string serializedMap)
+        {
+            Player p = new Player("Georges"); // TODO : change this
+            Map map = Map.Unserialize(serializedMap);
+            environment = new GameEnvironment(map, p);
+            ready = true;
+        }
+
+        public void ProcessMessage(String message)
+        {
+            if (!ready)
+            {
+                setEnvironment(message);
+            }
+        }
+
+        public GameEnvironment getEnvironment()
+        {
+            return environment;
+        }
+
+        public void Exit()
+        {
+            communication.Disconnect();
         }
     }
 }

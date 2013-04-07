@@ -6,9 +6,11 @@ using System.Threading;
 
 using ENet;
 
+using CQT.Engine;
+
 namespace CQT.Network
 {
-    class ENetServer
+    public class ENetServer
     {
         protected const int TIMEOUT = 1000;
 
@@ -16,10 +18,13 @@ namespace CQT.Network
         protected List<ENet.Peer> clients;
         protected ENet.Host server;
 
+        protected ServerEngine engine;
+
         protected bool end = false;
 
-        public ENetServer(int port, int maxClients)
+        public ENetServer(int port, int maxClients, ServerEngine se)
         {
+            engine = se;
             clients = new List<ENet.Peer>();
             server = new ENet.Host();
             server.InitializeServer(port, maxClients * 2); // 2 channels per client
@@ -59,13 +64,15 @@ namespace CQT.Network
                         // needs more error handling
                     case ENet.EventType.Connect:
                         addClient(e.Peer);
+                        engine.SendCurrentState(e.Peer);    // TODO : change the way this works ?
                         break;
                     case ENet.EventType.Disconnect:
                         removeClient(e.Peer);
                         break;
                     case ENet.EventType.Receive:
                         String message = new String((sbyte*)e.Packet.Data.ToPointer(), 0, e.Packet.Length);
-                        processMessage(message, e.Peer);
+                        engine.processMessage(message, e.Peer);
+                        //processMessage(message, e.Peer);
                         break;
                     case ENet.EventType.None:
                         break;

@@ -88,6 +88,19 @@ namespace CQT.Model
             return "{" + x + ";" + y + "}";
         }
 
+        public string Serialize()
+        {
+            return  x + ";" + y;
+        }
+
+        static public Point Unserialize(string s)
+        {
+            int index = s.IndexOf(';');
+            string x = s.Substring(0, index);
+            string y = s.Substring(index + 1);
+            return new Point(float.Parse(x), float.Parse(y));
+        }
+
 
     }
 }

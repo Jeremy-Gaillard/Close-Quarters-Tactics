@@ -55,6 +55,7 @@
             this.bJoin.TabIndex = 1;
             this.bJoin.Text = "Join Game";
             this.bJoin.UseVisualStyleBackColor = true;
+            this.bJoin.Click += new System.EventHandler(this.bJoin_Click);
             // 
             // bExit
             // 

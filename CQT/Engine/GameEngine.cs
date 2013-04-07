@@ -5,10 +5,14 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
-namespace CQT.Network
+using CQT.Model;
+
+namespace CQT.Engine
 {
-    interface NetworkInterface
+    public interface GameEngine
     {
         void Update(GameTime gameTime);
+        GameEnvironment getEnvironment();
+        void Exit();
     }
 }
