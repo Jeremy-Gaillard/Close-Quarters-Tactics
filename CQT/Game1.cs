@@ -66,7 +66,7 @@ namespace CQT
             XMLReader xmlTest = new XMLReader("../../../map.xml");
 
 
-            Map map = new Map(xmlTest.lowerLeft, xmlTest.upperRight, xmlTest.listObstacle, xmlTest.listWall);
+            Map map = new Map(xmlTest.upperLeft, xmlTest.lowerRight, xmlTest.listObstacle, xmlTest.listWall);
             Player player = new Player("Champ");
 
 			environment = GameEnvironment.Instance;

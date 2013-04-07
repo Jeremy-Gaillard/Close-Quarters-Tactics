@@ -8,14 +8,14 @@ namespace CQT.Model.Map
 {
     public class Map
     {
-        private Point lowerLeft;
-        private Point upperRight;
+        private Point upperLeft;
+        private Point lowerRight;
 
 		public float Width {
-			get { return (upperRight.x - lowerLeft.x); }
+			get { return (lowerRight.x - upperLeft.x); }
 		}
 		public float Height {
-			get { return (upperRight.y - lowerLeft.y); }
+			get { return (lowerRight.y - upperLeft.y); }
 		}
 
         private List<Obstacle> listObstacle = new List<Obstacle>();
@@ -26,10 +26,10 @@ namespace CQT.Model.Map
         private List<Line> visionBlockingLines;
 
 
-        public Map(Point _lowerLeft, Point _upperRight, List<Obstacle> _listObstacle, List<Wall> _listWall)
+        public Map(Point _upperLeft, Point _lowerRight, List<Obstacle> _listObstacle, List<Wall> _listWall)
         {
-            lowerLeft = _lowerLeft;
-            upperRight = _upperRight;
+            upperLeft = _upperLeft;
+            lowerRight = _lowerRight;
             listObstacle = _listObstacle;
             listWall = _listWall;
 
@@ -51,12 +51,12 @@ namespace CQT.Model.Map
         /// <summary>
         /// Get the delimitations of the map
         /// </summary>
-        /// <returns>A list of points. At 0, it's the lower left point. At 1 it's the upper right point</returns>
+        /// <returns>A list of points. At 0, it's the upper left point. At 1 it's the lower right point</returns>
         public List<Point> getDelimitation()
         {
             List<Point> delimitations = new List<Point>();
-            delimitations.Add(lowerLeft);
-            delimitations.Add(upperRight);
+            delimitations.Add(upperLeft);
+            delimitations.Add(lowerRight);
             return delimitations;
         }
 

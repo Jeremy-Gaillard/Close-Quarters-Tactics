@@ -9,8 +9,8 @@ namespace CQT.Model.Map
 {
     class XMLReader
     {
-        public readonly Point lowerLeft;
-        public readonly Point upperRight;
+        public readonly Point upperLeft;
+        public readonly Point lowerRight;
         public readonly List<Obstacle> listObstacle = new List<Obstacle>();
         public readonly List<Wall> listWall = new List<Wall>();
 
@@ -35,13 +35,13 @@ namespace CQT.Model.Map
                         float x = (float)frameElement.Attribute("x");
                         float y = (float)frameElement.Attribute("y");
  
-                        if (frameElement.Name == "lowerLeft")
+                        if (frameElement.Name == "upperLeft")
                         {
-                            lowerLeft = new Point(x, y);
+                            upperLeft = new Point(x, y);
                         }
-                        else if (frameElement.Name == "upperRight")
+                        else if (frameElement.Name == "lowerRight")
                         {
-                            upperRight = new Point(x, y);
+                            lowerRight = new Point(x, y);
                         }                 
                     }
                 }
@@ -94,10 +94,10 @@ namespace CQT.Model.Map
                     
                 }
 
-               /* Console.WriteLine("lower left : " + lowerLeft.x);
-                Console.WriteLine("lower right : " + lowerLeft.x);
-                Console.WriteLine("upper left : " + upperRight.x);
-                Console.WriteLine("upper right : " + upperRight.x);
+               /* Console.WriteLine("lower left : " + upperLeft.x);
+                Console.WriteLine("lower right : " + upperLeft.x);
+                Console.WriteLine("upper left : " + lowerRight.x);
+                Console.WriteLine("upper right : " + lowerRight.x);
 
                 Console.WriteLine("obstacle");
                 for (int i = 0; i < listObstacle.Count; i++)
