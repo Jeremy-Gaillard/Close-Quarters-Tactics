@@ -16,6 +16,8 @@ namespace CQT.Network
         protected List<ENet.Peer> clients;
         protected ENet.Host server;
 
+        protected bool end = false;
+
         public ENetServer(int port, int maxClients)
         {
             clients = new List<ENet.Peer>();
@@ -32,10 +34,23 @@ namespace CQT.Network
             listeningThread.Start();
         }
 
+        public void Shutdown()
+        {
+            foreach (ENet.Peer p in clients)
+            {
+                p.DisconnectLater(0);
+            }
+            clients.Clear();
+            end = true;
+            listeningThread.Join();
+            Console.Out.WriteLine("Server down");
+        }
+
+
         protected unsafe void listen()
         {
             ENet.Event e = new ENet.Event();
-            while (true) // TODO : change
+            while (!end) // TODO : change
             {
                 server.Service(TIMEOUT, out e);
                 //Console.Out.WriteLine("Message received. Type : " + e.Type);
@@ -58,10 +73,10 @@ namespace CQT.Network
             }
         }
 
-        protected unsafe bool addClient(ENet.Peer newClient)
+        protected bool addClient(ENet.Peer newClient)
         {
-            Console.Out.WriteLine("New connection from client " + newClient.NativeData->address.host + ":"
-                + newClient.NativeData->address.port);
+            Console.Out.WriteLine("New connection from client " + newClient.GetRemoteAddress().Address.ToString() + ":"
+                + newClient.GetRemoteAddress().Port);
             if (clients.Contains(newClient))
             {
                 return false;
@@ -83,6 +98,14 @@ namespace CQT.Network
             destination.Send((byte)(clients.IndexOf(destination)*2), packet);
         }
 
+        public void Send(String message)
+        {
+            ENet.Packet packet = new ENet.Packet();
+            byte[] buffer = Encoding.ASCII.GetBytes(message);
+            packet.Initialize(buffer, ENet.PacketFlags.UnreliableFragment);
+            server.Broadcast(0 /*TODO: change channel ?*/,ref packet);
+        }
+
         public void SendReliable(String message, ENet.Peer destination)
         {
             ENet.Packet packet = new ENet.Packet();
@@ -91,10 +114,18 @@ namespace CQT.Network
             destination.Send((byte)(clients.IndexOf(destination) * 2 + 1), packet);
         }
 
-        protected unsafe void processMessage(String message, ENet.Peer sender)
+        public void SendReliable(String message)
         {
-            Console.Out.WriteLine("Message from " + sender.NativeData->address.host + ":"
-                + sender.NativeData->address.port + " : " + message);
+            ENet.Packet packet = new ENet.Packet();
+            byte[] buffer = Encoding.ASCII.GetBytes(message);
+            packet.Initialize(buffer, ENet.PacketFlags.Reliable);
+            server.Broadcast(1 /*TODO : change channel ?*/, ref packet);
+        }
+
+        protected void processMessage(String message, ENet.Peer sender)
+        {
+            Console.Out.WriteLine("Message from " + sender.GetRemoteAddress().Address.ToString() + ":"
+                + sender.GetRemoteAddress().Port + " : " + message);
             SendReliable("Well hello good sir !", sender);
         }
     }

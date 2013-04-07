@@ -18,6 +18,8 @@ namespace CQT.Network
         protected ENet.Peer server;
         protected ENet.Host client;
 
+        protected bool end = false;
+
         public ENetClient()
         {
             client = new ENet.Host();
@@ -47,7 +49,7 @@ namespace CQT.Network
         protected unsafe void listen()
         {
             ENet.Event e = new ENet.Event();
-            while (true) // TODO : change
+            while (!end)
             {
                 client.Service(TIMEOUT, out e);
                 //Console.Out.WriteLine("Message received. Type : " + e.Type);
@@ -57,7 +59,9 @@ namespace CQT.Network
                     case ENet.EventType.Connect:
                         break;
                     case ENet.EventType.Disconnect:
-                        // TODO
+                        server = new ENet.Peer();
+                        end = true; // no thread join in this case, fix ?
+                        Console.Out.WriteLine("Connection closed by server");
                         break;
                     case ENet.EventType.Receive:
                         String message = new String((sbyte*)e.Packet.Data.ToPointer(), 0, e.Packet.Length);
@@ -85,10 +89,21 @@ namespace CQT.Network
             server.Send(1, packet);
         }
 
-        protected unsafe void processMessage(String message)
+        public void Disconnect()
         {
-            Console.Out.WriteLine("Message from " + server.NativeData->address.host + ":"
-                + server.NativeData->address.port + " : " + message);
+            if (server.IsInitialized)
+            {
+                server.DisconnectLater(0);
+            }
+            end = true;
+            listeningThread.Join();
+            Console.Out.WriteLine("Client disconnected");
+        }
+
+        protected void processMessage(String message)
+        {
+            Console.Out.WriteLine("Message from " + server.GetRemoteAddress().Address.ToString() + ":"
+                + server.GetRemoteAddress().Port + " : " + message);
         }
     }
 }

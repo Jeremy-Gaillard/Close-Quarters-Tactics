@@ -21,6 +21,8 @@ using CQT.Command;
 using CQT.Model.Physics;
 using CQT.Network;
 
+using System.Threading;
+
 namespace CQT
 {
     /// <summary>
@@ -74,7 +76,15 @@ namespace CQT
             client = new ENetClient();
             client.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1337));
 
-            client.Send("Hello");
+            ENetClient client2 = new ENetClient();
+            client2.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1337));
+
+
+            server.Send("Hello guize !");
+
+            client.Disconnect();
+
+            server.Shutdown();
 
             base.Initialize();
         }
