@@ -67,6 +67,7 @@
     <Compile Include="Command\Command.cs" />
     <Compile Include="Command\Move.cs" />
     <Compile Include="Command\Shoot.cs" />
+    <Compile Include="View\VisionView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">

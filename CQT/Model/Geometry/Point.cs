@@ -9,10 +9,17 @@ namespace CQT.Model
     public struct Point
     {
         public readonly float x, y;
+
         public Point(float x, float y)
         {
             this.x = x;
             this.y = y;
+        }
+
+        public Point(Vector2 vector2)
+        {
+            this.x = vector2.X;
+            this.y = vector2.Y;
         }
 
         public static bool operator ==(Point p1, Point p2)

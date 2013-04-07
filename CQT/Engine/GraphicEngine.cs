@@ -119,6 +119,15 @@ namespace CQT.Engine
             }
             spriteBatch.End();
 
+
+
+            // Drawing vision cone
+            VisionView.Draw(spriteBatch, graphics, cameraPosition, new CQT.Model.Point(followedCharacter.body.position), map.getVisionBlockingLines());
+
+
+
+
+
             // Drawing primitives
             // Game coordinates -> Screen coordinates
             basicEffect.View = Matrix.CreateTranslation(cameraPosition.X, cameraPosition.Y, 0);

@@ -31,7 +31,7 @@ namespace CQT.Model
 		protected uint hitPoints;
 		protected uint maxHP;
 
-        Body body;
+        public readonly Body body;
 
         public Character (Texture2D _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
 			: base(_texture, _size)

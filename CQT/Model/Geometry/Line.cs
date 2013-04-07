@@ -68,7 +68,7 @@ namespace CQT.Model
             return Utils.LineIntersect(this, l);
         }
 
-        internal Line rotated(float angle)
+        public Line rotated(float angle)
         {
             float currentAngle = (float)Math.Atan2(Y2 - Y1, X2 - X1);
             float dist = length; //Geometry.distance(p1,p2);
@@ -142,14 +142,14 @@ namespace CQT.Model
         }
 
 
-        internal Line TranslatePerpendicular(float ratio)
+        public Line TranslatePerpendicular(float ratio)
         {
             Vector2 normal = new Vector2(p1.y - p2.y, p2.x - p1.x);
             normal.Normalize();
             return Translate(normal*ratio);
         }
-        
-        internal Line Translate(Vector2 displacement)
+
+        public Line Translate(Vector2 displacement)
         {
             return new Line(p1.Translated(displacement), p2.Translated(displacement));
         }
@@ -220,7 +220,7 @@ namespace CQT.Model
         }
 
 
-        internal Tuple<Point?, Point?> IntersectLineCircle(Point center, float radius)
+        public Tuple<Point?, Point?> IntersectLineCircle(Point center, float radius)
         {
             if (p1.x == p2.x && p1.y == p2.y)
                 return new Tuple<Point?, Point?>(null, null);
@@ -244,7 +244,7 @@ namespace CQT.Model
             return new Tuple<Point?, Point?>(proj.Translated(normal * baseLength), proj.Translated(-normal * baseLength));
         }
 
-        internal Tuple<Point?, Point?> IntersectSegmentCircle(Point center, float radius)
+        public Tuple<Point?, Point?> IntersectSegmentCircle(Point center, float radius)
         {
             Tuple<Point?, Point?> pts = IntersectLineCircle(center, radius);
             //Point? p1 = pts.Item1;
@@ -290,23 +290,23 @@ namespace CQT.Model
             //return ((p.x >= p1.x && p.x <= p2.x) || (p.x <= p1.x && p.x >= p2.x))
             //    && ((p.y >= p1.y && p.y <= p2.y) || (p.y <= p1.y && p.y >= p2.y));
         }
-        
-        internal Line project(Line axis)
+
+        public Line project(Line axis)
         {
             return new Line(p1.Projected(axis), p2.Projected(axis));
         }
 
-        internal Vector2 asVector()
+        public Vector2 asVector()
         {
             return p2.asVector() - p1.asVector();
         }
 
-        internal Line Normal()
+        public Line Normal()
         {
             return new Line(p1, new Point(p1.x + p1.y - p2.y, p1.y + p2.x - p1.x));
         }
 
-        internal Vector2 NormalVector()
+        public Vector2 NormalVector()
         {
             return new Vector2(p1.y - p2.y, p2.x - p1.x);
         }
