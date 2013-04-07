@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Net;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -11,7 +9,6 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-
 using CQT.Model.Geometry;
 using CQT.Model.Map;
 using Geom = CQT.Model.Geometry;
@@ -21,8 +18,6 @@ using CQT.Command;
 using CQT.Model.Physics;
 using CQT.Network;
 
-using System.Threading;
-
 namespace CQT
 {
     /// <summary>
@@ -31,27 +26,12 @@ namespace CQT
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
 
         GraphicEngine graphicEngine;
         PhysicsEngine pengine;
         GraphicCache graphicCache;
         InputManager inputManager;
-
-        GraphicsDeviceManager g;
-        BasicEffect r;
-
-        Map map;
-
-        Player player;
-        ENetServer server;
-        ENetClient client;
-
-        // temp
-        Character testCharacter;
-        Entity testSprite;
-        // end temp
-
+        GameEnvironment environment;
 
         public Game1()
         {
@@ -59,7 +39,6 @@ namespace CQT
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 600;
-            player = new Player("Champ");
         }
 
         /// <summary>
@@ -71,20 +50,6 @@ namespace CQT
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            server = new ENetServer(1337, 8);
-            server.Launch();
-            client = new ENetClient();
-            client.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1337));
-
-            ENetClient client2 = new ENetClient();
-            client2.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1337));
-
-
-            server.Send("Hello guize !");
-
-            client.Disconnect();
-
-            server.Shutdown();
 
             base.Initialize();
         }
@@ -96,34 +61,26 @@ namespace CQT
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
             graphicEngine = new GraphicEngine(spriteBatch, graphics, GraphicsDevice);
 
             XMLReader xmlTest = new XMLReader("../../../map.xml");
 
 
-            map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
+            Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
+            Player player = new Player("Champ");
 
-            pengine = new PhysicsEngine(map);
+            environment = new GameEnvironment(map, player);
+            pengine = new PhysicsEngine(environment.map);
 
             // TODO: use this.Content to load your game content here
 
-
-            r = new BasicEffect(GraphicsDevice);
-            r.VertexColorEnabled = true;
-
-            //System.Console.WriteLine("INITIALIZED");
-            //throw new Exception();
-
             inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState(), player);
             graphicCache = new GraphicCache(Content);
-            testCharacter = new Character(graphicCache.getTexture("Bonhomme"), pengine, new Vector2(200, 100), new Vector2(100, 100));
+            Character testCharacter = new Character(graphicCache.getTexture("Bonhomme"), pengine, new Vector2(200, 100), new Vector2(100, 100));
             player.setCharacter(testCharacter);
-            /*
-            testSprite = new Character(graphicCache.getTexture("test"), pengine, new Vector2(50, 200), new Vector2(100, 100));
-            */
-            graphicEngine.setFollowedCharacter(testCharacter);
-            graphicEngine.setMap(map);
+            graphicEngine.setFollowedCharacter(environment.localPlayer.getCharacter());
+            graphicEngine.setMap(environment.map);
         }
 
         /// <summary>
@@ -146,10 +103,10 @@ namespace CQT
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
             inputManager.Update(Mouse.GetState(), Keyboard.GetState());
+            
 
-
-            testCharacter.setRotation((float)Math.Atan2(inputManager.getMousePosition().Y - graphicEngine.getCameraPosition().Y - testCharacter.getPosition().Y,
-                inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - testCharacter.getPosition().X));
+            environment.localPlayer.getCharacter().setRotation((float)Math.Atan2(inputManager.getMousePosition().Y - graphicEngine.getCameraPosition().Y - environment.localPlayer.getCharacter().getPosition().Y,
+                inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - environment.localPlayer.getCharacter().getPosition().X));
             // TODO : change this horror
 
             List<Command.Command> commands = inputManager.getCommands(gameTime);
@@ -162,9 +119,9 @@ namespace CQT
             // TODO: Add your update logic here
 
             pengine.Refresh(gameTime);
-            
 
-            graphicEngine.AddEntity(testCharacter);
+
+            graphicEngine.AddEntity(environment.localPlayer.getCharacter());
 
             /*
             graphicEngine.AddEntity(testSprite);
@@ -184,7 +141,6 @@ namespace CQT
             // TODO: Add your drawing code here
             graphicEngine.Draw();
             base.Draw(gameTime);
-            return;
         }
 
     }

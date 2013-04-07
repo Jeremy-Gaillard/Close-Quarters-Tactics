@@ -58,7 +58,7 @@
     <Compile Include="Engine\InputManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Model\CharacterInfo.cs" />
-    <Compile Include="Model\Environment.cs" />
+    <Compile Include="Model\GameEnvironment.cs" />
     <Compile Include="Model\Geometry\Polyline.cs" />
     <Compile Include="Model\Geometry\Utils.cs" />
     <Compile Include="Model\Geometry\Line.cs" />
@@ -73,8 +73,10 @@
     <Compile Include="Model\Map\XMLReader.cs" />
     <Compile Include="Model\Entity.cs" />
     <Compile Include="Model\WeaponInfo.cs" />
+    <Compile Include="Network\ClientInterface.cs" />
     <Compile Include="Network\ENetClient.cs" />
     <Compile Include="Network\ENetServer.cs" />
+    <Compile Include="Network\NetworkInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Character.cs" />
     <Compile Include="Model\Item.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="Command\Command.cs" />
     <Compile Include="Command\Move.cs" />
     <Compile Include="Command\Shoot.cs" />
+    <Compile Include="View\VisionView.cs" />
     <Compile Include="View\MainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,11 +125,11 @@
     </Content>
     <Content Include="Icon.ico" />
     <Content Include="lib\ENetX64.dll">
-	  <Link>ENetX64.dll</Link>
+      <Link>ENetX64.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="lib\ENetX86.dll">
-	  <Link>ENetX86.dll</Link>
+      <Link>ENetX86.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -1,49 +1,44 @@
-﻿using CQT.Model.Geometry;
-using Microsoft.Xna.Framework.Input;
+﻿using CQT.Model;
+using CQT.Model.Geometry;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
+using Vector3 = Microsoft.Xna.Framework.Vector3;
+using Color = Microsoft.Xna.Framework.Color;
+using GraphicsDeviceManager = Microsoft.Xna.Framework.GraphicsDeviceManager;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Input;
 
-namespace CQT.Model
+namespace CQT.View
 {
-    class GameEnvironment
+    class VisionView
     {
-        //public const float viewSize = 100;
-        float viewSize = 100;
 
-        Point origin;
-
-        public List<Line> walls = new List<Line>();
-        public Line viewLine;
-        public Line viewLine2;
-        public List<Line> intermediateLines = new List<Line>();
-
-        public List<Point> lightPolygon = new List<Point>();
-
-        public void update()
+        public static void Draw(SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 cameraOffset, Point origin, List<Line> visionBlockingLines)
         {
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-            {
-                //Console.WriteLine("OK");
-                origin = new Point(Mouse.GetState().X, Mouse.GetState().Y);
-            }
+            new VisionView(sb, _gman, cameraOffset, origin, visionBlockingLines);
+        }
 
-            //viewLine = new Line(0, 0, Mouse.GetState().X, Mouse.GetState().Y);
+        const float viewSize = 1000;
+        List<Line> visionBlockingLines;
+        GraphicsDeviceManager gman;
+        Point origin;
+        Line viewLine;
+        Line viewLine2;
+        List<Line> intermediateLines = new List<Line>();
+        Vector2 cameraOffset;
 
-            /*
-            ///////////////////////////////
-            viewLine = new Line(origin, new Point(Mouse.GetState().X, Mouse.GetState().Y));
-            
-            viewSize = viewLine.length;
+        public VisionView(SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 _cameraOffset, Point _origin, List<Line> _visionBlockingLines)
+        {
+            gman = _gman;
+            origin = _origin;
+            visionBlockingLines = _visionBlockingLines;
+            cameraOffset = _cameraOffset;
 
-            //viewLine2 = new Line(0, 0, Mouse.GetState().X, Mouse.GetState().Y);
-            viewLine2 = viewLine.rotated(Math.PI/5);
-            //System.Console.WriteLine(viewLine2.X2+" "+viewLine2.Y2);
-            ///////////////////////////////
-            */
+            List<Point> lightPolygon = new List<Point>();
 
-            viewSize = 1000;
             float alpha = (float) Math.PI / 4;
             viewLine = new Line(origin, new Point(Mouse.GetState().X, Mouse.GetState().Y)).resized(viewSize).rotated(-alpha/2);
             viewLine2 = viewLine.rotated(alpha);
@@ -86,52 +81,8 @@ namespace CQT.Model
             ls.Reverse();
             intermediateLines.AddRange(ls);
 
-            /*var intermediateLines_buffer = new List<Line>(); //(intermediateLines);
 
-            for (int i = 0; i < intermediateLines.Count(); i++)
-            {
-                intermediateLines_buffer.Add(intermediateLines[i]);
-                //Console.WriteLine("-");
-                foreach (Line wall in walls)
-                {
-                    if (i+1 < intermediateLines.Count())
-                    if (Utils.PointInTriangle(wall.p1, origin, intermediateLines[i].p2, intermediateLines[i + 1].p2)
-                     || Utils.PointInTriangle(wall.p2, origin, intermediateLines[i].p2, intermediateLines[i + 1].p2))
-                    {
-                        //Console.WriteLine("AAAAAAAAAAAAAAAAAAA");
-                        Point p =
-                            Utils.normalizedAngleDifference(Utils.angle(origin, wall.p1), Utils.angle(origin, wall.p2)) > 0 ?
-                            //wall.p1 : wall.p2;
-                            wall.retractedP1() : wall.retractedP2();
-                        
-                        Line l = new Line(origin, p);
-                        if (l.length < viewSize)
-                        {
-                            l = l.resized(viewSize);
-                            CollideWalls(ref l, wall);
-                        }
-                        intermediateLines_buffer.Add(l);
-                        //Line ll = l;
-                        //intermediateLines_final.Add(ll);
-
-                        ls = Project(ref l, intermediateLines[i + 1]);
-                        intermediateLines_buffer.AddRange(ls);
-                        
-                        //l = intermediateLines[i + 1];
-                        //ls = ProjectReverse(ls[ls.Count()-1], ref l);
-                        //intermediateLines_final.AddRange(ls);
-                        
-                        //break;
-                    }
-                }
-            }
-
-            //Console.WriteLine("---");
-
-            intermediateLines = intermediateLines_buffer;*/
-
-
-            foreach (Line wall in walls)
+            foreach (Line wall in visionBlockingLines)
             {
                 var intermediateLines_buffer = new List<Line>();
                 //Console.WriteLine("-");
@@ -197,7 +148,148 @@ namespace CQT.Model
             //Point p;
             //test(ref p);
 
+            displayLight(sb, cameraOffset, lightPolygon);
+
         }
+
+        void displayLight(SpriteBatch sb, Vector2 cameraOffset, List<Point> lightPolygon)
+        {
+
+            for (int i = 0; i < lightPolygon.Count() - 1; i++)
+            {
+                //debug.drawLine(new Line(env.lightPolygon[i], env.lightPolygon[i + 1]), Color.Red);
+                Render(sb.GraphicsDevice, viewLine.p1, lightPolygon[i], lightPolygon[i + 1], Color.Red);//Color.DarkGray);
+            }
+
+        }
+
+
+
+
+
+
+        //float x = 0;
+        public void Render(GraphicsDevice device, CQT.Model.Point p1, CQT.Model.Point p2, CQT.Model.Point p3, Color color)
+        {
+            BasicEffect _effect = new BasicEffect(device);
+            _effect.Texture = ColorToTexture(device, color, 1, 1);
+            _effect.TextureEnabled = true;
+            //_effect.VertexColorEnabled = true;
+
+            VertexPositionTexture[] _vertices = new VertexPositionTexture[3];
+
+            
+            _vertices[0].Position = PointToVector3(ref p1);
+            _vertices[1].Position = PointToVector3(ref p2);
+            _vertices[2].Position = PointToVector3(ref p3);
+
+            
+            foreach (var pass in _effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+
+                device.DrawUserIndexedPrimitives<VertexPositionTexture>
+                (
+                    PrimitiveType.TriangleStrip, // same result with TriangleList
+                    _vertices,
+                    0,
+                    _vertices.Length,
+                    new int[] { 0, 1, 2 },
+                    0,
+                    1
+                );
+            }
+
+        }
+
+        public Vector3 PointToVector3(ref CQT.Model.Point p)
+        {
+            //Console.WriteLine(p.x / graphics.PreferredBackBufferWidth + " " + p.y / graphics.PreferredBackBufferHeight);
+            return new Vector3(
+                //(p.x - graphics.PreferredBackBufferWidth / 2) / graphics.PreferredBackBufferWidth,
+                (p.x * 2 + cameraOffset.X - gman.PreferredBackBufferWidth) / gman.PreferredBackBufferWidth,
+                -(p.y * 2 + cameraOffset.Y - gman.PreferredBackBufferHeight) / gman.PreferredBackBufferHeight,
+                0
+            );
+            //Vector3 ret = new Vector3(p.x / graphics.PreferredBackBufferWidth, p.y / graphics.PreferredBackBufferHeight, 0);
+            //Console.WriteLine(ret);
+            //return ret;
+        }
+
+        public static Texture2D ColorToTexture(GraphicsDevice device, Color color, int width, int height)
+        {
+            Texture2D texture = new Texture2D(device, 1, 1);
+            texture.SetData<Color>(new Microsoft.Xna.Framework.Color[] { color });
+
+            return texture;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         /*
         void test(ref Point left)
@@ -353,7 +445,7 @@ namespace CQT.Model
         {
             //Point? ret = null;
             Line? ret = null;
-            foreach (Line l in walls)
+            foreach (Line l in visionBlockingLines)
             {
                 //if (l == ignoredWall)
                 //if (ignoredWall != null && l.Equals(ignoredWall.Value))
@@ -393,4 +485,5 @@ namespace CQT.Model
         }
         */
     }
+
 }

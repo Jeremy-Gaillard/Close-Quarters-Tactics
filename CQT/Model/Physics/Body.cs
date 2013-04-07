@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CQT.Model.Physics
 {
-    class Body
+    public class Body
     {
         //internal Vector2 position, nextPosition;
         internal Vector2 position;
