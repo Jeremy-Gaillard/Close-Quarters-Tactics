@@ -122,11 +122,11 @@
     </Content>
     <Content Include="Icon.ico" />
     <Content Include="lib\ENetX64.dll">
-      <Link>ENetX64.dll</Link>
+	  <Link>ENetX64.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="lib\ENetX86.dll">
-      <Link>ENetX86.dll</Link>
+	  <Link>ENetX86.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
