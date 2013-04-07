@@ -139,8 +139,7 @@ namespace CQT
 
             // TODO: Add your update logic here
 
-            pengine.Refresh();
-
+            pengine.Refresh(gameTime);
             
 
             graphicEngine.AddEntity(testCharacter);

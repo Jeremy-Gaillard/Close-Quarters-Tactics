@@ -57,7 +57,7 @@ namespace CQT.Model
 		{
 			hitPoints = maxHP = CharacterInfo.getMaxHP (type);
 			speed = CharacterInfo.getSpeed (type); // TODO: remove this (but currently chars are too slow)
-			//equipDefaultWeapons ();
+			equipDefaultWeapons ();
 		}
 
 		// WEAPON MANAGEMENT
@@ -124,12 +124,13 @@ namespace CQT.Model
 			return false;
 		}
 
-		public void shoot () {
-			if (currentWeapon != null/* && currentWeapon.canShoot(CharacterInfo.getROTBonus(), now) */) {
+		public void shoot (int now) {
+			if (currentWeapon != null && currentWeapon.canShoot(CharacterInfo.getROTBonus(type), now) ) {
 				currentWeapon.shoot(rotation);
 			}
 			else {
-				//TODO (exception?)
+				// play *click-click* noise?
+				//Console.WriteLine ("Character.shoot(): Cannot shoot...");
 			}
 		}
 

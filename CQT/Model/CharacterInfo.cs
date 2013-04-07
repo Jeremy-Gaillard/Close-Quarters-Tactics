@@ -38,6 +38,14 @@ namespace CQT.Model
                 return 1.00f * standardSpeed;
 			}
 		}
+		public static Single getROTBonus(Type t) {
+			switch (t) {
+			case Type.Commando: return 1.2F;
+			case Type.Medic: return 0.9F;
+			case Type.Support: return 1.0F;
+			default: return 1.0F;
+			}
+		}
 		public static string getName (Type t)
 		{
 			switch (t) {

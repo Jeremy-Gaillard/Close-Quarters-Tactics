@@ -21,20 +21,20 @@ namespace CQT.Model
 			case Type.Shotgun:
 				return 50;
 			default:
-				return 0;
+				return 1;
 			}
 		}
-		public static float getROT (Type t)
+		public static float getROT (Type t) // RPM
 		{
 			switch (t) {
 			case Type.Assault:
 				return 500;
 			case Type.Gun:
-				return 60;
+				return 100;
 			case Type.Shotgun:
 				return 30;
 			default:
-				return 0;
+				return 1/60;
 			}
 		}
 		public static string getName (Type t)
