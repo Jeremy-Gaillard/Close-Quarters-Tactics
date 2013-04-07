@@ -127,7 +127,6 @@ namespace CQT.Engine
 
 
 
-
             // Drawing primitives
             // Game coordinates -> Screen coordinates
             basicEffect.View = Matrix.CreateTranslation(cameraPosition.X, cameraPosition.Y, 0);

@@ -12,12 +12,20 @@ namespace CQT.Model
 		protected WeaponInfo.Type type;
 		protected int lastShotTime; // milliseconds
 
+
+
+
 		public Weapon (WeaponInfo.Type _type)
 			: base(null, new Vector2(1,1)) // TODO: get real values
 		{
 			owner = null;
 			type = _type;
 			lastShotTime = 0;
+		}
+
+		public override Vector2 getPosition()
+		{
+			return (owner!=null) ? owner.getPosition() : position;
 		}
 
 		/// <summary>
@@ -34,7 +42,10 @@ namespace CQT.Model
 		/// </summary>
 		public void drop ()
 		{
-			setOwner (null);
+			if (owner!=null) {
+				position = owner.getPosition();
+				setOwner(null);
+			}
 			// TODO?: some more stuff to leave it lying on the map...
 		}
 
@@ -55,9 +66,21 @@ namespace CQT.Model
 			return false;
 		}
 
-		public void shoot(float direction) {
+		public void shoot(float angle) {
 			//System.Console.WriteLine ("Weapon.shoot(): "+WeaponInfo.getName (type)+" shooting at angle "+direction);
 			//TODO
+
+//			GameEnvironment environment = GameEnvironment.Instance;
+//			if (environment == null) return;
+//
+//			Vector2 pos = getPosition();
+//			Map.Map map = environment.map;
+//
+//			Vector2 direction = new Vector2(Math.Cos(angle), Math.Sin (angle));
+//
+//			Line traj = new Line(pos.X, pos.Y, 
+//			                     pos.X + direction)
+			
 		}
 	}
 }
