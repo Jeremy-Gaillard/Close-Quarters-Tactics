@@ -42,7 +42,7 @@
     <Compile Include="Engine\InputManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Model\CharacterInfo.cs" />
-    <Compile Include="Model\Environment.cs" />
+    <Compile Include="Model\GameEnvironment.cs" />
     <Compile Include="Model\Geometry\Polyline.cs" />
     <Compile Include="Model\Geometry\Utils.cs" />
     <Compile Include="Model\Geometry\Line.cs" />
