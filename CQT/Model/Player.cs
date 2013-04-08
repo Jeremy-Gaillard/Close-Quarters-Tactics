@@ -21,22 +21,30 @@ namespace CQT.Model
 	public class Player
 	{
 		protected String name;
-		protected Character character = null;
-
+		protected List<Character> characters = new List<Character>();
+		protected Character currentChar = null;
 
 		public Player (String _name)
 		{
 			name = _name;
 		}
 
-		public void setCharacter (Character _character)
+		public void addCharacter (Character _character)
 		{
-			character = _character;
+			if (!characters.Contains(_character)) {
+				characters.Add(_character);
+			}
+			if (characters.Count==1) { // TODO: omg ugly i'm just testing i swear
+				currentChar = characters[0];
+			}
 		}
 
 		public Character getCharacter ()
 		{
-			return character;
+			return currentChar;
+		}
+		public List<Character> getCharacters() {
+			return characters;
 		}
 
         public String getName()

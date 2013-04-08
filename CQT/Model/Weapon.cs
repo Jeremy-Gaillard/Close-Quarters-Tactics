@@ -71,17 +71,73 @@ namespace CQT.Model
 			//System.Console.WriteLine ("Weapon.shoot(): "+WeaponInfo.getName (type)+" shooting at angle "+direction);
 			//TODO
 
-//			GameEnvironment environment = GameEnvironment.Instance;
-//			if (environment == null) return;
-//
-//			Vector2 pos = getPosition();
-//			Map.Map map = environment.map;
-//
-//			Vector2 direction = new Vector2(Math.Cos(angle), Math.Sin (angle));
-//
-//			Line traj = new Line(pos.X, pos.Y, 
-//			                     pos.X + direction)
+			GameEnvironment environment = GameEnvironment.Instance;
+			if (environment == null) return;
+
+			Point pos = new Point(getPosition());
+			float cosA = (float)Math.Cos(angle);
+			float sinA = (float)Math.Sin(angle);
 			
+			Map.Map map = environment.Map;
+
+			Vector2 direction = new Vector2(cosA, sinA);
+			direction = Vector2.Multiply(direction, map.diagonal);
+
+			Point origin = new Point(pos.x + (owner.getSize().X * cosA),
+			                         pos.y + (owner.getSize().Y * sinA));
+
+			Line traj = new Line(origin.x, origin.y, pos.x + direction.X, pos.y + direction.Y);
+
+			Character shootee = null;
+			Line trajToChar = traj;
+
+			foreach (Player p in environment.Players) {
+				foreach (Character c in p.getCharacters()) {
+					Point cPos = new Point(c.getPosition ());
+					Tuple<Point?, Point?> intersct
+						= traj.IntersectSegmentCircle(cPos, c.getRadius());
+					Point? p1 = intersct.Item1;
+					Point? p2 = intersct.Item2;
+
+					if ( p1.HasValue || p2.HasValue ) {
+						float d1 = (p1.HasValue ? Utils.distance(p1.Value, origin) : map.diagonal);
+						float d2 = (p2.HasValue ? Utils.distance(p2.Value, origin) : map.diagonal);
+						Point impact = ( d1 < d2 ? p1.Value : p2.Value );
+
+						float distance = Utils.distance(impact, origin);
+
+						if ( trajToChar.length > distance ) {
+							shootee = c;
+							trajToChar = new Line(origin, impact);
+						}
+					}
+				}
+			}
+
+			Line wallShot = new Line (0,0,0,0);
+			bool wallOnTraj = false;
+			Line trajToWall = traj;
+			
+			foreach (Line l in map.getVisionBlockingLines()) {
+				Point? intersct = Utils.LineIntersect(traj, l);
+				if (intersct.HasValue) {
+					float distance = Utils.distance(intersct.Value, pos);
+
+					if ( trajToWall.length > distance ) {
+						wallShot = l;
+						wallOnTraj = true;
+						trajToWall = new Line(origin, intersct.Value);
+					}
+				}
+			}
+
+			if (trajToChar.length < trajToWall.length) {
+				float preciseDmg = ((float)WeaponInfo.getDamage(type))*CharacterInfo.getDamageBonus(owner.getCharType());
+				shootee.harm( (uint)preciseDmg );
+			}
+			else if ( wallOnTraj ) {
+				Console.WriteLine("Weapon.shoot(): hit a wall at "+trajToWall.p2.ToString());
+			}
 		}
 	}
 }

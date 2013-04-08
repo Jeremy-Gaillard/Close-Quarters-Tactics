@@ -76,7 +76,7 @@ namespace CQT.Engine
             {
                 Player p = new Player(lp.name);
                 Character c = new Character(lp.character.textureName, pengine, lp.character.position, lp.character.size);
-                p.setCharacter(c);
+                p.addCharacter(c);
                 environment.AddPlayer(p);
             }
 

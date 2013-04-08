@@ -54,6 +54,7 @@ namespace CQT.Model
             players = new List<Player>();
             map = _map;
             localPlayer = _localPlayer;
+			players.Add(localPlayer);
         }
 
         public void AddPlayer(Player player)

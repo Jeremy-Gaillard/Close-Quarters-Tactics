@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -94,7 +94,9 @@ namespace CQT
 
             inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState(), environment.LocalPlayer);
             Character testCharacter = new Character("Bonhomme", pengine, new Vector2(200, 100), new Vector2(100, 100));
-            environment.LocalPlayer.setCharacter(testCharacter);
+			Character redshirt = new Character("Redshirt", pengine, new Vector2(400, 100), new Vector2(100, 100));
+            environment.LocalPlayer.addCharacter(testCharacter);
+			environment.LocalPlayer.addCharacter(redshirt);
             graphicEngine.setFollowedCharacter(environment.LocalPlayer.getCharacter());
             graphicEngine.setMap(environment.Map);
         }
@@ -141,9 +143,13 @@ namespace CQT
 
             foreach (Player p in GameEnvironment.Instance.Players)
             {
-                graphicEngine.AddEntity(p.getCharacter());
+				foreach (Character c in p.getCharacters()) {
+					graphicEngine.AddEntity(c);
+				}
             }
-            graphicEngine.AddEntity(environment.LocalPlayer.getCharacter());
+            foreach (Character c in environment.LocalPlayer.getCharacters()) {
+				graphicEngine.AddEntity(c);
+			}
 
             base.Update(gameTime);
         }
