@@ -147,10 +147,10 @@ namespace CQT
 					graphicEngine.AddEntity(c);
 				}
             }
-            foreach (Character c in environment.LocalPlayer.getCharacters()) {
-				graphicEngine.AddEntity(c);
-			}
-
+//            foreach (Character c in environment.LocalPlayer.getCharacters()) {
+//				graphicEngine.AddEntity(c);
+//			}
+//
             base.Update(gameTime);
         }
 
