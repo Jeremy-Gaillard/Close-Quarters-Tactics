@@ -6,6 +6,7 @@ using CQT.Model.Geometry;
 
 namespace CQT.Model.Map
 {
+    [Serializable()]
     public class Obstacle
     {
         public readonly Polyline polyline;
@@ -25,6 +26,13 @@ namespace CQT.Model.Map
                 _polyline.lineList.Add(newLine);
                 polyline = _polyline;
             }
+        }
+
+        // TODO : used for testing purpose, remove or rework
+        public Obstacle(Polyline _polyline)
+        {
+            polyline = _polyline;
+            height = -1;
         }
     }
 }

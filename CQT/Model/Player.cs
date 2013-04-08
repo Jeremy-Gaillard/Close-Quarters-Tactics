@@ -6,7 +6,19 @@ using CQT.Model;
 
 namespace CQT.Model
 {
-	class Player
+    [Serializable()]
+    public struct LightPlayer
+    {
+        public LightPlayer(Player p)
+        {
+            name = p.getName();
+            character = new LightCharacter(p.getCharacter());
+        }
+        public String name;
+        public LightCharacter character;
+    }
+
+	public class Player
 	{
 		protected String name;
 		protected Character character = null;
@@ -21,9 +33,15 @@ namespace CQT.Model
 		{
 			character = _character;
 		}
+
 		public Character getCharacter ()
 		{
 			return character;
 		}
+
+        public String getName()
+        {
+            return name;
+        }
 	}
 }

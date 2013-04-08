@@ -6,6 +6,7 @@ using System.Text;
 
 namespace CQT.Model
 {
+    [Serializable()]
     public struct Line
     {
         private float _length;

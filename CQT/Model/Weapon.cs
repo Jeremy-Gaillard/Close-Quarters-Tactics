@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace CQT.Model
 {
+    [Serializable()]
 	public class Weapon : Item
 	{
 

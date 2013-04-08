@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.Serialization;
 using CQT.Model.Geometry;
 
 namespace CQT.Model.Map
 {
+    [Serializable()]
     public class Map
     {
         private Point upperLeft;
@@ -87,6 +89,5 @@ namespace CQT.Model.Map
         {
             return visionBlockingLines;
         }
-
     }
 }

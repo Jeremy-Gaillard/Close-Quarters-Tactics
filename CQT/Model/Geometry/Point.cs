@@ -6,6 +6,7 @@ using System.Text;
 
 namespace CQT.Model
 {
+    [Serializable()]
     public struct Point
     {
         public readonly float x, y;
@@ -87,7 +88,5 @@ namespace CQT.Model
             //return "Pt{"+x+","+y+"}";
             return "{" + x + ";" + y + "}";
         }
-
-
     }
 }

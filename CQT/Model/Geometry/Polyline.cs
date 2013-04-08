@@ -5,6 +5,7 @@ using System.Text;
 
 namespace CQT.Model.Geometry
 {
+    [Serializable()]
     public class Polyline
     {
         public readonly List<Line> lineList = new List<Line>();

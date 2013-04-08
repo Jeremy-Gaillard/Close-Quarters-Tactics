@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace CQT.Model.Map
 {
+    [Serializable()]
     public class Wall
     {
         public readonly Polyline polyline;
@@ -69,6 +70,11 @@ namespace CQT.Model.Map
             points.Add(p21);
 
             polyline = new Polyline(points);
+        }
+
+        public Wall(Polyline _polyline)
+        {
+            polyline = _polyline;
         }
     }
 }

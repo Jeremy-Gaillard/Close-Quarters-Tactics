@@ -6,6 +6,7 @@ using System.Text;
 
 namespace CQT.Model.Physics
 {
+    [Serializable()]
     public class Body
     {
         //internal Vector2 position, nextPosition;
