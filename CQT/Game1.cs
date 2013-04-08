@@ -29,7 +29,6 @@ namespace CQT
 
         GraphicEngine graphicEngine;
         PhysicsEngine pengine;
-        GraphicCache graphicCache;
         InputManager inputManager;
         GameEnvironment environment;
 
@@ -80,7 +79,7 @@ namespace CQT
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
-            graphicEngine = new GraphicEngine(spriteBatch, graphics, GraphicsDevice);
+            graphicEngine = new GraphicEngine(spriteBatch, graphics, GraphicsDevice, Content);
 
             /*XMLReader xmlTest = new XMLReader("../../../map.xml");
 
@@ -89,13 +88,12 @@ namespace CQT
             Player player = new Player("Champ");
 
             environment = new GameEnvironment(map, player);*/
-            pengine = new PhysicsEngine(environment.Map);
+            pengine = gengine.getPhysicsEngine();
 
             // TODO: use this.Content to load your game content here
 
             inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState(), environment.LocalPlayer);
-            graphicCache = new GraphicCache(Content);
-            Character testCharacter = new Character(graphicCache.getTexture("Bonhomme"), pengine, new Vector2(200, 100), new Vector2(100, 100));
+            Character testCharacter = new Character("Bonhomme", pengine, new Vector2(200, 100), new Vector2(100, 100));
             environment.LocalPlayer.setCharacter(testCharacter);
             graphicEngine.setFollowedCharacter(environment.LocalPlayer.getCharacter());
             graphicEngine.setMap(environment.Map);
@@ -141,13 +139,11 @@ namespace CQT
 
             pengine.Refresh(gameTime);
 
-
+            foreach (Player p in GameEnvironment.Instance.Players)
+            {
+                graphicEngine.AddEntity(p.getCharacter());
+            }
             graphicEngine.AddEntity(environment.LocalPlayer.getCharacter());
-
-            /*
-            graphicEngine.AddEntity(testSprite);
-            */
-
 
             base.Update(gameTime);
         }

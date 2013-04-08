@@ -7,31 +7,24 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CQT.Model
 {
+    [Serializable()]
 	public abstract class Entity
 	{
-		protected Texture2D texture;
+		protected String textureName;
 		//protected Vector2 position;
 		protected Vector2 size;
 		protected Single rotation;
 		protected Vector2 spriteOrigin; // middle of the sprite
 
 		//public Entity (Texture2D _texture, Vector2 _position, Vector2 _size)
-        public Entity (Texture2D _texture, Vector2 _size)
+        public Entity (String _texture, Vector2 _size)
 		{
-			texture = _texture;
+			textureName = _texture;
 			//position = _position;
 			size = _size;
 			rotation = 0f;
-			spriteOrigin = (_texture != null ? new Vector2 (texture.Width / 2, texture.Height / 2)
-			                : new Vector2(0,0));
 		}
 
-        
-
-		public void Update (GameTime gameTime)
-		{
-
-		}
 
 		public void setRotation (Single _rotation)
 		{
@@ -59,9 +52,9 @@ namespace CQT.Model
 			return rotation;
 		}
 
-		internal Texture2D getTexture ()
+		internal String getTextureName ()
 		{
-			return texture;
+			return textureName;
 		}
 	}
 }

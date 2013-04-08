@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 using Microsoft.Xna.Framework;
 
@@ -11,6 +13,7 @@ using CQT.Network;
 using CQT.Command;
 using CQT.Model;
 using CQT.Model.Map;
+using CQT.Model.Physics;
 
 namespace CQT.Engine
 {
@@ -22,6 +25,7 @@ namespace CQT.Engine
         protected int elapsedTime;
         protected List<Command.Command> commands;
         protected GameEnvironment environment;
+        protected PhysicsEngine pengine;
 
         public ServerEngine(int serverPort, int maxClients/*map name, etc*/)
         {
@@ -40,6 +44,8 @@ namespace CQT.Engine
 
             environment = GameEnvironment.Instance;
             environment.init(map, player);
+
+            pengine = new PhysicsEngine(environment.Map);
         }
 
         public void Update(GameTime gameTime)
@@ -60,7 +66,11 @@ namespace CQT.Engine
 
         public void SendCurrentState(ENet.Peer p)
         {
-            communication.SendReliable(environment.Map.Serialize(), p);
+            LightEnvironment env = new LightEnvironment(GameEnvironment.Instance);
+            MemoryStream stream = new MemoryStream(512); // TODO : how to chose buffer size ?
+            BinaryFormatter formater = new BinaryFormatter();
+            formater.Serialize(stream, env);
+            communication.SendReliable(stream.GetBuffer(), p);
         }
 
 
@@ -82,6 +92,11 @@ namespace CQT.Engine
         public void processMessage(String message, ENet.Peer sender)
         {
             // TODO
+        }
+
+        public PhysicsEngine getPhysicsEngine()
+        {
+            return pengine;
         }
     }
 }

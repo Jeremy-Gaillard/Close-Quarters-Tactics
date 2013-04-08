@@ -5,16 +5,17 @@ using Microsoft.Xna.Framework;
 
 namespace CQT.Model
 {
+    [Serializable()]
 	public class Item : Entity
 	{
 		protected Vector2 position;
 
-		public Item (Texture2D _texture, Vector2 _position, Vector2 _size)
+		public Item (String _texture, Vector2 _position, Vector2 _size)
 			: base(_texture, _size)
 		{
 			position = _position;
 		}		
-		public Item(Texture2D _texture, Vector2 _size)
+		public Item(String _texture, Vector2 _size)
         	: base(_texture, _size)
 		{
 			position = new Vector2();

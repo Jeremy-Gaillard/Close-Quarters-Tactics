@@ -5,6 +5,7 @@ using System.Text;
 
 namespace CQT.Model.Geometry
 {
+    [Serializable()]
     public class Polyline
     {
         public readonly List<Line> lineList = new List<Line>();
@@ -30,31 +31,6 @@ namespace CQT.Model.Geometry
             }
 
             return description;
-        }
-
-        public string Serialize()
-        {
-            string value = "{" + lineList[0].p1.Serialize() + "}";
-            foreach (Line l in lineList)
-            {
-                value += "{" + l.p2.Serialize() + "}";
-            }
-            return value;
-        }
-
-        static public Polyline Unserialize(string s)
-        {
-            List<Point> points = new List<Point>();
-            int index = 1;
-            int nextIndex = s.IndexOf('}');
-            while (nextIndex != -1)
-            {
-                string sub = s.Substring(index, nextIndex-index);
-                points.Add(Point.Unserialize(sub));
-                index = nextIndex + 2;
-                nextIndex = s.IndexOf('}', index-1);
-            }
-            return new Polyline(points);
         }
     }
 }

@@ -7,6 +7,22 @@ using CQT.Model.Physics;
 
 namespace CQT.Model
 {
+    [Serializable()]
+    public struct LightCharacter
+    {
+        public LightCharacter(Character c)
+        {
+            textureName = c.getTextureName();
+            position = c.body.position;
+            size = c.getSize();
+        }
+
+        //Weapon public weapon; TODO : add
+        public String textureName;
+        public Vector2 position;
+        public Vector2 size;
+    }
+    
 	public class Character : Entity
 	{
 		public enum MovementDirection
@@ -33,7 +49,7 @@ namespace CQT.Model
 
         public readonly Body body;
 
-        public Character (Texture2D _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+        public Character (String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
 			: base(_texture, _size)
 		{
 			type = CharacterInfo.Type.None;
@@ -43,7 +59,7 @@ namespace CQT.Model
             engine.AddBody(body);
 		}
 
-		public Character (CharacterInfo.Type _type, Texture2D _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+		public Character (CharacterInfo.Type _type, String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
 			: base(_texture, _size)
 		{
 			type = _type;

@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 
 using CQT.Model;
+using CQT.Model.Physics;
 
 namespace CQT.Engine
 {
@@ -14,5 +15,6 @@ namespace CQT.Engine
         void Update(GameTime gameTime);
         GameEnvironment getEnvironment();
         void Exit();
+        PhysicsEngine getPhysicsEngine();
     }
 }

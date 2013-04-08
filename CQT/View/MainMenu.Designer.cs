@@ -73,6 +73,7 @@
             this.tbIp.Name = "tbIp";
             this.tbIp.Size = new System.Drawing.Size(100, 20);
             this.tbIp.TabIndex = 3;
+            this.tbIp.Text = "127.0.0.1";
             // 
             // tbPort
             // 
@@ -80,6 +81,7 @@
             this.tbPort.Name = "tbPort";
             this.tbPort.Size = new System.Drawing.Size(100, 20);
             this.tbPort.TabIndex = 4;
+            this.tbPort.Text = "1337";
             // 
             // label1
             // 

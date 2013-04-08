@@ -69,8 +69,13 @@ namespace CQT.Network
                         Console.Out.WriteLine("Connection closed by server");
                         break;
                     case ENet.EventType.Receive:
-                        String message = new String((sbyte*)e.Packet.Data.ToPointer(), 0, e.Packet.Length);
-                        engine.ProcessMessage(message);
+                        //String message = new String((sbyte*)e.Packet.Data.ToPointer(), 0, e.Packet.Length);
+                        byte[] bytes = new byte[e.Packet.Length];
+                        for (int i = 0; i < e.Packet.Length; i++)
+                        {
+                            bytes[i] = *((byte*)(e.Packet.Data.ToPointer())+i);
+                        }
+                        engine.ProcessMessage(bytes);
                         break;
                     case ENet.EventType.None:
                         break;

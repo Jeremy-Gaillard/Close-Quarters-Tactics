@@ -6,6 +6,7 @@ using CQT.Model.Geometry;
 
 namespace CQT.Model.Map
 {
+    [Serializable()]
     public class Obstacle
     {
         public readonly Polyline polyline;
@@ -26,16 +27,6 @@ namespace CQT.Model.Map
         {
             polyline = _polyline;
             height = -1;
-        }
-
-        public string Serialize()
-        {
-            return polyline.Serialize();
-        }
-
-        static public Obstacle Unserialize(string s)
-        {
-            return new Obstacle(Polyline.Unserialize(s));
         }
     }
 }

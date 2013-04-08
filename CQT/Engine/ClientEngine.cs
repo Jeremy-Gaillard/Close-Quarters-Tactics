@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 using Microsoft.Xna.Framework;
 
@@ -10,6 +12,7 @@ using CQT.Network;
 using CQT.Command;
 using CQT.Model;
 using CQT.Model.Map;
+using CQT.Model.Physics;
 
 namespace CQT.Engine
 {
@@ -21,6 +24,7 @@ namespace CQT.Engine
         protected int elapsedTime;
         protected List<Command.Command> commands;
         protected GameEnvironment environment;
+        protected PhysicsEngine pengine;
 
         public bool ready { get; protected set; }
 
@@ -57,16 +61,37 @@ namespace CQT.Engine
             commands.Add(command);
         }
 
-        public void setEnvironment(string serializedMap)
+        public void setEnvironment(byte[] serializedEnvironment)
         {
-            Player p = new Player("Georges"); // TODO : change this
-            Map map = Map.Unserialize(serializedMap);
+            Player local = new Player("Georges"); // TODO : change this
+            MemoryStream stream = new MemoryStream(serializedEnvironment);
+            BinaryFormatter formater = new BinaryFormatter();
+            LightEnvironment env = (LightEnvironment)formater.Deserialize(stream);
             environment = GameEnvironment.Instance;
-            environment.init(map, p);
+            environment.init(env.map, local);
+
+            pengine = new PhysicsEngine(environment.Map);
+
+            foreach (LightPlayer lp in env.players)
+            {
+                Player p = new Player(lp.name);
+                Character c = new Character(lp.character.textureName, pengine, lp.character.position, lp.character.size);
+                p.setCharacter(c);
+                environment.AddPlayer(p);
+            }
+
             ready = true;
         }
 
-        public void ProcessMessage(String message)
+        /*public void ProcessMessage(String message)
+        {
+            if (!ready)
+            {
+                setEnvironment(message);
+            }
+        }*/
+
+        public void ProcessMessage(byte[] message)
         {
             if (!ready)
             {
@@ -82,6 +107,11 @@ namespace CQT.Engine
         public void Exit()
         {
             communication.Disconnect();
+        }
+
+        public PhysicsEngine getPhysicsEngine()
+        {
+            return pengine;
         }
     }
 }

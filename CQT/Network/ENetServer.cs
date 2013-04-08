@@ -121,6 +121,13 @@ namespace CQT.Network
             destination.Send((byte)(clients.IndexOf(destination) * 2 + 1), packet);
         }
 
+        public void SendReliable(byte[] message, ENet.Peer destination)
+        {
+            ENet.Packet packet = new ENet.Packet();
+            packet.Initialize(message, ENet.PacketFlags.Reliable);
+            destination.Send((byte)(clients.IndexOf(destination) * 2 + 1), packet);
+        }
+
         public void SendReliable(String message)
         {
             ENet.Packet packet = new ENet.Packet();
