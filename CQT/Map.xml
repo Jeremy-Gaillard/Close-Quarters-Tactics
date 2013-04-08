@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map name ="firstMap">
 	<frame>
-		<lowerLeft x="-1000" y="-1000"/>
-		<upperRight x="1000" y="1000"/>
+		<upperLeft x="-1000" y="-1000"/>
+		<lowerRight x="1000" y="1000"/>
 	</frame>
 	<object>
 		<obstacle height="5">

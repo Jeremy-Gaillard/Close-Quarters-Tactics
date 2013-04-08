@@ -17,7 +17,7 @@ namespace CQT.Model.Map
 			get { return (lowerRight.x - upperLeft.x); }
 		}
 		public float Height {
-			get { return (lowerRight.y - upperLeft.y); }
+			get { return (lowerRight.y - upperLeft.y); } // y axis goes downwards
 		}
 
         private List<Obstacle> listObstacle = new List<Obstacle>();
