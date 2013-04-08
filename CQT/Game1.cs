@@ -89,16 +89,16 @@ namespace CQT
             Player player = new Player("Champ");
 
             environment = new GameEnvironment(map, player);*/
-            pengine = new PhysicsEngine(environment.map);
+            pengine = new PhysicsEngine(environment.Map);
 
             // TODO: use this.Content to load your game content here
 
-            inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState(), environment.localPlayer);
+            inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState(), environment.LocalPlayer);
             graphicCache = new GraphicCache(Content);
             Character testCharacter = new Character(graphicCache.getTexture("Bonhomme"), pengine, new Vector2(200, 100), new Vector2(100, 100));
-            environment.localPlayer.setCharacter(testCharacter);
-            graphicEngine.setFollowedCharacter(environment.localPlayer.getCharacter());
-            graphicEngine.setMap(environment.map);
+            environment.LocalPlayer.setCharacter(testCharacter);
+            graphicEngine.setFollowedCharacter(environment.LocalPlayer.getCharacter());
+            graphicEngine.setMap(environment.Map);
         }
 
         /// <summary>
@@ -126,8 +126,8 @@ namespace CQT
             inputManager.Update(Mouse.GetState(), Keyboard.GetState());
             
 
-            environment.localPlayer.getCharacter().setRotation((float)Math.Atan2(inputManager.getMousePosition().Y - graphicEngine.getCameraPosition().Y - environment.localPlayer.getCharacter().getPosition().Y,
-                inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - environment.localPlayer.getCharacter().getPosition().X));
+            environment.LocalPlayer.getCharacter().setRotation((float)Math.Atan2(inputManager.getMousePosition().Y - graphicEngine.getCameraPosition().Y - environment.LocalPlayer.getCharacter().getPosition().Y,
+                inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - environment.LocalPlayer.getCharacter().getPosition().X));
             // TODO : change this horror
 
             List<Command.Command> commands = inputManager.getCommands(gameTime);
@@ -142,7 +142,7 @@ namespace CQT
             pengine.Refresh(gameTime);
 
 
-            graphicEngine.AddEntity(environment.localPlayer.getCharacter());
+            graphicEngine.AddEntity(environment.LocalPlayer.getCharacter());
 
             /*
             graphicEngine.AddEntity(testSprite);

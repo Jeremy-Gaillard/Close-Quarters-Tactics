@@ -7,11 +7,31 @@ namespace CQT.Model
 {
     public class GameEnvironment
     {
-        public readonly Map.Map map;
-        public readonly Player localPlayer;
-        public readonly List<Player> players;
+        protected Map.Map map;
+		public Map.Map Map {
+			get { return map; }
+		}
+        protected Player localPlayer;
+		public Player LocalPlayer {
+			get { return localPlayer; }
+		}
+		protected List<Player> players;
+		public List<Player> Players {
+			get { return players; }
+		}
 
-        public GameEnvironment(Map.Map _map, Player _localPlayer)
+		private static GameEnvironment instance;
+		private GameEnvironment() {}
+		public static GameEnvironment Instance {
+			get { 
+				if (instance==null) {
+					instance = new GameEnvironment();
+				}
+				return instance;
+			}
+		}
+
+        public void init(Map.Map _map, Player _localPlayer)
         {
             players = new List<Player>();
             map = _map;

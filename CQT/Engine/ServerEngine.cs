@@ -38,7 +38,8 @@ namespace CQT.Engine
             Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
             Player player = new Player("Champ");
 
-            environment = new GameEnvironment(map, player);
+            environment = GameEnvironment.Instance;
+            environment.init(map, player);
         }
 
         public void Update(GameTime gameTime)
@@ -59,7 +60,7 @@ namespace CQT.Engine
 
         public void SendCurrentState(ENet.Peer p)
         {
-            communication.SendReliable(environment.map.Serialize(), p);
+            communication.SendReliable(environment.Map.Serialize(), p);
         }
 
 

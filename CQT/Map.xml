@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map nom ="firstMap">
+<map name ="firstMap">
 	<frame>
-		<lowerLeft x="0" y="0"/>
-		<upperRight x="800" y="600"/>
+		<lowerLeft x="-1000" y="-1000"/>
+		<upperRight x="1000" y="1000"/>
 	</frame>
 	<object>
 		<obstacle height="5">
@@ -18,19 +18,43 @@
 			<point x="800" y="600"/>
 		</obstacle>
 		<wall thickness="5">
-			<point x="100" y="0"/>
-			<point x="100" y="800"/>
-			<point x="1100" y="800"/>
-			<point x="900" y="0"/>
+			<point x="-1000" y="-1000"/>
+			<point x="1000" y="-1000"/>
+			<point x="1000" y="1000"/>
+			<point x="-1000" y="1000"/>
+			<point x="-1000" y="-995"/>
 		</wall>
 		<wall thickness="5">
-			<point x="200" y="200"/>
-			<point x="300" y="400"/>
-			<point x="500" y="0"/>
+			<point x="-1000" y="700"/>
+			<point x="-600" y="700"/>
 		</wall>
-		<wall thickness="100">
-			<point x="50" y="0"/>
-			<point x="50" y="200"/>
+		<wall thickness="5">
+			<point x="-600" y="1000"/>
+			<point x="-600" y="850"/>
+		</wall>	
+		<wall thickness="5">
+			<point x="-600" y="-1000"/>
+			<point x="-600" y="-750"/>
 		</wall>
+		<wall thickness="5">
+			<point x="-1000" y="-600"/>
+			<point x="-600" y="-600"/>			
+		</wall>
+		<wall thickness="5">
+			<point x="600" y="-1000"/>
+			<point x="600" y="-750"/>			
+		</wall>
+		<wall thickness="5">
+			<point x="1000" y="-600"/>
+			<point x="600" y="-600"/>			
+		</wall>		
+		<wall thickness="5">
+			<point x="600" y="1000"/>
+			<point x="600" y="750"/>			
+		</wall>	
+			<wall thickness="5">
+			<point x="1000" y="750"/>
+			<point x="750" y="750"/>			
+		</wall>	
 	</object>
 </map>

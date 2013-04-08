@@ -61,7 +61,8 @@ namespace CQT.Engine
         {
             Player p = new Player("Georges"); // TODO : change this
             Map map = Map.Unserialize(serializedMap);
-            environment = new GameEnvironment(map, p);
+            environment = GameEnvironment.Instance;
+            environment.init(map, p);
             ready = true;
         }
 
