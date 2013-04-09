@@ -84,8 +84,8 @@ namespace CQT.Model
 			Vector2 direction = new Vector2(cosA, sinA);
 			direction = Vector2.Multiply(direction, map.diagonal);
 
-			Point origin = new Point(pos.x + (owner.getSize().X * cosA),
-			                         pos.y + (owner.getSize().Y * sinA));
+			Point origin = new Point(pos.x + (owner.getRadius() * cosA),
+			                         pos.y + (owner.getRadius() * sinA));
 
 			Line traj = new Line(origin.x, origin.y, pos.x + direction.X, pos.y + direction.Y);
 

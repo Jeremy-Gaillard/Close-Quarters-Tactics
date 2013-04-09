@@ -34,8 +34,8 @@ namespace CQT.Model
 			if (!characters.Contains(_character)) {
 				characters.Add(_character);
 			}
-			if (characters.Count==1) { // TODO: omg ugly i'm just testing i swear
-				currentChar = characters[0];
+			if (characters.Count==1) {
+				currentChar = _character;
 			}
 		}
 
