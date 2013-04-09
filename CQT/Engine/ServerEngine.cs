@@ -46,6 +46,9 @@ namespace CQT.Engine
             environment.init(map, player);
 
             pengine = new PhysicsEngine(environment.Map);
+
+            Character character = new Character("Bonhomme", pengine, new Vector2(200, 100), new Vector2(100, 100));
+            player.addCharacter(character);
         }
 
         public void Update(GameTime gameTime)
@@ -67,10 +70,7 @@ namespace CQT.Engine
         public void SendCurrentState(ENet.Peer p)
         {
             LightEnvironment env = new LightEnvironment(GameEnvironment.Instance);
-            MemoryStream stream = new MemoryStream(512); // TODO : how to chose buffer size ?
-            BinaryFormatter formater = new BinaryFormatter();
-            formater.Serialize(stream, env);
-            communication.SendReliable(stream.GetBuffer(), p);
+            communication.SendReliable(env, NetFrame.FrameType.environment, p);
         }
 
 
@@ -89,9 +89,12 @@ namespace CQT.Engine
             communication.Shutdown();
         }
 
-        public void processMessage(String message, ENet.Peer sender)
+        public void AddPlayer(LightPlayer lp, ENet.Peer sender)
         {
-            // TODO
+            Player p = new Player(lp.name);
+            Character c = new Character(lp.character.textureName, pengine, lp.character.position, lp.character.size);
+            p.addCharacter(c);
+            GameEnvironment.Instance.AddPlayer(p);
         }
 
         public PhysicsEngine getPhysicsEngine()

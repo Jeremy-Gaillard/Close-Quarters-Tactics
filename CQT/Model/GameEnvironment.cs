@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Concurrent;
 
 namespace CQT.Model
 {
     [Serializable()]
-    struct LightEnvironment
+    public struct LightEnvironment
     {
         public LightEnvironment(GameEnvironment ge)
         {
             map = ge.Map;
             players = new List<LightPlayer>();
-            players.Add(new LightPlayer(ge.LocalPlayer));
             foreach (Player p in ge.Players)
             {
                 players.Add(new LightPlayer(p));
@@ -33,8 +33,8 @@ namespace CQT.Model
 		public Player LocalPlayer {
 			get { return localPlayer; }
 		}
-		protected List<Player> players;
-		public List<Player> Players {
+		protected BlockingCollection<Player> players;
+		public BlockingCollection<Player> Players {
 			get { return players; }
 		}
 
@@ -51,7 +51,7 @@ namespace CQT.Model
 
         public void init(Map.Map _map, Player _localPlayer)
         {
-            players = new List<Player>();
+            players = new BlockingCollection<Player>();
             map = _map;
             localPlayer = _localPlayer;
 			players.Add(localPlayer);
@@ -64,7 +64,10 @@ namespace CQT.Model
 
         public void AddPlayers(List<Player> newPlayers)
         {
-            players.AddRange(newPlayers);
+            foreach( Player p in newPlayers )
+            {
+                players.Add(p);
+            }
         }
     }
 }

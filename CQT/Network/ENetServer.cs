@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 using ENet;
 
 using CQT.Engine;
+using CQT.Model;
 
 namespace CQT.Network
 {
@@ -64,19 +67,36 @@ namespace CQT.Network
                         // needs more error handling
                     case ENet.EventType.Connect:
                         addClient(e.Peer);
-                        engine.SendCurrentState(e.Peer);    // TODO : change the way this works ?
+                        engine.SendCurrentState(e.Peer);
                         break;
                     case ENet.EventType.Disconnect:
                         removeClient(e.Peer);
                         break;
                     case ENet.EventType.Receive:
-                        String message = new String((sbyte*)e.Packet.Data.ToPointer(), 0, e.Packet.Length);
-                        engine.processMessage(message, e.Peer);
-                        //processMessage(message, e.Peer);
+                        byte[] bytes = new byte[e.Packet.Length];
+                        for (int i = 0; i < e.Packet.Length; i++)
+                        {
+                            bytes[i] = *((byte*)(e.Packet.Data.ToPointer())+i);
+                        }
+                        dispatchMessage(bytes, e.Peer);
                         break;
                     case ENet.EventType.None:
                         break;
                 }
+            }
+        }
+
+        private void dispatchMessage(byte[] bytes, Peer peer)
+        {
+            MemoryStream stream = new MemoryStream(bytes);
+            BinaryFormatter formater = new BinaryFormatter();
+            NetFrame frame = (NetFrame)formater.Deserialize(stream);
+            switch (frame.type)
+            {
+                case NetFrame.FrameType.player:
+                    engine.AddPlayer((LightPlayer)frame.content, peer);
+                    // TODO : map player to peer
+                    break;
             }
         }
 
@@ -121,6 +141,18 @@ namespace CQT.Network
             destination.Send((byte)(clients.IndexOf(destination) * 2 + 1), packet);
         }
 
+        public void SendReliable(Object message, NetFrame.FrameType type, ENet.Peer destination)
+        {
+            ENet.Packet packet = new ENet.Packet();
+            NetFrame f = new NetFrame(message, type);
+            MemoryStream stream = new MemoryStream(512); // TODO : buffer size ?
+            BinaryFormatter formater = new BinaryFormatter();
+            formater.Serialize(stream, f); 
+            packet.Initialize(stream.GetBuffer(), ENet.PacketFlags.Reliable);
+            destination.Send((byte)(clients.IndexOf(destination) * 2 + 1), packet);
+        }
+
+
         public void SendReliable(byte[] message, ENet.Peer destination)
         {
             ENet.Packet packet = new ENet.Packet();
@@ -134,13 +166,6 @@ namespace CQT.Network
             byte[] buffer = Encoding.ASCII.GetBytes(message);
             packet.Initialize(buffer, ENet.PacketFlags.Reliable);
             server.Broadcast(1 /*TODO : change channel ?*/, ref packet);
-        }
-
-        protected void processMessage(String message, ENet.Peer sender)
-        {
-            Console.Out.WriteLine("Message from " + sender.GetRemoteAddress().Address.ToString() + ":"
-                + sender.GetRemoteAddress().Port + " : " + message);
-            SendReliable("Well hello good sir !", sender);
         }
     }
 }
