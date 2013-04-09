@@ -29,7 +29,7 @@ namespace CQT.Model
 			name = _name;
 		}
 
-		public void addCharacter (Character _character)
+		public void addCharacter(Character _character)
 		{
 			if (!characters.Contains(_character)) {
 				characters.Add(_character);
