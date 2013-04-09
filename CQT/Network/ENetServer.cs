@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 using ENet;
 
 using CQT.Engine;
+using CQT.Model;
 
 namespace CQT.Network
 {
@@ -64,7 +67,7 @@ namespace CQT.Network
                         // needs more error handling
                     case ENet.EventType.Connect:
                         addClient(e.Peer);
-                        engine.SendCurrentState(e.Peer);    // TODO : change the way this works ?
+                        engine.SendCurrentState(e.Peer);
                         break;
                     case ENet.EventType.Disconnect:
                         removeClient(e.Peer);
@@ -75,12 +78,25 @@ namespace CQT.Network
                         {
                             bytes[i] = *((byte*)(e.Packet.Data.ToPointer())+i);
                         }
-                        engine.ProcessMessage(bytes, e.Peer);
-                        //String message = new String((sbyte*)e.Packet.Data.ToPointer(), 0, e.Packet.Length);
+                        dispatchMessage(bytes, e.Peer);
                         break;
                     case ENet.EventType.None:
                         break;
                 }
+            }
+        }
+
+        private void dispatchMessage(byte[] bytes, Peer peer)
+        {
+            MemoryStream stream = new MemoryStream(bytes);
+            BinaryFormatter formater = new BinaryFormatter();
+            NetFrame frame = (NetFrame)formater.Deserialize(stream);
+            switch (frame.type)
+            {
+                case NetFrame.FrameType.player:
+                    engine.AddPlayer((LightPlayer)frame.content, peer);
+                    // TODO : map player to peer
+                    break;
             }
         }
 
@@ -124,6 +140,18 @@ namespace CQT.Network
             packet.Initialize(buffer, ENet.PacketFlags.Reliable);
             destination.Send((byte)(clients.IndexOf(destination) * 2 + 1), packet);
         }
+
+        public void SendReliable(Object message, NetFrame.FrameType type, ENet.Peer destination)
+        {
+            ENet.Packet packet = new ENet.Packet();
+            NetFrame f = new NetFrame(message, type);
+            MemoryStream stream = new MemoryStream(512); // TODO : buffer size ?
+            BinaryFormatter formater = new BinaryFormatter();
+            formater.Serialize(stream, f); 
+            packet.Initialize(stream.GetBuffer(), ENet.PacketFlags.Reliable);
+            destination.Send((byte)(clients.IndexOf(destination) * 2 + 1), packet);
+        }
+
 
         public void SendReliable(byte[] message, ENet.Peer destination)
         {

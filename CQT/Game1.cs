@@ -96,10 +96,10 @@ namespace CQT
             // TODO: use this.Content to load your game content here
 
             inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState(), environment.LocalPlayer);
-            Character testCharacter = new Character("Bonhomme", pengine, new Vector2(200, 100), new Vector2(100, 100));
-			Character redshirt = new Character("Redshirt", pengine, new Vector2(400, 100), new Vector2(100, 100));
-            environment.LocalPlayer.addCharacter(testCharacter);
-			environment.LocalPlayer.addCharacter(redshirt);
+            //Character testCharacter = new Character("Bonhomme", pengine, new Vector2(200, 100), new Vector2(100, 100));
+			//Character redshirt = new Character("Redshirt", pengine, new Vector2(400, 100), new Vector2(100, 100));
+            //environment.LocalPlayer.addCharacter(testCharacter);
+			//environment.LocalPlayer.addCharacter(redshirt);
             graphicEngine.setFollowedCharacter(environment.LocalPlayer.getCharacter());
             graphicEngine.setMap(environment.Map);
         }

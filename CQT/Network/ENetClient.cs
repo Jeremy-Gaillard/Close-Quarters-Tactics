@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Net;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 using ENet;
 
 using CQT.Engine;
+using CQT.Model;
 
 namespace CQT.Network
 {
@@ -75,12 +78,26 @@ namespace CQT.Network
                         {
                             bytes[i] = *((byte*)(e.Packet.Data.ToPointer())+i);
                         }
-                        engine.ProcessMessage(bytes);
+                        dispatchMessage(bytes);
                         break;
                     case ENet.EventType.None:
                         break;
                 }
             }
+        }
+
+        private void dispatchMessage(byte[] bytes)
+        {
+            MemoryStream stream = new MemoryStream(bytes);
+            BinaryFormatter formater = new BinaryFormatter();
+            NetFrame frame = (NetFrame) formater.Deserialize(stream);
+            switch (frame.type)
+            {
+                case NetFrame.FrameType.environment:
+                    engine.setEnvironment((LightEnvironment)frame.content);
+                    break;
+            }
+
         }
 
         public void Send(String message)
@@ -103,6 +120,17 @@ namespace CQT.Network
         {
             ENet.Packet packet = new ENet.Packet();
             packet.Initialize(message, ENet.PacketFlags.Reliable);
+            server.Send(1, packet);
+        }
+
+        public void SendReliable(Object message, NetFrame.FrameType type)
+        {
+            ENet.Packet packet = new ENet.Packet();
+            NetFrame f = new NetFrame(message, type);
+            MemoryStream stream = new MemoryStream(512); // TODO : buffer size ?
+            BinaryFormatter formater = new BinaryFormatter();
+            formater.Serialize(stream, f);
+            packet.Initialize(stream.GetBuffer(), ENet.PacketFlags.Reliable);
             server.Send(1, packet);
         }
 
