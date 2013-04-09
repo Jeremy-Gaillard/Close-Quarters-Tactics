@@ -38,6 +38,7 @@ namespace CQT.Engine
 
             // Environment initialization
             XMLReader xmlTest = new XMLReader("../../../map.xml");
+			Constants.Instance.init();
 
             Map map = new Map(xmlTest.upperLeft, xmlTest.lowerRight, xmlTest.listObstacle, xmlTest.listWall);
             Player player = new Player("Champ");
