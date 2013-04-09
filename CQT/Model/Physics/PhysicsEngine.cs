@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using CQT.Model.Map;
@@ -11,7 +12,7 @@ namespace CQT.Model.Physics
     public class PhysicsEngine
     {
         Map.Map map;
-        List<Body> bodies = new List<Body>();
+        ConcurrentBag<Body> bodies = new ConcurrentBag<Body>();
 
         public PhysicsEngine(Map.Map m)
         {

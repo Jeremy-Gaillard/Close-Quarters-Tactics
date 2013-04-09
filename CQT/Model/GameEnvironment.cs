@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.Concurrent;
+using System.Threading;
 
 namespace CQT.Model
 {
@@ -18,7 +19,6 @@ namespace CQT.Model
                 players.Add(new LightPlayer(p));
             }
         }
-
         public Map.Map map;
         public List<LightPlayer> players;
     }
@@ -33,15 +33,15 @@ namespace CQT.Model
 		public Player LocalPlayer {
 			get { return localPlayer; }
 		}
-		protected BlockingCollection<Player> players;
-		public BlockingCollection<Player> Players {
+		protected ConcurrentBag<Player> players;
+		public ConcurrentBag<Player> Players {
 			get { return players; }
 		}
 
 		private static GameEnvironment instance;
 		private GameEnvironment() {}
 		public static GameEnvironment Instance {
-			get { 
+			get {
 				if (instance==null) {
 					instance = new GameEnvironment();
 				}
@@ -51,7 +51,7 @@ namespace CQT.Model
 
         public void init(Map.Map _map, Player _localPlayer)
         {
-            players = new BlockingCollection<Player>();
+            players = new ConcurrentBag<Player>();
             map = _map;
             localPlayer = _localPlayer;
 			players.Add(localPlayer);

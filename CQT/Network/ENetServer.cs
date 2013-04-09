@@ -6,6 +6,8 @@ using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
+using Microsoft.Xna.Framework;
+
 using ENet;
 
 using CQT.Engine;
@@ -23,12 +25,15 @@ namespace CQT.Network
 
         protected ServerEngine engine;
 
+        protected Dictionary<ENet.Peer, Player> clientMap;
+
         protected bool end = false;
 
         public ENetServer(int port, int maxClients, ServerEngine se)
         {
             engine = se;
             clients = new List<ENet.Peer>();
+            clientMap = new Dictionary<Peer, Player>();
             server = new ENet.Host();
             server.InitializeServer(port, maxClients * 2); // 2 channels per client
         }
@@ -94,8 +99,11 @@ namespace CQT.Network
             switch (frame.type)
             {
                 case NetFrame.FrameType.player:
-                    engine.AddPlayer((LightPlayer)frame.content, peer);
-                    // TODO : map player to peer
+                    Player newPlayer = engine.AddPlayer((LightPlayer)frame.content);
+                    clientMap.Add(peer, newPlayer);
+                    break;
+                case NetFrame.FrameType.position:
+                    engine.UpdatePosition(clientMap[peer], (Vector2)frame.content);
                     break;
             }
         }
@@ -150,6 +158,7 @@ namespace CQT.Network
             formater.Serialize(stream, f); 
             packet.Initialize(stream.GetBuffer(), ENet.PacketFlags.Reliable);
             destination.Send((byte)(clients.IndexOf(destination) * 2 + 1), packet);
+            server.Flush();
         }
 
 

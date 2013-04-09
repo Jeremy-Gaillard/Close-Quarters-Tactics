@@ -50,13 +50,18 @@ namespace CQT.Engine
             }
             if (elapsedTime > POSITIONREFRESHTIME)
             {
-                //communication.Send();
+                sendPosition();
                 elapsedTime = 0;
             }
             commands.Clear();
         }
 
-        public void SendCommand(Command.Command command)
+        private void sendPosition()
+        {
+            communication.SendReliable(GameEnvironment.Instance.LocalPlayer.getCharacter().body.position, NetFrame.FrameType.position);
+        }
+
+        public void AddCommand(Command.Command command)
         {
             commands.Add(command);
         }
