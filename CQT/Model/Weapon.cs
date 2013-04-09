@@ -10,17 +10,14 @@ namespace CQT.Model
 	{
 
 		protected Character owner;
-		protected WeaponInfo.Type type;
+		protected WeaponInfo info;
 		protected int lastShotTime; // milliseconds
-
-
-
 
 		public Weapon (WeaponInfo.Type _type)
 			: base(null, new Vector2(1,1)) // TODO: get real values
 		{
 			owner = null;
-			type = _type;
+			info = Constants.Instance.getWeaponInfo(_type);
 			lastShotTime = 0;
 		}
 
@@ -56,7 +53,7 @@ namespace CQT.Model
 			// - check ROT
 			// - check ammo in magazine
 
-			float msPerShot = 60000 / (rotBonus * WeaponInfo.getROT(type));
+			float msPerShot = 60000 / (rotBonus * info.ROT);
 			int nextShot = lastShotTime + (int)msPerShot;
 
 			if (nextShot <= currentTime) {
@@ -72,7 +69,7 @@ namespace CQT.Model
 			//System.Console.WriteLine ("Weapon.shoot(): "+WeaponInfo.getName (type)+" shooting at angle "+direction);
 			//TODO
 
-            float imprec = WeaponInfo.getImprecision(type);
+            float imprec = info.imprecision;
             angle += (float)rand.NextDouble() * imprec - imprec / 2f;
 
 			GameEnvironment environment = GameEnvironment.Instance;
@@ -153,7 +150,7 @@ namespace CQT.Model
 
 
 			if (trajToChar.length < trajToWall.length) {
-				float preciseDmg = ((float)WeaponInfo.getDamage(type))*CharacterInfo.getDamageBonus(owner.getCharType());
+				float preciseDmg = ((float)info.damage)*owner.getInfo().damageBonus;
 				shootee.harm( (uint)preciseDmg );
                 environment.addBulletTrail(trajToChar);
 			}

@@ -30,6 +30,7 @@ namespace CQT.Engine
 
         public ClientEngine(IPEndPoint server/*player info*/)
         {
+			Constants.Instance.init();
             elapsedTime = 0;
             commands = new List<Command.Command>();
             communication = new ENetClient(this);
