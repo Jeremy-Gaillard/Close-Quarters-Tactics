@@ -38,7 +38,7 @@ namespace CQT.Model
 			Right,
 			UpRight
 		}
-		protected CharacterInfo.Type type;
+		protected CharacterInfo info;
 
 		protected List<Weapon> weapons;
 		protected Weapon currentWeapon;
@@ -53,7 +53,7 @@ namespace CQT.Model
         public Character (String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
 			: base(_texture, _size)
 		{
-			type = CharacterInfo.Type.None;
+			info = Constants.Instance.getCharacterInfo(CharacterInfo.Type.Default);
             initCharacter();
             //body.setPosition(_position);
             body = new Body(_size.X, _position); // TODO: size as a FLOAT instead?!
@@ -63,7 +63,7 @@ namespace CQT.Model
 		public Character (CharacterInfo.Type _type, String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
 			: base(_texture, _size)
 		{
-			type = _type;
+			info = Constants.Instance.getCharacterInfo(_type);
 			initCharacter ();
             //body.setPosition(_position);
             body = new Body(_size.X, _position); // TODO: size as a FLOAT instead?!
@@ -72,7 +72,7 @@ namespace CQT.Model
 
 		public void initCharacter ()
 		{
-			hitPoints = CharacterInfo.getMaxHP (type);
+			hitPoints = info.maxHP;
 			equipDefaultWeapons ();
 		}
 
@@ -143,7 +143,7 @@ namespace CQT.Model
 
         //Random rand = new Random();
 		public void shoot (int now) {
-            if (currentWeapon != null && currentWeapon.canShoot(CharacterInfo.getROTBonus(type), now))
+            if (currentWeapon != null && currentWeapon.canShoot(info.ROTBonus, now))
             {
                 /*
                 float imprec = WeaponInfo.getImprecision(currentWeapon.GetType());
@@ -232,7 +232,7 @@ namespace CQT.Model
 			///movement = movement * milliseconds * speed; // ce n'est pas à Character de faire ce genre de trucs (millisecond)
 			//Console.Out.WriteLine (movement);
 			///position += movement;
-            body.tryMove(movement * CharacterInfo.getSpeed(type));
+            body.tryMove(movement * info.speedBonus);
 		}
 
 		public void harm(uint damage) {
@@ -254,8 +254,8 @@ namespace CQT.Model
 		{
 			return (getSize().X)/2F; // TODO: is that actually correct?
 		}
-		public CharacterInfo.Type getCharType() {
-			return type;
+		public CharacterInfo getInfo() {
+			return info;
 		}
 	}
 }

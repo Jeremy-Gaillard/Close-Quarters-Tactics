@@ -150,7 +150,7 @@ namespace CQT.Model
 
 
 			if (trajToChar.length < trajToWall.length) {
-				float preciseDmg = ((float)info.damage)*CharacterInfo.getDamageBonus(owner.getCharType());
+				float preciseDmg = ((float)info.damage)*owner.getInfo().damageBonus;
 				shootee.harm( (uint)preciseDmg );
                 environment.addBulletTrail(trajToChar);
 			}
