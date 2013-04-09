@@ -25,6 +25,9 @@ namespace CQT.Model
 
     public class GameEnvironment
     {
+        public readonly List<Point> bulletSparks = new List<Point>();
+        public readonly List<Line> bulletTrails = new List<Line>();
+
         protected Map.Map map;
 		public Map.Map Map {
 			get { return map; }
@@ -42,7 +45,7 @@ namespace CQT.Model
 		private GameEnvironment() {}
 		public static GameEnvironment Instance {
 			get {
-				if (instance==null) {
+				if (instance == null) {
 					instance = new GameEnvironment();
 				}
 				return instance;
@@ -69,5 +72,16 @@ namespace CQT.Model
                 players.Add(p);
             }
         }
+
+        internal void addBulletSpark(Point p)
+        {
+            bulletSparks.Add(p);
+        }
+
+        internal void addBulletTrail(Line l)
+        {
+            bulletTrails.Add(l);
+        }
+
     }
 }

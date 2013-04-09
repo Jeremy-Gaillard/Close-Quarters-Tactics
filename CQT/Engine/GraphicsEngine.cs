@@ -100,10 +100,27 @@ namespace CQT.Engine
             entities.AddRange(el);
         }
 
+        Random random = new Random();
+        float NextFloat()
+        {
+            double mantissa = (random.NextDouble() * 2.0) - 1.0;
+            double exponent = Math.Pow(2.0, random.Next(-126, 128));
+            return (float)(mantissa * exponent);
+        }
+
+        Vector2 nextVector2(float range)
+        {
+            return new Vector2(
+                (float) random.NextDouble() * range - range / 2,
+                (float)random.NextDouble() * range - range / 2);
+        }
+
+
+
         /// <summary>
         /// Draws the entities previously added to the entity list
         /// </summary>
-        public void Draw()
+        public void Draw(GameEnvironment environment)
         {
             updateCameraPosition();
 
@@ -128,6 +145,36 @@ namespace CQT.Engine
                 EntityView.Draw(spriteBatch, cache, cameraPosition, e);
             }
             */
+
+            Color bulletColor = Color.Red;
+
+            foreach (Model.Line l in environment.bulletTrails)
+            {
+                /*AddLine(l, bulletColor);
+                AddLine(l.TranslatePerpendicular(1), bulletColor);*/
+                Line currentLine = l;
+                const int thickness = 4;
+                for (int i = 0; i < thickness; i++)
+                {
+                    AddLine(currentLine, bulletColor);
+                    if (i != thickness - 1)
+                        currentLine = currentLine.TranslatePerpendicular(1);
+                }
+            }
+            environment.bulletTrails.Clear();
+
+            foreach (Model.Point pt in environment.bulletSparks)
+            {
+                //AddPoint(pt, Color.Yellow);
+                //AddTriangle(pt.asVector, Color.Yellow);
+                float siz = 25;
+                AddTriangle(
+                    pt.Translated(nextVector2(siz)),
+                    pt.Translated(nextVector2(siz)),
+                    pt.Translated(nextVector2(siz)),
+                bulletColor);
+            }
+            environment.bulletSparks.Clear();
 
 
             spriteBatch.End();
