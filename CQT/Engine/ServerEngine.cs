@@ -47,7 +47,7 @@ namespace CQT.Engine
 
             pengine = new PhysicsEngine(environment.Map);
 
-            Character character = new Character("Bonhomme", pengine, new Vector2(200, 100), new Vector2(100, 100));
+            Character character = new Character("swattds", pengine, new Vector2(200, 100), new Vector2(100, 100));
 			Character redshirt = new Character("Redshirt", pengine, new Vector2(400, 100), new Vector2(100, 100));
             player.addCharacter(character);
 			player.addCharacter(redshirt);
