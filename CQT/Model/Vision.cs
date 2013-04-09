@@ -8,19 +8,32 @@ namespace CQT.Model
 {
     public class Vision
     {
-        const float viewSize = 1000;
-        List<Line> visionBlockingLines;
-        Point origin;
+        const float viewSize = 1500;
+        const float visionAperture = (float)Math.PI *.7f;
+
+        public readonly List<Point> lightTriangles;
+
+        public List<Line> visionBlockingLines;
+        public Point origin;
+        public float rotation;
+
         /*Line viewLine;
         Line viewLine2;*/
         Line leftViewLine;
         Line rightViewLine;
 
+        public Vision(Point origin, float rotation, List<Line> visionBlockingLines)
+        {
+            //this.origin = origin;
+            //this.rotation = rotation;
+            lightTriangles = GetLightPolygons(origin, rotation, visionBlockingLines);
+        }
+
         /// <summary>
         /// Points representing triangles with the given origin
         /// </summary>
         /// <returns></returns>
-        public List<Point> GetLightPolygons(Point _origin, float rotation, List<Line> _visionBlockingLines)
+        private List<Point> GetLightPolygons(Point _origin, float rotation, List<Line> _visionBlockingLines)
         {
             origin = _origin;
             visionBlockingLines = _visionBlockingLines;
@@ -28,7 +41,9 @@ namespace CQT.Model
             List<Point> lightPolygons = new List<Point>();
 
             //float alpha = (float)Math.PI / 4;
-            float alpha = (float)Math.PI / 3;
+            //float alpha = (float)Math.PI / 3;
+            //float alpha = visionAperture / 2f;
+            float alpha = visionAperture;
 
             //leftViewLine = new Line(origin, new Point(Mouse.GetState().X, Mouse.GetState().Y)).resized(viewSize).rotated(-alpha / 2);
             leftViewLine = new Line(origin, origin.Translated(100, 0)).resized(viewSize).rotated(rotation - alpha / 2);
@@ -62,8 +77,7 @@ namespace CQT.Model
                         bool cont = false;
                         foreach (Tuple<Line, Line> t in intermediateLines)
                         {
-                            if (t.Item1.p2 == newT.Item1.p2)
-                                { cont = true; break; }
+                            if (t.Item1.p2 == newT.Item1.p2) { cont = true; break; }
 
                             //var angle = Utils.normalizedAngleDifference(t.Item1.angle, newT.Item2.angle);
                             var angle = Utils.normalizedAngleDifference(t.Item1.angle, newT.Item1.angle);
@@ -146,11 +160,25 @@ namespace CQT.Model
                     if (d > ray.length)
                     {
                         Line rayContinued = ray.resized(viewSize);
+
+                        //rayContinued = rayContinued.rotated(float.Epsilon);
+
                         CollideWalls(ref rayContinued, false, wall);
                         lightPolygons.Add(rayContinued.p2);
 
-                        lightPolygons.Add(ray.p2);
+
+                        //rayContinued = rayContinued.rotated((float)Math.PI / 30f).resized(viewSize);
+                        rayContinued = rayContinued.rotated((float)Math.PI / 100f).resized(viewSize);
+                        //rayContinued = rayContinued.rotated(float.Epsilon*10000).resized(viewSize);
+                        //rayContinued = rayContinued.resized(viewSize);
+                        currentWall = CollideWalls(ref rayContinued, true);
+                        lightPolygons.Add(rayContinued.p2);
+                        //lightPolygons.Add(ray.p2);
+
+                        /*
+                        lightPolygons.Add(rayContinued.p2);
                         currentWall = wall;
+                        */
                     }
                 }
                 

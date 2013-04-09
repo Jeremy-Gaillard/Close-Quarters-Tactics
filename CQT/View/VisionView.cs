@@ -16,23 +16,28 @@ namespace CQT.View
 {
     class VisionView
     {
-        GraphicEngine graphicEngine;
+        GraphicsEngine graphicEngine;
+        //readonly Color visionViewColor = Color.CornflowerBlue; // Color.White;
+        readonly Color visionViewColor = Color.LightGray;
 
-        public static void Draw(GraphicEngine _graphicEngine, SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 cameraOffset, Point origin, float rotation, List<Line> visionBlockingLines)
+        public static Vision Draw(GraphicsEngine _graphicEngine, SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 cameraOffset, Point origin, float rotation, List<Line> visionBlockingLines)
         {
-            new VisionView(_graphicEngine, sb, _gman, cameraOffset, origin, rotation, visionBlockingLines);
+            VisionView vv = new VisionView(_graphicEngine, sb, _gman, cameraOffset, origin, rotation, visionBlockingLines);
+            //return vv.lightPolygon;
+            return vv.vision;
         }
+
+        Vision vision;
 
         const float viewSize = 1000;
         List<Line> visionBlockingLines;
         GraphicsDeviceManager gman;
         Point origin;
-        Line viewLine;
-        Line viewLine2;
         List<Line> intermediateLines = new List<Line>();
         Vector2 cameraOffset;
+        List<Point> lightPolygon;
 
-        public VisionView(GraphicEngine _graphicEngine, SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 _cameraOffset, Point _origin, float rotation, List<Line> _visionBlockingLines)
+        public VisionView(GraphicsEngine _graphicEngine, SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 _cameraOffset, Point _origin, float rotation, List<Line> _visionBlockingLines)
         {
             graphicEngine = _graphicEngine;
             gman = _gman;
@@ -40,21 +45,25 @@ namespace CQT.View
             visionBlockingLines = _visionBlockingLines;
             cameraOffset = _cameraOffset;
 
-            List<Point> lightPolygon = new Vision().GetLightPolygons(origin, rotation, _visionBlockingLines);
-
+            //List<Point> lightPolygon
+            //lightPolygon = new Vision().GetLightPolygons();
+            vision = new Vision(origin, rotation, _visionBlockingLines);
 
             //Console.WriteLine(origin);
 
 
 
-            displayLight(sb, cameraOffset, lightPolygon);
+            displayLight(sb, cameraOffset, vision.lightTriangles);
 
         }
 
         void displayLight(SpriteBatch sb, Vector2 cameraOffset, List<Point> lightPolygon)
         {
 
-            Color c = Color.Red;
+            const bool debug = false;
+
+            //Color c = Color.Red;
+            Color c = visionViewColor;
 
             for (int i = 0; i < lightPolygon.Count() - 1; i++)
             {
@@ -64,11 +73,15 @@ namespace CQT.View
                 //Render(sb.GraphicsDevice, origin, lightPolygon[i], lightPolygon[i + 1], Color.Red);//Color.DarkGray);
 
                 graphicEngine.AddTriangle(origin, lightPolygon[i], lightPolygon[i + 1], c);
-                graphicEngine.AddLine(origin, lightPolygon[i], Color.Black);
-                graphicEngine.AddLine(origin, lightPolygon[i + 1], Color.Beige);
 
-                //c.R -= 20;
-                c.R -= (byte) (255.0/(double)lightPolygon.Count());
+                if (debug)
+                {
+                    graphicEngine.AddLine(origin, lightPolygon[i], Color.Black);
+                    graphicEngine.AddLine(origin, lightPolygon[i + 1], Color.Beige);
+
+                    //c.R -= 20;
+                    c.R -= (byte)(255.0 / (double)lightPolygon.Count());
+                }
 
             }
 

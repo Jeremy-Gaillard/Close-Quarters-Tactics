@@ -27,7 +27,7 @@ namespace CQT
     {
         GraphicsDeviceManager graphics;
 
-        GraphicEngine graphicEngine;
+        GraphicsEngine graphicEngine;
         PhysicsEngine pengine;
         InputManager inputManager;
         GameEnvironment environment;
@@ -82,7 +82,7 @@ namespace CQT
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
-            graphicEngine = new GraphicEngine(spriteBatch, graphics, GraphicsDevice, Content);
+            graphicEngine = new GraphicsEngine(spriteBatch, graphics, GraphicsDevice, Content);
 
             /*XMLReader xmlTest = new XMLReader("../../../map.xml");
 
