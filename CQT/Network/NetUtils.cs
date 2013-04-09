@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Microsoft.Xna.Framework;
+
 namespace CQT.Network
 {
     [Serializable()]
@@ -11,6 +13,7 @@ namespace CQT.Network
         public enum FrameType
         {
             position,
+            positions,
             environment,
             shootCommand,
             player
@@ -24,5 +27,25 @@ namespace CQT.Network
             type = t;
             content = o;
         }
+    }
+
+
+    [Serializable()]
+    public struct Position
+    {
+        public Vector2 pos;
+        public Single rot;
+
+        public Position(Vector2 _pos, Single _rot)
+        {
+            pos = _pos;
+            rot = _rot;
+        }
+    }
+
+    [Serializable()]
+    public struct Positions
+    {
+        public List<Position> positions;
     }
 }

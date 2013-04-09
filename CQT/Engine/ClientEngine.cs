@@ -58,7 +58,9 @@ namespace CQT.Engine
 
         private void sendPosition()
         {
-            communication.SendReliable(GameEnvironment.Instance.LocalPlayer.getCharacter().body.position, NetFrame.FrameType.position);
+            Position position = new Position(GameEnvironment.Instance.LocalPlayer.getCharacter().body.position,
+                GameEnvironment.Instance.LocalPlayer.getCharacter().getRotation());
+            communication.SendReliable(position, NetFrame.FrameType.position);
         }
 
         public void AddCommand(Command.Command command)
@@ -121,6 +123,20 @@ namespace CQT.Engine
         public PhysicsEngine getPhysicsEngine()
         {
             return pengine;
+        }
+
+        internal void UpdatePosition(Positions positions)
+        {
+            int i = 0;
+            foreach(Player p in GameEnvironment.Instance.Players)
+            {
+                if (p != GameEnvironment.Instance.LocalPlayer)
+                {
+                    p.getCharacter().body.position = positions.positions[i].pos;
+                    p.getCharacter().setRotation(positions.positions[i].rot);
+                }
+                i++;
+            }
         }
     }
 }

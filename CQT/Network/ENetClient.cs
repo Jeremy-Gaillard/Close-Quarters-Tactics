@@ -96,6 +96,9 @@ namespace CQT.Network
                 case NetFrame.FrameType.environment:
                     engine.setEnvironment((LightEnvironment)frame.content);
                     break;
+                case NetFrame.FrameType.positions:
+                    engine.UpdatePosition((Positions)frame.content);
+                    break;
             }
 
         }
