@@ -72,8 +72,9 @@ namespace CQT.Model
 			//TODO
 
 			GameEnvironment environment = GameEnvironment.Instance;
-			if (environment == null) return;
-
+            //if (environment == null) return;
+            if (environment == null) throw new ArgumentNullException();
+            
 			Point pos = new Point(getPosition());
 			float cosA = (float)Math.Cos(angle);
 			float sinA = (float)Math.Sin(angle);
@@ -134,10 +135,20 @@ namespace CQT.Model
 			if (trajToChar.length < trajToWall.length) {
 				float preciseDmg = ((float)WeaponInfo.getDamage(type))*CharacterInfo.getDamageBonus(owner.getCharType());
 				shootee.harm( (uint)preciseDmg );
+                environment.addBulletTrail(trajToChar);
 			}
-			else if ( wallOnTraj ) {
-				Console.WriteLine("Weapon.shoot(): hit a wall at "+trajToWall.p2.ToString());
-			}
+            else if (wallOnTraj)
+            {
+                Console.WriteLine("Weapon.shoot(): hit a wall at " + trajToWall.p2.ToString());
+                environment.addBulletSpark(trajToWall.p2);
+                environment.addBulletSpark(trajToWall.p2);
+                environment.addBulletSpark(trajToWall.p2);
+                environment.addBulletTrail(trajToWall);
+            }
+            else
+            {
+                environment.addBulletTrail(traj);
+            }
 		}
 	}
 }

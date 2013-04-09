@@ -166,7 +166,7 @@ namespace CQT
         {
 
             // TODO: Add your drawing code here
-            graphicEngine.Draw();
+            graphicEngine.Draw(environment);
             base.Draw(gameTime);
         }
 
