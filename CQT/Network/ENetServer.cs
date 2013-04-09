@@ -70,9 +70,13 @@ namespace CQT.Network
                         removeClient(e.Peer);
                         break;
                     case ENet.EventType.Receive:
-                        String message = new String((sbyte*)e.Packet.Data.ToPointer(), 0, e.Packet.Length);
-                        engine.processMessage(message, e.Peer);
-                        //processMessage(message, e.Peer);
+                        byte[] bytes = new byte[e.Packet.Length];
+                        for (int i = 0; i < e.Packet.Length; i++)
+                        {
+                            bytes[i] = *((byte*)(e.Packet.Data.ToPointer())+i);
+                        }
+                        engine.ProcessMessage(bytes, e.Peer);
+                        //String message = new String((sbyte*)e.Packet.Data.ToPointer(), 0, e.Packet.Length);
                         break;
                     case ENet.EventType.None:
                         break;
@@ -134,13 +138,6 @@ namespace CQT.Network
             byte[] buffer = Encoding.ASCII.GetBytes(message);
             packet.Initialize(buffer, ENet.PacketFlags.Reliable);
             server.Broadcast(1 /*TODO : change channel ?*/, ref packet);
-        }
-
-        protected void processMessage(String message, ENet.Peer sender)
-        {
-            Console.Out.WriteLine("Message from " + sender.GetRemoteAddress().Address.ToString() + ":"
-                + sender.GetRemoteAddress().Port + " : " + message);
-            SendReliable("Well hello good sir !", sender);
         }
     }
 }

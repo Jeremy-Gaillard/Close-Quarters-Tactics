@@ -64,13 +64,17 @@ namespace CQT.Engine
         public void setEnvironment(byte[] serializedEnvironment)
         {
             Player local = new Player("Georges"); // TODO : change this
+
             MemoryStream stream = new MemoryStream(serializedEnvironment);
             BinaryFormatter formater = new BinaryFormatter();
             LightEnvironment env = (LightEnvironment)formater.Deserialize(stream);
             environment = GameEnvironment.Instance;
             environment.init(env.map, local);
-
+            
             pengine = new PhysicsEngine(environment.Map);
+
+            Character character = new Character("patate", pengine, new Vector2(100, 300), new Vector2(50, 50));
+            local.setCharacter(character);
 
             foreach (LightPlayer lp in env.players)
             {
@@ -79,6 +83,11 @@ namespace CQT.Engine
                 p.setCharacter(c);
                 environment.AddPlayer(p);
             }
+
+            // Sending local info to server
+            stream = new MemoryStream(128); // TODO : buffer size ?
+            formater.Serialize(stream, new LightPlayer(local));
+            communication.SendReliable(stream.GetBuffer());
 
             ready = true;
         }

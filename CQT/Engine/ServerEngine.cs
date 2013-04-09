@@ -89,9 +89,16 @@ namespace CQT.Engine
             communication.Shutdown();
         }
 
-        public void processMessage(String message, ENet.Peer sender)
+        public void ProcessMessage(byte[] message, ENet.Peer sender)
         {
-            // TODO
+            // TODO : add switch on first byte ?
+            MemoryStream stream = new MemoryStream(message);
+            BinaryFormatter formater = new BinaryFormatter();
+            LightPlayer lp = (LightPlayer) formater.Deserialize(stream);
+            Player p = new Player(lp.name);
+            Character c = new Character(lp.character.textureName, pengine, lp.character.position, lp.character.size);
+            p.setCharacter(c);
+            GameEnvironment.Instance.AddPlayer(p);
         }
 
         public PhysicsEngine getPhysicsEngine()

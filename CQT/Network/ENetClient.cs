@@ -99,6 +99,13 @@ namespace CQT.Network
             server.Send(1, packet);
         }
 
+        public void SendReliable(byte[] message)
+        {
+            ENet.Packet packet = new ENet.Packet();
+            packet.Initialize(message, ENet.PacketFlags.Reliable);
+            server.Send(1, packet);
+        }
+
         public void Disconnect()
         {
             if (server.IsInitialized)
