@@ -85,8 +85,9 @@ namespace CQT.Model
 		{
 			//TODO: determine what is the basic equipment, unequip old one, equip new one
 			weapons = new List<Weapon> ();
-			
-			Weapon aGun = new Weapon (WeaponInfo.Type.Gun);
+
+            //Weapon aGun = new Weapon (WeaponInfo.Type.Gun);
+            Weapon aGun = new Weapon(WeaponInfo.Type.Assault);
 
 			pickUp (aGun);
 			switchTo (aGun);

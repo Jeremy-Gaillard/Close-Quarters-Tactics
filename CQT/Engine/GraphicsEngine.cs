@@ -158,7 +158,7 @@ namespace CQT.Engine
                 {
                     AddLine(currentLine, bulletColor);
                     if (i != thickness - 1)
-                        currentLine = currentLine.TranslatePerpendicular(1);
+                        currentLine = currentLine.TranslatePerpendicular(.8f);
                 }
             }
             environment.bulletTrails.Clear();
