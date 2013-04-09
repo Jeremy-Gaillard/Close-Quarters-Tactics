@@ -26,7 +26,6 @@ namespace CQT.Engine
         protected List<Command.Command> commands;
         protected GameEnvironment environment;
         protected PhysicsEngine pengine;
-        Stopwatch timer = new Stopwatch();
 
         public ServerEngine(int serverPort, int maxClients/*map name, etc*/)
         {
@@ -106,9 +105,7 @@ namespace CQT.Engine
 
         internal void UpdatePosition(Player player, Vector2 position)
         {
-            timer.Start();
             player.getCharacter().body.setPosition(position);
-            Console.Out.WriteLine(timer.ElapsedMilliseconds);
         }
     }
 }

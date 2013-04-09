@@ -75,7 +75,7 @@ namespace CQT.Engine
             
             pengine = new PhysicsEngine(environment.Map);
 
-            Character character = new Character("patate", pengine, new Vector2(100, 300), new Vector2(50, 50));
+            Character character = new Character("patate", pengine, new Vector2(150, 300), new Vector2(50, 50));
             local.addCharacter(character);
 
             foreach (LightPlayer lp in env.players)
