@@ -142,9 +142,15 @@ namespace CQT.Model
 			return false;
 		}
 
+        //Random rand = new Random();
 		public void shoot (int now) {
-			if (currentWeapon != null && currentWeapon.canShoot(CharacterInfo.getROTBonus(type), now) ) {
-				currentWeapon.shoot(rotation);
+            if (currentWeapon != null && currentWeapon.canShoot(CharacterInfo.getROTBonus(type), now))
+            {
+                /*
+                float imprec = WeaponInfo.getImprecision(currentWeapon.GetType());
+                float angle = rotation + (float)rand.NextDouble() * imprec - imprec / 2f;
+                */
+                currentWeapon.shoot(rotation);
 			}
 			else {
 				// play *click-click* noise?

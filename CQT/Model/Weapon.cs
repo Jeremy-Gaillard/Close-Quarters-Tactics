@@ -67,9 +67,13 @@ namespace CQT.Model
 			return false;
 		}
 
+        Random rand = new Random();
 		public void shoot(float angle) {
 			//System.Console.WriteLine ("Weapon.shoot(): "+WeaponInfo.getName (type)+" shooting at angle "+direction);
 			//TODO
+
+            float imprec = WeaponInfo.getImprecision(type);
+            angle += (float)rand.NextDouble() * imprec - imprec / 2f;
 
 			GameEnvironment environment = GameEnvironment.Instance;
             //if (environment == null) return;

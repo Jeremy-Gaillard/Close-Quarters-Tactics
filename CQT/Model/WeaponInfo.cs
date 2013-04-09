@@ -24,11 +24,25 @@ namespace CQT.Model
 				return 1;
 			}
 		}
+        public static float getImprecision(Type t) // in radians
+        {
+            switch (t)
+            {
+                case Type.Assault:
+                    return (float)Math.PI/40f;
+                case Type.Gun:
+                    return (float)Math.PI / 20f;
+                case Type.Shotgun:
+                    return (float)Math.PI / 10f;
+                default:
+                    return 1;
+            }
+        }
 		public static float getROT (Type t) // RPM
 		{
 			switch (t) {
 			case Type.Assault:
-				return 500;
+				return 700;
 			case Type.Gun:
 				return 100;
 			case Type.Shotgun:
