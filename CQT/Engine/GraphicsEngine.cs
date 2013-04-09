@@ -160,6 +160,7 @@ namespace CQT.Engine
                     if (i != thickness - 1)
                         currentLine = currentLine.TranslatePerpendicular(.8f);
                 }
+                AddLine(l.TranslatePerpendicular(.8f*(thickness/2f)), Color.Yellow);
             }
             environment.bulletTrails.Clear();
 
@@ -173,6 +174,11 @@ namespace CQT.Engine
                     pt.Translated(nextVector2(siz)),
                     pt.Translated(nextVector2(siz)),
                 bulletColor);
+                AddTriangle(
+                    pt.Translated(nextVector2(siz/2)),
+                    pt.Translated(nextVector2(siz/2)),
+                    pt.Translated(nextVector2(siz/2)),
+                Color.Yellow);
             }
             environment.bulletSparks.Clear();
 

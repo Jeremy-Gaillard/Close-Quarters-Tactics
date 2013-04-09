@@ -122,10 +122,12 @@ namespace CQT.Model
 				}
 			}
 
-			Line wallShot = new Line (0,0,0,0);
-			bool wallOnTraj = false;
+			/*Line wallShot = new Line (0,0,0,0);
+			bool wallOnTraj = false;*/
+            Line? wallShot = null;
 			Line trajToWall = traj;
 			
+            /*
 			foreach (Line l in map.getVisionBlockingLines()) {
 				Point? intersct = Utils.LineIntersect(traj, l);
 				if (intersct.HasValue) {
@@ -138,13 +140,24 @@ namespace CQT.Model
 					}
 				}
 			}
+            */
+            foreach (Line l in map.getVisionBlockingLines())
+            {
+                Point? intersct = trajToWall.Intersect(l);
+                if (intersct.HasValue)
+                {
+                    wallShot = l;
+                    trajToWall = new Line(origin, intersct.Value);
+                }
+            }
+
 
 			if (trajToChar.length < trajToWall.length) {
 				float preciseDmg = ((float)WeaponInfo.getDamage(type))*CharacterInfo.getDamageBonus(owner.getCharType());
 				shootee.harm( (uint)preciseDmg );
                 environment.addBulletTrail(trajToChar);
 			}
-            else if (wallOnTraj)
+            else if (wallShot.HasValue)
             {
                 Console.WriteLine("Weapon.shoot(): hit a wall at " + trajToWall.p2.ToString());
                 environment.addBulletSpark(trajToWall.p2);
