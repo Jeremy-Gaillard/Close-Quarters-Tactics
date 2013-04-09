@@ -54,7 +54,7 @@
   <ItemGroup>
     <Compile Include="DebugToolbox.cs" />
     <Compile Include="Engine\GraphicCache.cs" />
-    <Compile Include="Engine\GraphicEngine.cs" />
+    <Compile Include="Engine\GraphicsEngine.cs" />
     <Compile Include="Engine\InputManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Model\CharacterInfo.cs" />

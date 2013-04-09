@@ -61,17 +61,17 @@ namespace CQT.Model
             return new Point(x + _x, y + _y);
         }
 
-        internal Vector2 asVector()
+        public Vector2 asVector()
         {
             return new Vector2(x,y);
         }
 
-        internal float Distance(Point p)
+        public float Distance(Point p)
         {
             return Utils.distance(this, p);
         }
 
-        internal Point Projected(Line axis)
+        public Point Projected(Line axis)
         {
             if (axis.p1.x == axis.p2.x)
             {
@@ -90,6 +90,11 @@ namespace CQT.Model
         public bool Around(Point p, float d)
         {
             return Distance(p) <= d;
+        }
+
+        public bool InTriangle(Point v1, Point v2, Point v3)
+        {
+            return Utils.PointInTriangle(this, v1, v2, v3);
         }
 
 
