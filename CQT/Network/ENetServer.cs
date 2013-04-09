@@ -26,6 +26,7 @@ namespace CQT.Network
         protected ServerEngine engine;
 
         protected Dictionary<ENet.Peer, Player> clientMap;
+        protected Dictionary<Player, ENet.Peer> playerMap; // TODO : change this
 
         protected bool end = false;
 
@@ -34,6 +35,7 @@ namespace CQT.Network
             engine = se;
             clients = new List<ENet.Peer>();
             clientMap = new Dictionary<Peer, Player>();
+            playerMap = new Dictionary<Player, Peer>();
             server = new ENet.Host();
             server.InitializeServer(port, maxClients * 2); // 2 channels per client
         }
@@ -72,7 +74,7 @@ namespace CQT.Network
                         // needs more error handling
                     case ENet.EventType.Connect:
                         addClient(e.Peer);
-                        engine.SendCurrentState(e.Peer);
+                        SendReliable(engine.getCurrentState(), NetFrame.FrameType.environment, e.Peer);
                         break;
                     case ENet.EventType.Disconnect:
                         removeClient(e.Peer);
@@ -101,9 +103,10 @@ namespace CQT.Network
                 case NetFrame.FrameType.player:
                     Player newPlayer = engine.AddPlayer((LightPlayer)frame.content);
                     clientMap.Add(peer, newPlayer);
+                    playerMap.Add(newPlayer, peer);
                     break;
                 case NetFrame.FrameType.position:
-                    engine.UpdatePosition(clientMap[peer], (Vector2)frame.content);
+                    engine.UpdatePosition(clientMap[peer], (Position)frame.content);
                     break;
             }
         }
@@ -147,6 +150,19 @@ namespace CQT.Network
             byte[] buffer = Encoding.ASCII.GetBytes(message);
             packet.Initialize(buffer, ENet.PacketFlags.Reliable);
             destination.Send((byte)(clients.IndexOf(destination) * 2 + 1), packet);
+        }
+
+        public void SendReliable(Object message, NetFrame.FrameType type, Player player)
+        {
+            ENet.Peer destination = playerMap[player];
+            ENet.Packet packet = new ENet.Packet();
+            NetFrame f = new NetFrame(message, type);
+            MemoryStream stream = new MemoryStream(512); // TODO : buffer size ?
+            BinaryFormatter formater = new BinaryFormatter();
+            formater.Serialize(stream, f); 
+            packet.Initialize(stream.GetBuffer(), ENet.PacketFlags.Reliable);
+            destination.Send((byte)(clients.IndexOf(destination) * 2 + 1), packet);
+            server.Flush();
         }
 
         public void SendReliable(Object message, NetFrame.FrameType type, ENet.Peer destination)

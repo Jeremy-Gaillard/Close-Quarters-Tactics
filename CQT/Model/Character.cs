@@ -18,6 +18,7 @@ namespace CQT.Model
         }
 
         //Weapon public weapon; TODO : add
+        // TODO : add currentHP
         public String textureName;
         public Vector2 position;
         public Vector2 size;

@@ -63,16 +63,35 @@ namespace CQT.Engine
             }
             if (elapsedTime > POSITIONREFRESHTIME)
             {
-                //communication.Send();
+                sendPositions();
                 elapsedTime = 0;
             }
             commands.Clear();
         }
 
-        public void SendCurrentState(ENet.Peer p)
+        private void sendPositions()
         {
-            LightEnvironment env = new LightEnvironment(GameEnvironment.Instance);
-            communication.SendReliable(env, NetFrame.FrameType.environment, p);
+            foreach (Player receiver in GameEnvironment.Instance.Players)
+            {
+                if( receiver != GameEnvironment.Instance.LocalPlayer)
+                {
+                    Positions positions = new Positions();
+                    positions.positions = new List<Position>();
+                    foreach (Player p in GameEnvironment.Instance.Players)
+                    {
+                        if (p != receiver)
+                        {
+                            positions.positions.Add(new Position(p.getCharacter().body.position, p.getCharacter().getRotation()));
+                        }
+                    }
+                    communication.SendReliable(positions, NetFrame.FrameType.positions, receiver);
+                }
+            }
+        }
+
+        public LightEnvironment getCurrentState()
+        {
+            return new LightEnvironment(GameEnvironment.Instance);
         }
 
 
@@ -105,9 +124,10 @@ namespace CQT.Engine
             return pengine;
         }
 
-        internal void UpdatePosition(Player player, Vector2 position)
+        internal void UpdatePosition(Player player, Position position)
         {
-            player.getCharacter().body.setPosition(position);
+            player.getCharacter().body.setPosition(position.pos);
+            player.getCharacter().setRotation(position.rot);
         }
     }
 }
