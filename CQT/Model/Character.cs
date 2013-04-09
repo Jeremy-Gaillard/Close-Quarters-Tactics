@@ -238,7 +238,6 @@ namespace CQT.Model
 		public void harm(uint damage) {
 			if (damage >= hitPoints) {
 				hitPoints = 0;
-				// TODO die properly
 				Console.WriteLine("Blerg!");
 			}
 			else {

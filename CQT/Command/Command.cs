@@ -6,15 +6,16 @@ namespace CQT.Command
 	{
 		public enum Type
 		{
+			None,
 			Move,
 			Shoot
 		}
 
 		protected Type type;
 
-		public Command (Type _type)
+		public Command ()
 		{
-			type = _type;
+			type = Type.None;
 		}
 
 		public virtual void execute ()
