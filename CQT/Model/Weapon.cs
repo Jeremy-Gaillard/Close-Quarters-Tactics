@@ -78,7 +78,9 @@ namespace CQT.Model
 			GameEnvironment environment = GameEnvironment.Instance;
             //if (environment == null) return;
             if (environment == null) throw new ArgumentNullException();
-            
+
+            environment.gunShotSound();
+
 			Point pos = new Point(getPosition());
 			float cosA = (float)Math.Cos(angle);
 			float sinA = (float)Math.Sin(angle);

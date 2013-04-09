@@ -42,7 +42,7 @@ namespace CQT.Model
 		{
 			switch (t) {
 			case Type.Assault:
-				return 700;
+				return 500;
 			case Type.Gun:
 				return 100;
 			case Type.Shotgun:

@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Collections.Concurrent;
 using System.Threading;
+using System.Media;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 
 namespace CQT.Model
 {
@@ -27,6 +30,17 @@ namespace CQT.Model
     {
         public readonly List<Point> bulletSparks = new List<Point>();
         public readonly List<Line> bulletTrails = new List<Line>();
+        //SoundPlayer gun_sound = new SoundPlayer("../../../sound/wpnfire_g43_plyr_blnc2.wav");
+        SoundPlayer[] gunSoundChannels = new SoundPlayer[] {
+            new SoundPlayer("../../../sound/cx_fire.wav"),
+            new SoundPlayer("../../../sound/cx_fire.wav"),
+            new SoundPlayer("../../../sound/cx_fire.wav"),
+            new SoundPlayer("../../../sound/cx_fire.wav")
+        };
+        int gunSoundCurrentIndex = 0;
+        //SoundEffect soundEffect = Content.Load<SoundEffect>("../../../sound/wpnfire_g43_plyr_blnc2.wav");
+        //SoundEffect soundEffect = new SoundEffect("../../../sound/wpnfire_g43_plyr_blnc2.wav");
+
 
         protected Map.Map map;
 		public Map.Map Map {
@@ -83,5 +97,13 @@ namespace CQT.Model
             bulletTrails.Add(l);
         }
 
+        internal void gunShotSound()
+        {
+            //gun_sound.Play();
+            gunSoundChannels[gunSoundCurrentIndex++].Play();
+            if (gunSoundCurrentIndex >= gunSoundChannels.Length)
+                gunSoundCurrentIndex = 0;
+        }
+            
     }
 }
