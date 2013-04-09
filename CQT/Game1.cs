@@ -144,6 +144,7 @@ namespace CQT
 
             pengine.Refresh(gameTime);
 
+            gengine.Update(gameTime);
 
             foreach (Player p in GameEnvironment.Instance.Players)
             {

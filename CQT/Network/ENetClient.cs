@@ -108,6 +108,18 @@ namespace CQT.Network
             server.Send(0, packet);
         }
 
+        public void Send(Object message, NetFrame.FrameType type)
+        {
+            ENet.Packet packet = new ENet.Packet();
+            NetFrame f = new NetFrame(message, type);
+            MemoryStream stream = new MemoryStream(512); // TODO : buffer size ?
+            BinaryFormatter formater = new BinaryFormatter();
+            formater.Serialize(stream, f);
+            packet.Initialize(stream.GetBuffer(), ENet.PacketFlags.UnreliableFragment);
+            server.Send(0, packet);
+            client.Flush();
+        }
+
         public void SendReliable(String message)
         {
             ENet.Packet packet = new ENet.Packet();
@@ -132,6 +144,7 @@ namespace CQT.Network
             formater.Serialize(stream, f);
             packet.Initialize(stream.GetBuffer(), ENet.PacketFlags.Reliable);
             server.Send(1, packet);
+            client.Flush();
         }
 
         public void Disconnect()

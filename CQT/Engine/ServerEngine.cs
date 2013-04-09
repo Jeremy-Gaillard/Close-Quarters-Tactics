@@ -5,9 +5,9 @@ using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
-using ENet;
+using Microsoft.Xna.Framework;
 
 using CQT.Network;
 using CQT.Command;
@@ -89,17 +89,23 @@ namespace CQT.Engine
             communication.Shutdown();
         }
 
-        public void AddPlayer(LightPlayer lp, ENet.Peer sender)
+        public Player AddPlayer(LightPlayer lp)
         {
             Player p = new Player(lp.name);
             Character c = new Character(lp.character.textureName, pengine, lp.character.position, lp.character.size);
             p.addCharacter(c);
             GameEnvironment.Instance.AddPlayer(p);
+            return p;
         }
 
         public PhysicsEngine getPhysicsEngine()
         {
             return pengine;
+        }
+
+        internal void UpdatePosition(Player player, Vector2 position)
+        {
+            player.getCharacter().body.setPosition(position);
         }
     }
 }
