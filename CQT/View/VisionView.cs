@@ -10,15 +10,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
+using CQT.Engine;
 
 namespace CQT.View
 {
     class VisionView
     {
+        GraphicEngine graphicEngine;
 
-        public static void Draw(SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 cameraOffset, Point origin, List<Line> visionBlockingLines)
+        public static void Draw(GraphicEngine _graphicEngine, SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 cameraOffset, Point origin, float rotation, List<Line> visionBlockingLines)
         {
-            new VisionView(sb, _gman, cameraOffset, origin, visionBlockingLines);
+            new VisionView(_graphicEngine, sb, _gman, cameraOffset, origin, rotation, visionBlockingLines);
         }
 
         const float viewSize = 1000;
@@ -30,123 +32,20 @@ namespace CQT.View
         List<Line> intermediateLines = new List<Line>();
         Vector2 cameraOffset;
 
-        public VisionView(SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 _cameraOffset, Point _origin, List<Line> _visionBlockingLines)
+        public VisionView(GraphicEngine _graphicEngine, SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 _cameraOffset, Point _origin, float rotation, List<Line> _visionBlockingLines)
         {
+            graphicEngine = _graphicEngine;
             gman = _gman;
             origin = _origin;
             visionBlockingLines = _visionBlockingLines;
             cameraOffset = _cameraOffset;
 
-            List<Point> lightPolygon = new List<Point>();
-
-            float alpha = (float) Math.PI / 4;
-            viewLine = new Line(origin, new Point(Mouse.GetState().X, Mouse.GetState().Y)).resized(viewSize).rotated(-alpha/2);
-            viewLine2 = viewLine.rotated(alpha);
-
-            /*
-            foreach(Line l in walls)
-            {
-                Point? p = l.Intersect(viewLine);
-                if (p != null)
-                {
-                    Point pt = p.Value;
-                    viewLine = new Line(0, 0, pt.x, pt.y);
-                }
-            }*/
-            //Line? v = viewLine;
-
-            intermediateLines.Clear();
-            lightPolygon.Clear();
-
-            //Console.WriteLine(viewLine.length);
-            if (float.IsNaN(viewLine.length)) return;
-            
-            //////
-            var ls = Project(ref viewLine, viewLine2);
-            //Project(ref viewLine, ref viewLine2, true);
-
-            intermediateLines.AddRange(ls);
-
-            /*
-            if (intermediateLines.Count() > 0)
-            {
-                Line newLeft = intermediateLines[intermediateLines.Count() - 1];
-                ProjectReverse(ref newLeft, ref viewLine2);
-            }*/
-
-            Line newLeft = intermediateLines.Count() > 0 ? intermediateLines[intermediateLines.Count() - 1] : viewLine;
-            //////
-            ls = ProjectReverse(newLeft, ref viewLine2);
-            //Project(ref viewLine, ref viewLine2, false);
-            ls.Reverse();
-            intermediateLines.AddRange(ls);
+            List<Point> lightPolygon = new Vision().GetLightPolygons(origin, rotation, _visionBlockingLines);
 
 
-            foreach (Line wall in visionBlockingLines)
-            {
-                var intermediateLines_buffer = new List<Line>();
-                //Console.WriteLine("-");
-                for (int i = 0; i < intermediateLines.Count(); i++)
-                {
-                    intermediateLines_buffer.Add(intermediateLines[i]);
-                    if (i + 1 < intermediateLines.Count())
-                    if (Utils.PointInTriangle(wall.p1, origin, intermediateLines[i].p2, intermediateLines[i + 1].p2)
-                        || Utils.PointInTriangle(wall.p2, origin, intermediateLines[i].p2, intermediateLines[i + 1].p2))
-                    {
-                        //Console.WriteLine("AAAAAAAAAAAAAAAAAAA");
-                        Point p =
-                            Utils.normalizedAngleDifference(Utils.angle(origin, wall.p1), Utils.angle(origin, wall.p2)) > 0 ?
-                            //wall.p1 : wall.p2;
-                            wall.retractedP1() : wall.retractedP2();
-
-                        Line l = new Line(origin, p);
-                        if (l.length < viewSize)
-                        {
-                            l = l.resized(viewSize);
-                            CollideWalls(ref l, wall);
-                        }
-                        intermediateLines_buffer.Add(l);
-                        //Line ll = l;
-                        //intermediateLines_final.Add(ll);
-
-                        ls = Project(ref l, intermediateLines[i + 1]);
-                        intermediateLines_buffer.AddRange(ls);
-
-                        //l = intermediateLines[i + 1];
-                        //ls = ProjectReverse(ls[ls.Count()-1], ref l);
-                        //intermediateLines_final.AddRange(ls);
-
-                        //break;
-                    }
-                }
-                intermediateLines = intermediateLines_buffer;
-            }
+            //Console.WriteLine(origin);
 
 
-            lightPolygon.Add(viewLine.p2);
-            /*foreach(Line l in intermediateLines) {
-                Line newLine = l;
-                CollideWalls(ref newLine);
-                lightPolygon.Add(newLine.p2);
-                l = newLine;
-            }*/
-            for (int i = 0; i < intermediateLines.Count(); i++)
-            {
-                /*Line newLine = intermediateLines[i];
-                Line? wall = CollideWalls(ref newLine);
-                Console.WriteLine(wall == null);
-                lightPolygon.Add(newLine.p2);
-                CollideWalls(ref newLine, wall);
-                lightPolygon.Add(newLine.p2);
-                intermediateLines[i] = newLine;*/
-
-                if (Utils.distance(origin, intermediateLines[i].p2) <= viewSize+1)
-                    lightPolygon.Add(intermediateLines[i].p2);
-            }
-            lightPolygon.Add(viewLine2.p2);
-
-            //Point p;
-            //test(ref p);
 
             displayLight(sb, cameraOffset, lightPolygon);
 
@@ -155,10 +54,22 @@ namespace CQT.View
         void displayLight(SpriteBatch sb, Vector2 cameraOffset, List<Point> lightPolygon)
         {
 
+            Color c = Color.Red;
+
             for (int i = 0; i < lightPolygon.Count() - 1; i++)
             {
                 //debug.drawLine(new Line(env.lightPolygon[i], env.lightPolygon[i + 1]), Color.Red);
-                Render(sb.GraphicsDevice, viewLine.p1, lightPolygon[i], lightPolygon[i + 1], Color.Red);//Color.DarkGray);
+                //Render(sb.GraphicsDevice, viewLine.p1, lightPolygon[i], lightPolygon[i + 1], Color.Red);//Color.DarkGray);
+                
+                //Render(sb.GraphicsDevice, origin, lightPolygon[i], lightPolygon[i + 1], Color.Red);//Color.DarkGray);
+
+                graphicEngine.AddTriangle(origin, lightPolygon[i], lightPolygon[i + 1], c);
+                graphicEngine.AddLine(origin, lightPolygon[i], Color.Black);
+                graphicEngine.AddLine(origin, lightPolygon[i + 1], Color.Beige);
+
+                //c.R -= 20;
+                c.R -= (byte) (255.0/(double)lightPolygon.Count());
+
             }
 
         }
@@ -205,10 +116,17 @@ namespace CQT.View
         public Vector3 PointToVector3(ref CQT.Model.Point p)
         {
             //Console.WriteLine(p.x / graphics.PreferredBackBufferWidth + " " + p.y / graphics.PreferredBackBufferHeight);
+
+            // FIXME SALE & REF
+            //p.x += cameraOffset.X;
+            //p.y += cameraOffset.Y;
+            Point pp = new Point(p.x + cameraOffset.X, p.y + cameraOffset.Y);
+            //Point pp = p;
+
             return new Vector3(
                 //(p.x - graphics.PreferredBackBufferWidth / 2) / graphics.PreferredBackBufferWidth,
-                (p.x * 2 + cameraOffset.X - gman.PreferredBackBufferWidth) / gman.PreferredBackBufferWidth,
-                -(p.y * 2 + cameraOffset.Y - gman.PreferredBackBufferHeight) / gman.PreferredBackBufferHeight,
+                (pp.x * 2 - gman.PreferredBackBufferWidth) / gman.PreferredBackBufferWidth,
+                -(pp.y * 2 - gman.PreferredBackBufferHeight) / gman.PreferredBackBufferHeight,
                 0
             );
             //Vector3 ret = new Vector3(p.x / graphics.PreferredBackBufferWidth, p.y / graphics.PreferredBackBufferHeight, 0);

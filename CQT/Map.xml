@@ -5,31 +5,33 @@
 		<lowerRight x="800" y="600"/>
 	</frame>
 	<object>
+	<!--
 		<obstacle height="5">
 			<point x="400" y="40"/>
 			<point x="300" y="30"/>
 			<point x="350" y="100"/>
 			<point x="400" y="40"/>
 		</obstacle>
-		<obstacle height="5">
+		-->
+		<obstacle height="25">
 			<point x="800" y="600"/>
 			<point x="800" y="500"/>
 			<point x="600" y="600"/>
 			<point x="800" y="600"/>
 		</obstacle>
-		<wall thickness="5">
+		<wall thickness="25">
 			<point x="100" y="0"/>
 			<point x="100" y="800"/>
 			<point x="1100" y="800"/>
 			<point x="900" y="0"/>
 		</wall>
-		<wall thickness="5">
+		<wall thickness="25">
 			<point x="200" y="200"/>
 			<point x="300" y="400"/>
 			<point x="500" y="0"/>
 		</wall>
 		<wall thickness="100">
-			<point x="50" y="0"/>
+			<point x="75" y="0"/>
 			<point x="50" y="200"/>
 		</wall>
 	</object>

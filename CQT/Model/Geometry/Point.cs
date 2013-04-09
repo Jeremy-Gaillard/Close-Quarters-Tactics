@@ -51,9 +51,13 @@ namespace CQT.Model
             return (x == p.Value.x) && (y == p.Value.y);
         }
 
-        internal Point Translated(Microsoft.Xna.Framework.Vector2 displacement)
+        public Point Translated(Microsoft.Xna.Framework.Vector2 displacement)
         {
             return new Point(x+displacement.X, y+displacement.Y);
+        }
+        public Point Translated(float _x, float _y)
+        {
+            return new Point(x + _x, y + _y);
         }
 
         internal Vector2 asVector()
@@ -82,12 +86,17 @@ namespace CQT.Model
             return new Point(_x, _y);
         }
 
+        public bool Around(Point p, float d)
+        {
+            return Distance(p) <= d;
+        }
+
+
         public override string ToString()
         {
             //return "Pt{"+x+","+y+"}";
             return "{" + x + ";" + y + "}";
         }
-
 
     }
 }
