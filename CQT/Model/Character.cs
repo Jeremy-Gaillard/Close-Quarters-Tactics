@@ -40,13 +40,13 @@ namespace CQT.Model
 		}
 		protected CharacterInfo.Type type;
 
-
 		protected List<Weapon> weapons;
 		protected Weapon currentWeapon;
 
-		protected Single speed;
 		protected uint hitPoints;
-		protected uint maxHP;
+		public bool isAlive {
+			get { return (hitPoints > 0); }
+		}
 
         public readonly Body body;
 
@@ -72,8 +72,7 @@ namespace CQT.Model
 
 		public void initCharacter ()
 		{
-			hitPoints = maxHP = CharacterInfo.getMaxHP (type);
-			speed = CharacterInfo.getSpeed (type); // TODO: remove this (but currently chars are too slow)
+			hitPoints = CharacterInfo.getMaxHP (type);
 			equipDefaultWeapons ();
 		}
 
@@ -133,7 +132,7 @@ namespace CQT.Model
 		/// </summary>
 		/// <param name="w">The weapon to drop</param>
 		/// <returns>true if successful, false if weapon isn't part of his equipment</param>
-		public bool drop (Weapon w)
+		public bool drop(Weapon w)
 		{
 			if (weapons.Remove (w)) {
 				w.drop ();
@@ -233,7 +232,7 @@ namespace CQT.Model
 			///movement = movement * milliseconds * speed; // ce n'est pas à Character de faire ce genre de trucs (millisecond)
 			//Console.Out.WriteLine (movement);
 			///position += movement;
-            body.tryMove(movement * speed);
+            body.tryMove(movement * CharacterInfo.getSpeed(type));
 		}
 
 		public void harm(uint damage) {

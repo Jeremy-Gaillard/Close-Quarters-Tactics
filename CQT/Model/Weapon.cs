@@ -98,6 +98,7 @@ namespace CQT.Model
 
 			foreach (Player p in environment.Players) {
 				foreach (Character c in p.getCharacters()) {
+					if (!c.isAlive || c==owner) continue;
 					Point cPos = new Point(c.getPosition ());
 					Tuple<Point?, Point?> intersct
 						= traj.IntersectSegmentCircle(cPos, c.getRadius());
