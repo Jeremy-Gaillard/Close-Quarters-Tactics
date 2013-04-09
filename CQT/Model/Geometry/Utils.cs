@@ -98,7 +98,8 @@ namespace CQT.Model
 
         public static float angle(Point p1, Point p2)
         {
-            return (float) Math.Atan2(p2.y - p1.y, p2.x - p1.x);
+            return (float)Math.Atan2(p2.y - p1.y, p2.x - p1.x);
+            //return (float)Math.Atan2(p1.y - p2.y, p1.x - p2.x);
         }
 
         public static float angle(Line l)
@@ -161,12 +162,13 @@ namespace CQT.Model
             angle2 = normalizedAngle(angle2);
 
             return normalizedAngle(angle2 - angle1);
+            //return normalizedAngle(angle1 - angle2);
 
             Console.WriteLine(angle1 + " " + angle2);
 
 
             float pi = (float)Math.PI;
-            return pi - Math.Abs(Math.Abs(angle1 - angle2) - pi); 
+            return pi - Math.Abs(Math.Abs(angle1 - angle2) - pi);
         }
 
         public static bool inRange(float x, float a, float b) // a > b or a < a or a == b work

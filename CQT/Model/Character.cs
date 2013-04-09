@@ -37,7 +37,7 @@ namespace CQT.Model
 			Right,
 			UpRight
 		}
-		CharacterInfo.Type type;
+		protected CharacterInfo.Type type;
 
 
 		protected List<Weapon> weapons;
@@ -228,10 +228,28 @@ namespace CQT.Model
             body.tryMove(movement * speed);
 		}
 
+		public void harm(uint damage) {
+			if (damage >= hitPoints) {
+				hitPoints = 0;
+				// TODO die properly
+				Console.WriteLine("Blerg!");
+			}
+			else {
+				hitPoints-= damage;
+				Console.WriteLine("Ouch.");
+			}
+		}
+
         public override Vector2 getPosition()
         {
             return body.getPosition();
         }
-
+		public float getRadius()
+		{
+			return (getSize().X)/2F; // TODO: is that actually correct?
+		}
+		public CharacterInfo.Type getCharType() {
+			return type;
+		}
 	}
 }

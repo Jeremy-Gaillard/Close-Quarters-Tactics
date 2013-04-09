@@ -110,7 +110,8 @@ namespace CQT.Model
         public Line resized(float newLength)
         {
             if (length == 0)
-                return this;
+                //return this;
+                return new Line(p1, p1);
             float ratio = newLength / length;
             return new Line(
                 X1,
