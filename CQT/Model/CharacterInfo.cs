@@ -38,6 +38,14 @@ namespace CQT.Model
                 return 1.00f * standardSpeed;
 			}
 		}
+		public static Single getDamageBonus(Type t) {
+			switch (t) {
+			case Type.Commando: return 1.0f;
+			case Type.Medic: return 0.9f;
+			case Type.Support: return 1.1f;
+			default: return 1.0f;
+			}
+		}
 		public static Single getROTBonus(Type t) {
 			switch (t) {
 			case Type.Commando: return 1.2F;

@@ -6,6 +6,7 @@ using System.Text;
 
 namespace CQT.Model
 {
+    [Serializable()]
     public struct Point
     {
         public readonly float x, y;
@@ -42,10 +43,10 @@ namespace CQT.Model
 
             // If parameter cannot be cast to Point return false.
             Point? p = obj as Point?;
-            if ((System.Object)p == null)
+            /*if ((System.Object)p == null)
             {
                 return false;
-            }
+            }*/
             //System.Console.WriteLine("Comp " + x +" "+ p.Value.x);
             // Return true if the fields match:
             return (x == p.Value.x) && (y == p.Value.y);
@@ -97,6 +98,5 @@ namespace CQT.Model
             //return "Pt{"+x+","+y+"}";
             return "{" + x + ";" + y + "}";
         }
-
     }
 }

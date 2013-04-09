@@ -16,6 +16,7 @@ using CQT.Model;
 using CQT.Engine;
 using CQT.Command;
 using CQT.Model.Physics;
+using CQT.Network;
 
 namespace CQT
 {
@@ -28,19 +29,36 @@ namespace CQT
 
         GraphicEngine graphicEngine;
         PhysicsEngine pengine;
-        GraphicCache graphicCache;
         InputManager inputManager;
         GameEnvironment environment;
 
-        public Game1()
+        GameEngine gengine;
+
+        public Game1(ServerEngine eng)
+        {
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            //graphics.PreferredBackBufferWidth = 800;
+            //graphics.PreferredBackBufferHeight = 600;
+
+            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferHeight = 768;
+            gengine = eng;
+            environment = gengine.getEnvironment();
+        }
+
+        public Game1(ClientEngine eng)
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 600;
-
-            graphics.PreferredBackBufferWidth = 1024;
-            graphics.PreferredBackBufferHeight = 768;
+            gengine = eng;
+            while (!eng.ready)
+            {
+                // horrible   
+            }
+            environment = gengine.getEnvironment();
         }
 
         /// <summary>
@@ -64,24 +82,24 @@ namespace CQT
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
-            graphicEngine = new GraphicEngine(spriteBatch, graphics, GraphicsDevice);
+            graphicEngine = new GraphicEngine(spriteBatch, graphics, GraphicsDevice, Content);
 
-            XMLReader xmlTest = new XMLReader("../../../map.xml");
+            /*XMLReader xmlTest = new XMLReader("../../../map.xml");
 
 
-            Map map = new Map(xmlTest.upperLeft, xmlTest.lowerRight, xmlTest.listObstacle, xmlTest.listWall);
+            Map map = new Map(xmlTest.lowerRight, xmlTest.upperLeft, xmlTest.listObstacle, xmlTest.listWall);
             Player player = new Player("Champ");
 
-			environment = GameEnvironment.Instance;
-			environment.init(map, player);
-            pengine = new PhysicsEngine(environment.Map);
+            environment = new GameEnvironment(map, player);*/
+            pengine = gengine.getPhysicsEngine();
 
             // TODO: use this.Content to load your game content here
 
-            inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState(), player);
-            graphicCache = new GraphicCache(Content);
-            Character testCharacter = new Character(graphicCache.getTexture("Bonhomme"), pengine, new Vector2(200, 100), new Vector2(100, 100));
-            player.setCharacter(testCharacter);
+            inputManager = new InputManager(Mouse.GetState(), Keyboard.GetState(), environment.LocalPlayer);
+            Character testCharacter = new Character("Bonhomme", pengine, new Vector2(200, 100), new Vector2(100, 100));
+			Character redshirt = new Character("Redshirt", pengine, new Vector2(400, 100), new Vector2(100, 100));
+            environment.LocalPlayer.addCharacter(testCharacter);
+			environment.LocalPlayer.addCharacter(redshirt);
             graphicEngine.setFollowedCharacter(environment.LocalPlayer.getCharacter());
             graphicEngine.setMap(environment.Map);
         }
@@ -104,12 +122,15 @@ namespace CQT
         {
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                gengine.Exit();
                 this.Exit();
+            }
             inputManager.Update(Mouse.GetState(), Keyboard.GetState());
             
 
             environment.LocalPlayer.getCharacter().setRotation((float)Math.Atan2(inputManager.getMousePosition().Y - graphicEngine.getCameraPosition().Y - environment.LocalPlayer.getCharacter().getPosition().Y,
-			                                                                     inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - environment.LocalPlayer.getCharacter().getPosition().X));
+                inputManager.getMousePosition().X - graphicEngine.getCameraPosition().X - environment.LocalPlayer.getCharacter().getPosition().X));
             // TODO : change this horror
 
             List<Command.Command> commands = inputManager.getCommands(gameTime);
@@ -124,13 +145,16 @@ namespace CQT
             pengine.Refresh(gameTime);
 
 
-            graphicEngine.AddEntity(environment.LocalPlayer.getCharacter());
-
-            /*
-            graphicEngine.AddEntity(testSprite);
-            */
-
-
+            foreach (Player p in GameEnvironment.Instance.Players)
+            {
+				foreach (Character c in p.getCharacters()) {
+					graphicEngine.AddEntity(c);
+				}
+            }
+//            foreach (Character c in environment.LocalPlayer.getCharacters()) {
+//				graphicEngine.AddEntity(c);
+//			}
+//
             base.Update(gameTime);
         }
 

@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.Serialization;
 using CQT.Model.Geometry;
 
 namespace CQT.Model.Map
 {
+    [Serializable()]
     public class Map
     {
         private Point upperLeft;
@@ -15,8 +17,9 @@ namespace CQT.Model.Map
 			get { return (lowerRight.x - upperLeft.x); }
 		}
 		public float Height {
-			get { return (lowerRight.y - upperLeft.y); }
+			get { return (lowerRight.y - upperLeft.y); } // y axis goes downwards
 		}
+		public readonly float diagonal;
 
         private List<Obstacle> listObstacle = new List<Obstacle>();
         private List<Wall> listWall = new List<Wall>();
@@ -30,6 +33,8 @@ namespace CQT.Model.Map
         {
             upperLeft = _upperLeft;
             lowerRight = _lowerRight;
+			diagonal = Utils.distance(upperLeft, lowerRight);
+
             listObstacle = _listObstacle;
             listWall = _listWall;
 
@@ -87,6 +92,5 @@ namespace CQT.Model.Map
         {
             return visionBlockingLines;
         }
-
     }
 }

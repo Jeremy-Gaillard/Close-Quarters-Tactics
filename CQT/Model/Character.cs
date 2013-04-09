@@ -7,6 +7,22 @@ using CQT.Model.Physics;
 
 namespace CQT.Model
 {
+    [Serializable()]
+    public struct LightCharacter
+    {
+        public LightCharacter(Character c)
+        {
+            textureName = c.getTextureName();
+            position = c.body.position;
+            size = c.getSize();
+        }
+
+        //Weapon public weapon; TODO : add
+        public String textureName;
+        public Vector2 position;
+        public Vector2 size;
+    }
+    
 	public class Character : Entity
 	{
 		public enum MovementDirection
@@ -21,7 +37,7 @@ namespace CQT.Model
 			Right,
 			UpRight
 		}
-		CharacterInfo.Type type;
+		protected CharacterInfo.Type type;
 
 
 		protected List<Weapon> weapons;
@@ -33,7 +49,7 @@ namespace CQT.Model
 
         public readonly Body body;
 
-        public Character (Texture2D _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+        public Character (String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
 			: base(_texture, _size)
 		{
 			type = CharacterInfo.Type.None;
@@ -43,7 +59,7 @@ namespace CQT.Model
             engine.AddBody(body);
 		}
 
-		public Character (CharacterInfo.Type _type, Texture2D _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+		public Character (CharacterInfo.Type _type, String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
 			: base(_texture, _size)
 		{
 			type = _type;
@@ -212,10 +228,28 @@ namespace CQT.Model
             body.tryMove(movement * speed);
 		}
 
+		public void harm(uint damage) {
+			if (damage >= hitPoints) {
+				hitPoints = 0;
+				// TODO die properly
+				Console.WriteLine("Blerg!");
+			}
+			else {
+				hitPoints-= damage;
+				Console.WriteLine("Ouch.");
+			}
+		}
+
         public override Vector2 getPosition()
         {
             return body.getPosition();
         }
-
+		public float getRadius()
+		{
+			return (getSize().X)/2F; // TODO: is that actually correct?
+		}
+		public CharacterInfo.Type getCharType() {
+			return type;
+		}
 	}
 }

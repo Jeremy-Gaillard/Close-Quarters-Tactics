@@ -5,7 +5,25 @@ using System.Text;
 
 namespace CQT.Model
 {
-    class GameEnvironment
+    [Serializable()]
+    struct LightEnvironment
+    {
+        public LightEnvironment(GameEnvironment ge)
+        {
+            map = ge.Map;
+            players = new List<LightPlayer>();
+            players.Add(new LightPlayer(ge.LocalPlayer));
+            foreach (Player p in ge.Players)
+            {
+                players.Add(new LightPlayer(p));
+            }
+        }
+
+        public Map.Map map;
+        public List<LightPlayer> players;
+    }
+
+    public class GameEnvironment
     {
         protected Map.Map map;
 		public Map.Map Map {
@@ -36,11 +54,17 @@ namespace CQT.Model
             players = new List<Player>();
             map = _map;
             localPlayer = _localPlayer;
+			players.Add(localPlayer);
         }
 
         public void AddPlayer(Player player)
         {
             players.Add(player);
+        }
+
+        public void AddPlayers(List<Player> newPlayers)
+        {
+            players.AddRange(newPlayers);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using CQT.Model;
@@ -17,6 +18,7 @@ namespace CQT.Engine
         protected SpriteBatch spriteBatch;
         protected GraphicsDevice graphicDevice;
         protected GraphicsDeviceManager graphics;
+        protected GraphicCache cache;
         protected BasicEffect basicEffect;
 
         protected Map map = null;
@@ -28,11 +30,12 @@ namespace CQT.Engine
 
         protected Character followedCharacter;
 
-        public GraphicEngine(SpriteBatch sb, GraphicsDeviceManager gm, GraphicsDevice gd)
+        public GraphicEngine(SpriteBatch sb, GraphicsDeviceManager gm, GraphicsDevice gd, ContentManager cm)
         {
             spriteBatch = sb;
             graphics = gm;
             graphicDevice = gd;
+            cache = new GraphicCache(cm);
             cameraPosition = new Vector2(0, 0);
             entities = new List<Entity>();
             lines = new List<VertexPositionColor>();
@@ -115,7 +118,7 @@ namespace CQT.Engine
             // Drawing sprites
             foreach (Entity e in entities)
             {
-                EntityView.Draw(spriteBatch, cameraPosition, e);
+                EntityView.Draw(spriteBatch, cache, cameraPosition, e);
             }
 
 
@@ -124,7 +127,6 @@ namespace CQT.Engine
 
 
             spriteBatch.End();
-
 
 
 
