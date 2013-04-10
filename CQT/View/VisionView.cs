@@ -20,6 +20,7 @@ namespace CQT.View
         //readonly Color visionViewColor = Color.CornflowerBlue; // Color.White;
         readonly Color visionViewColor = Color.LightGray;
         //readonly Color visionViewColor = Color.White;
+        //readonly Color visionViewColor = Color.SlateGray;
 
         public static Vision Draw(GraphicsEngine _graphicEngine, SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 cameraOffset, Point origin, float rotation, List<Line> visionBlockingLines)
         {

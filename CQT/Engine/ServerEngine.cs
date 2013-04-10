@@ -48,7 +48,8 @@ namespace CQT.Engine
 
             pengine = new PhysicsEngine(environment.Map);
 
-            Character character = new Character("Bonhomme", pengine, new Vector2(200, 100), new Vector2(100, 100));
+            Character character = new Character("swattds", pengine, new Vector2(200, 100), new Vector2(75, 75), 55);
+
 			//Character redshirt = new Character("Redshirt", pengine, new Vector2(400, 100), new Vector2(100, 100));
             player.addCharacter(character);
 			//player.addCharacter(redshirt);
@@ -142,7 +143,7 @@ namespace CQT.Engine
         public Player AddPlayer(LightPlayer lp)
         {
             Player p = new Player(lp.name);
-            Character c = new Character(lp.character.textureName, pengine, lp.character.position, lp.character.size);
+            Character c = new Character(lp.character.textureName, pengine, lp.character.position, lp.character.size, lp.character.size.X);
             p.addCharacter(c);
             GameEnvironment.Instance.AddPlayer(p);
             return p;

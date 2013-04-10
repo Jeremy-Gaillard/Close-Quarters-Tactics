@@ -59,23 +59,23 @@ namespace CQT.Model
 
         public readonly Body body;
 
-        public Character (String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+        public Character (String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size, float bodySize)
 			: base(_texture, _size)
 		{
 			info = Constants.Instance.getCharacterInfo(CharacterInfo.Type.Default);
             initCharacter();
             //body.setPosition(_position);
-            body = new Body(_size.X, _position); // TODO: size as a FLOAT instead?!
+            body = new Body(bodySize, _position); // TODO: size as a FLOAT instead?!
             engine.AddBody(body);
 		}
 
-		public Character (CharacterInfo.Type _type, String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+		public Character (CharacterInfo.Type _type, String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size, float bodySize)
 			: base(_texture, _size)
 		{
 			info = Constants.Instance.getCharacterInfo(_type);
 			initCharacter ();
             //body.setPosition(_position);
-            body = new Body(_size.X, _position); // TODO: size as a FLOAT instead?!
+            body = new Body(bodySize, _position); // TODO: size as a FLOAT instead?!
             engine.AddBody(body);
 		}
 

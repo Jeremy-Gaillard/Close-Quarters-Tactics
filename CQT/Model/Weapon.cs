@@ -2,6 +2,8 @@ using CQT.Model;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using CQT.Model.Geometry;
+using System.Collections.Generic;
 
 namespace CQT.Model
 {
@@ -85,10 +87,16 @@ namespace CQT.Model
 
             environment.gunShotSound();
 
-			Point pos = new Point(getPosition());
+			//Point pos = new Point(getPosition());
 			float cosA = (float)Math.Cos(angle);
 			float sinA = (float)Math.Sin(angle);
-			
+
+            //Console.WriteLine(size);
+            //float shift = size.X * 2f;
+            float shift = 75 * .15f;
+            //Point pos = new Point(getPosition() + new Vector2(cosA * shift, sinA * shift));
+            Point pos = new Point(getPosition() + new Vector2(-sinA * shift, cosA * shift));
+
 			Map.Map map = environment.Map;
 
 			Vector2 direction = new Vector2(cosA, sinA);
@@ -160,6 +168,23 @@ namespace CQT.Model
 				float preciseDmg = ((float)info.damage)*owner.getInfo().damageBonus;
 				shootee.harm( (uint)preciseDmg );
                 environment.addBulletTrail(trajToChar);
+
+                Vector2 hitPoint = trajToChar.p2.asVector() + new Vector2(cosA * owner.body.size, sinA * owner.body.size);
+
+                List<Point> pts = new List<Point>();
+                int nbCouples = 4;
+                float r1 = 20, r2 = 100, dist = 50;
+                for (int i = 0; i < nbCouples; i++)
+                {
+                    pts.Add(new Point(hitPoint + nextVector2(r1)));
+                    pts.Add(new Point(hitPoint + new Vector2(cosA * dist, sinA * dist) + nextVector2(r2)));
+                    //if (random.NextDouble() > .7)
+                        //pts.Add(new Point(hitPoint + new Vector2(cosA * dist, sinA * dist) + nextVector2(r2*1.5f)));
+                        //pts.Add(new Point(pts[pts.Count - 1].asVector() + nextVector2(r1)));
+                    if (random.NextDouble() > .7)
+                        pts.Add(new Point(pts[pts.Count - 2].asVector() + nextVector2(r1)));
+                }
+                environment.bloodStains.Add(new Polyline(pts));
 			}
             else if (wallShot.HasValue)
             {
@@ -176,6 +201,15 @@ namespace CQT.Model
 			
 			ammoLeft--;
 		}
+
+        Random random = new Random();
+        Vector2 nextVector2(float range)
+        {
+            return new Vector2(
+                (float)random.NextDouble() * range - range / 2,
+                (float)random.NextDouble() * range - range / 2);
+        }
+
 		
 		public void reload() {
 			// TODO: manage ammo packs (new Item ? in some List<Item> Character.equipment? ...)

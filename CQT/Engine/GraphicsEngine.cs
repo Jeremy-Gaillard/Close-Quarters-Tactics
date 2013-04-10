@@ -128,10 +128,17 @@ namespace CQT.Engine
 
             //graphicDevice.Clear(Color.CornflowerBlue);
             //graphicDevice.Clear(Color.Black);
-            graphicDevice.Clear(Color.DarkGray);
+            //graphicDevice.Clear(Color.DarkGray);
+            graphicDevice.Clear(MapView.groundColor);
 
             // Drawing vision cone
             Vision vision = VisionView.Draw(this, spriteBatch, graphics, cameraPosition, new CQT.Model.Point(followedCharacter.body.position), followedCharacter.getRotation(), map.getVisionBlockingLines());
+
+            // Blood
+            foreach (Polyline pl in environment.bloodStains)
+            {
+                AddPolygon(pl, Color.DarkRed);
+            }
 
             // Drawing map
             if (map != null)
