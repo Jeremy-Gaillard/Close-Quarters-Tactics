@@ -225,7 +225,7 @@ namespace CQT.Model
 			}
 		}
 
-		public void move (MovementDirection direction) // TODO rm useless param "millisecond"
+		public void move (MovementDirection direction) // TODONE rm useless param "millisecond"
 		{
 			//Console.Out.WriteLine("moving ! " + direction.ToString() );
 			Vector2 movement;
