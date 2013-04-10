@@ -19,6 +19,7 @@ namespace CQT.View
         GraphicsEngine graphicEngine;
         //readonly Color visionViewColor = Color.CornflowerBlue; // Color.White;
         readonly Color visionViewColor = Color.LightGray;
+        //readonly Color visionViewColor = Color.White;
 
         public static Vision Draw(GraphicsEngine _graphicEngine, SpriteBatch sb, GraphicsDeviceManager _gman, Vector2 cameraOffset, Point origin, float rotation, List<Line> visionBlockingLines)
         {
