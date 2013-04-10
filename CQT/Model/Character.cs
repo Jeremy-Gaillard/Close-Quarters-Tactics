@@ -97,7 +97,7 @@ namespace CQT.Model
 			weapons = new List<Weapon> ();
 
             //Weapon aGun = new Weapon (WeaponInfo.Type.Gun);
-            Weapon aGun = new Weapon(WeaponInfo.Type.Shotgun);
+            Weapon aGun = new Weapon(WeaponInfo.Type.Assault);
 
 			pickUp (aGun);
 			switchTo (aGun);
