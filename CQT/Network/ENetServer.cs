@@ -12,6 +12,7 @@ using ENet;
 
 using CQT.Engine;
 using CQT.Model;
+using CQT.Command;
 
 namespace CQT.Network
 {
@@ -107,6 +108,9 @@ namespace CQT.Network
                     break;
                 case NetFrame.FrameType.position:
                     engine.UpdatePosition(clientMap[peer], (Position)frame.content);
+                    break;
+                case NetFrame.FrameType.shootCommand:
+                    engine.AddShoot(clientMap[peer], (LightShoot) frame.content);
                     break;
             }
         }

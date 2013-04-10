@@ -10,7 +10,7 @@ namespace CQT.Command
 			Shoot
 		}
 
-		protected Type type;
+		public readonly Type type;
 
 		public Command (Type _type)
 		{

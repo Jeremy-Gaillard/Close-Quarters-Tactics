@@ -19,7 +19,7 @@ namespace CQT.Engine
 {
     public class ServerEngine : GameEngine
     {
-        protected const int POSITIONREFRESHTIME = 50;
+        protected const int POSITIONREFRESHTIME = 0;
 
         protected ENetServer communication;
         protected int elapsedTime;
@@ -48,9 +48,9 @@ namespace CQT.Engine
             pengine = new PhysicsEngine(environment.Map);
 
             Character character = new Character("Bonhomme", pengine, new Vector2(200, 100), new Vector2(100, 100));
-			Character redshirt = new Character("Redshirt", pengine, new Vector2(400, 100), new Vector2(100, 100));
+			//Character redshirt = new Character("Redshirt", pengine, new Vector2(400, 100), new Vector2(100, 100));
             player.addCharacter(character);
-			player.addCharacter(redshirt);
+			//player.addCharacter(redshirt);
         }
 
         public void Update(GameTime gameTime)
@@ -59,6 +59,7 @@ namespace CQT.Engine
 
             foreach (Command.Command c in commands)
             {
+                c.execute();
                 //communication.SendReliable(c.Serialize());
             }
             if (elapsedTime > POSITIONREFRESHTIME)
@@ -95,9 +96,24 @@ namespace CQT.Engine
         }
 
 
-        public void SendCommand(Command.Command command)
+        public void AddCommand(Command.Command command)
         {
             commands.Add(command);
+            switch (command.type)
+            {
+                case Command.Command.Type.Shoot:
+                    LightShootPlayer lightCommand = new LightShootPlayer((Shoot)command, GameEnvironment.Instance.Players.Count-2); // On client, player max-1 = server
+                    // TODO : change this ! (cf GameEnvironment)
+                    // TODO : use broadcast ?
+                    foreach (Player p in GameEnvironment.Instance.Players)
+                    {
+                        if (p != GameEnvironment.Instance.LocalPlayer)
+                        {
+                            communication.SendReliable(lightCommand, NetFrame.FrameType.shootCommandPlayer, p);
+                        }
+                    }
+                    break;
+            }
         }
 
         public GameEnvironment getEnvironment()
@@ -128,6 +144,31 @@ namespace CQT.Engine
         {
             player.getCharacter().body.setPosition(position.pos);
             player.getCharacter().setRotation(position.rot);
+        }
+
+        internal void AddShoot(Player player, LightShoot lightShoot)
+        {
+            Shoot shoot = new Shoot(Command.Command.Type.Shoot, player.getCharacter(), lightShoot.time);
+            commands.Add(shoot);
+            int index = GameEnvironment.Instance.Players.Count-1; 
+            foreach ( Player p in GameEnvironment.Instance.Players )
+            {
+                if ( p==player )
+                {
+                    break;
+                }
+                index--;
+            }
+            index--; // On server, player max = server | On client, player max = client, player max-1 = server
+                // TODO : change this ! (cf GameEnvironment)
+            LightShootPlayer lsp = new LightShootPlayer(shoot, index);
+            foreach (Player p in GameEnvironment.Instance.Players)
+            {
+                if (p != GameEnvironment.Instance.LocalPlayer && p != player)
+                {
+                    communication.SendReliable(lsp, NetFrame.FrameType.shootCommandPlayer, p);
+                }
+            }
         }
     }
 }

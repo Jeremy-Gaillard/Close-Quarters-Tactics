@@ -18,7 +18,7 @@ namespace CQT.Engine
 {
     public class ClientEngine : GameEngine
     {
-        protected const int POSITIONREFRESHTIME = 50;
+        protected const int POSITIONREFRESHTIME = 0;
 
         protected ENetClient communication;
         protected int elapsedTime;
@@ -46,7 +46,7 @@ namespace CQT.Engine
 
             foreach (Command.Command c in commands)
             {
-                //communication.SendReliable(c.Serialize());
+                c.execute();
             }
             if (elapsedTime > POSITIONREFRESHTIME)
             {
@@ -66,6 +66,14 @@ namespace CQT.Engine
         public void AddCommand(Command.Command command)
         {
             commands.Add(command);
+
+            switch (command.type)
+            {
+                case Command.Command.Type.Shoot:
+                    LightShoot lightCommand = new LightShoot((Shoot)command);
+                    communication.SendReliable(lightCommand, NetFrame.FrameType.shootCommand);
+                    break;
+            }
         }
 
         public void setEnvironment(LightEnvironment env)
@@ -137,6 +145,13 @@ namespace CQT.Engine
                 }
                 i++;
             }
+        }
+
+        internal void AddShoot(LightShootPlayer lightShootPlayer)
+        {
+            Player p = GameEnvironment.Instance.Players.ElementAt(lightShootPlayer.playerIndex);
+            Shoot shoot = new Shoot(Command.Command.Type.Shoot, p.getCharacter(), lightShootPlayer.time);
+            commands.Add(shoot);
         }
     }
 }

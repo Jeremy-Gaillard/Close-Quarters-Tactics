@@ -16,6 +16,7 @@ namespace CQT.Network
             positions,
             environment,
             shootCommand,
+            shootCommandPlayer,
             player
         }
 
@@ -28,7 +29,6 @@ namespace CQT.Network
             content = o;
         }
     }
-
 
     [Serializable()]
     public struct Position

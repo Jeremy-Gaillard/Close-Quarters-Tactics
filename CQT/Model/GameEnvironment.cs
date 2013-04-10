@@ -50,7 +50,7 @@ namespace CQT.Model
 		public Player LocalPlayer {
 			get { return localPlayer; }
 		}
-		protected ConcurrentBag<Player> players;
+		protected ConcurrentBag<Player> players;    // TODO : bag is bad (unordered), change it
 		public ConcurrentBag<Player> Players {
 			get { return players; }
 		}

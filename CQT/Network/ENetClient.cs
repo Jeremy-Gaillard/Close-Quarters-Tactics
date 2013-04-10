@@ -11,6 +11,7 @@ using ENet;
 
 using CQT.Engine;
 using CQT.Model;
+using CQT.Command;
 
 namespace CQT.Network
 {
@@ -98,6 +99,9 @@ namespace CQT.Network
                     break;
                 case NetFrame.FrameType.positions:
                     engine.UpdatePosition((Positions)frame.content);
+                    break;
+                case NetFrame.FrameType.shootCommandPlayer:
+                    engine.AddShoot((LightShootPlayer)frame.content);
                     break;
             }
 
