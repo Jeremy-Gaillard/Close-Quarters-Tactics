@@ -12,6 +12,11 @@ namespace CQT.Model
 		protected Character owner;
 		protected WeaponInfo info;
 		protected int lastShotTime; // milliseconds
+		protected uint ammoLeft;
+		
+		public bool Full {
+			get {return (ammoLeft==info.magSize); }
+		}
 
 		public Weapon (WeaponInfo.Type _type)
 			: base(null, new Vector2(1,1)) // TODO: get real values
@@ -19,6 +24,7 @@ namespace CQT.Model
 			owner = null;
 			info = Constants.Instance.getWeaponInfo(_type);
 			lastShotTime = 0;
+			ammoLeft = info.magSize;
 		}
 
 		public override Vector2 getPosition()
@@ -26,6 +32,10 @@ namespace CQT.Model
 			return (owner!=null) ? owner.getPosition() : position;
 		}
 
+		public WeaponInfo getInfo() {
+			return info;
+		}
+		
 		/// <summary>
 		/// Assigns this weapon to a character
 		/// <param name="c">The character to set as owner</param>
@@ -49,14 +59,11 @@ namespace CQT.Model
 
 		// currentTime = milliseconds
 		public bool canShoot(float rotBonus, int currentTime) {
-			// TODO
-			// - check ROT
-			// - check ammo in magazine
 
 			float msPerShot = 60000 / (rotBonus * info.ROT);
 			int nextShot = lastShotTime + (int)msPerShot;
 
-			if (nextShot <= currentTime) {
+			if (nextShot <= currentTime && ammoLeft > 0) {
 				lastShotTime = currentTime;
 				return true;
 			}
@@ -166,6 +173,15 @@ namespace CQT.Model
             {
                 environment.addBulletTrail(traj);
             }
+			
+			ammoLeft--;
+		}
+		
+		public void reload() {
+			// TODO: manage ammo packs (new Item ? in some List<Item> Character.equipment? ...)
+			if (!Full) {
+				ammoLeft = info.magSize;
+			}
 		}
 	}
 }

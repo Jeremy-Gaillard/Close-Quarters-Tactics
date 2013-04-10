@@ -38,6 +38,15 @@ namespace CQT.Model
 			Right,
 			UpRight
 		}
+		public enum State
+		{
+			Standing,
+			Reloading,
+			Dead
+		}
+		protected State currentState;
+		protected int timeInState;
+		
 		protected CharacterInfo info;
 
 		protected List<Weapon> weapons;
@@ -45,7 +54,7 @@ namespace CQT.Model
 
 		protected uint hitPoints;
 		public bool isAlive {
-			get { return (hitPoints > 0); }
+			get { return (currentState!=State.Dead); }
 		}
 
         public readonly Body body;
@@ -72,6 +81,7 @@ namespace CQT.Model
 
 		public void initCharacter ()
 		{
+			setState(State.Standing);
 			hitPoints = info.maxHP;
 			equipDefaultWeapons ();
 		}
@@ -87,7 +97,7 @@ namespace CQT.Model
 			weapons = new List<Weapon> ();
 
             //Weapon aGun = new Weapon (WeaponInfo.Type.Gun);
-            Weapon aGun = new Weapon(WeaponInfo.Type.Assault);
+            Weapon aGun = new Weapon(WeaponInfo.Type.Shotgun);
 
 			pickUp (aGun);
 			switchTo (aGun);
@@ -112,6 +122,14 @@ namespace CQT.Model
 
 		}
 
+		public void reload()
+		{
+			if (currentWeapon!=null && !currentWeapon.Full) {
+				currentWeapon.reload();
+				setState(State.Reloading);
+			}
+		}
+		
 		/// <summary>
 		/// Makes this character equip the weapon he's told.
 		/// </summary>
@@ -157,10 +175,14 @@ namespace CQT.Model
 			}
 		}
 
+		public bool canShoot() {
+			return (isAlive && (currentState!=State.Reloading));
+		}		
+		
 		// END (WEAPON MANAGEMENT)
 
-//		public void Update (GameTime gameTime, List<Player.Commands> commands)
-//		{
+		public void Update (GameTime gameTime)
+		{
 //			if (commands.Contains (Player.Commands.MoveDown)) {
 //				if (commands.Contains (Player.Commands.MoveLeft)) {
 //					move (gameTime, MovementDirection.DownLeft);
@@ -182,10 +204,28 @@ namespace CQT.Model
 //			} else if (commands.Contains (Player.Commands.MoveRight)) {
 //				move (gameTime, MovementDirection.Right);
 //			}
-//
-//		}
+			timeInState+= gameTime.ElapsedGameTime.Milliseconds;
+			
+			switch (currentState) {
+			case State.Standing: break;
+			case State.Dead: break;
 
-		public void move (int milliseconds, MovementDirection direction) // TODO rm useless param "millisecond"
+			case State.Reloading:
+				float baseReloadTime = (currentWeapon==null ? 0 : currentWeapon.getInfo().reloadTime);
+				int reloadTime = 1000*(int)(baseReloadTime / info.reloadSpeed);
+//				Console.WriteLine("baseReloadTime:" + baseReloadTime + " --- reloadSpeed: "+info.reloadSpeed);
+//				Console.WriteLine("time in state: "+timeInState+" --- reloadTime: "+reloadTime);
+				if (timeInState > (reloadTime)) {
+					setState(State.Standing); // TODO: when we'll have 1 state/command, change this (ie with moving, ...)
+				}
+		
+				break;
+			
+			default: break;
+			}
+		}
+
+		public void move (MovementDirection direction) // TODO rm useless param "millisecond"
 		{
 			//Console.Out.WriteLine("moving ! " + direction.ToString() );
 			Vector2 movement;
@@ -239,6 +279,7 @@ namespace CQT.Model
 			if (damage >= hitPoints) {
 				hitPoints = 0;
 				Console.WriteLine("Blerg!");
+				setState(State.Dead);
 			}
 			else {
 				hitPoints-= damage;
@@ -256,6 +297,13 @@ namespace CQT.Model
 		}
 		public CharacterInfo getInfo() {
 			return info;
+		}
+		
+		public void setState(State s) {
+			// could have used property setter, but what would be the name of the property... ? setter is just as good
+			Console.WriteLine("old state: "+currentState.ToString()+" --- new state: "+s.ToString());
+			currentState = s;
+			timeInState = 0;
 		}
 	}
 }

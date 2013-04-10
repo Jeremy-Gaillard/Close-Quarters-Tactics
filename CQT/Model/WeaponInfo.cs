@@ -19,6 +19,7 @@ namespace CQT.Model
 		public readonly float ROT; // Rate Of Fire, in rounds per minute
 		public readonly uint magSize; //TODO: implement
 		public readonly float imprecision; // radians
+		public readonly float reloadTime;
 
 		public WeaponInfo(XElement weapon)
 		{
@@ -27,6 +28,7 @@ namespace CQT.Model
 			ROT = (float)weapon.Attribute("rot");
 			magSize = (uint)weapon.Attribute("magsize");
 			imprecision = (float)(Math.PI / (float)weapon.Attribute("imprecision"));
+			reloadTime = (float)weapon.Attribute("reloadtime");
 
 //			Console.WriteLine("name is "+name);
 //			Console.WriteLine("damage is "+damage);

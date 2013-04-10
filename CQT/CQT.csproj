@@ -97,6 +97,7 @@
       <DependentUpon>MainMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Constants.cs" />
+    <Compile Include="Command\Reload.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">

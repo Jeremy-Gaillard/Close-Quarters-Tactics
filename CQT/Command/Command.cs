@@ -8,7 +8,8 @@ namespace CQT.Command
 		{
 			None,
 			Move,
-			Shoot
+			Shoot,
+			Reload
 		}
 
         public readonly Type type;

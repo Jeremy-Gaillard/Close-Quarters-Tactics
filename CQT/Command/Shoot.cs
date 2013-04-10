@@ -41,7 +41,7 @@ namespace CQT.Command
 		public override void execute ()
 		{
 			if (shooter.isAlive){
-				shooter.shoot (time);
+				shooter.shoot(time);
 			}
 		}
 	}

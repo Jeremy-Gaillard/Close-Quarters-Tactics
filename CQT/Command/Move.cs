@@ -7,20 +7,20 @@ namespace CQT.Command
 	{
 		protected Character charToMove;
 		protected Character.MovementDirection direction;
-		protected int milliseconds;
+//		protected int milliseconds;
 
-        public Move(Character.MovementDirection _direction, Character _charToMove, int _milliseconds)
+        public Move(Character.MovementDirection _direction, Character _charToMove)
             : base(Type.Move)
 		{
 			direction = _direction;
 			charToMove = _charToMove;
-			milliseconds = _milliseconds;
+//			milliseconds = _milliseconds;
 		}
 
 		public override void execute ()
 		{
 			if ( charToMove.isAlive ) {
-				charToMove.move (milliseconds, direction);
+				charToMove.move (direction);
 			}
 		}
 	}

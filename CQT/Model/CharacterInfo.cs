@@ -17,6 +17,7 @@ namespace CQT.Model
 		public readonly float speedBonus;
 		public readonly float damageBonus;
 		public readonly float ROTBonus;
+		public readonly float reloadSpeed;
 		
 		public CharacterInfo(XElement character)
 		{
@@ -25,6 +26,7 @@ namespace CQT.Model
 			speedBonus = 0.5f*(float)character.Attribute("speedbonus");
 			damageBonus = (float)character.Attribute("dmgbonus");
 			ROTBonus = (float)character.Attribute("rotbonus");
+			reloadSpeed = (float)character.Attribute("reloadspeed");
 			
 			type = (CharacterInfo.Type)Enum.Parse(typeof(CharacterInfo.Type),
 			                                      (String)character.Attribute("type"));

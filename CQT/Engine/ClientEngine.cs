@@ -45,17 +45,30 @@ namespace CQT.Engine
         {
             elapsedTime += gameTime.ElapsedGameTime.Milliseconds;
 
-            foreach (Command.Command c in commands)
-            {
-                c.execute();
-            }
+			try {
+	            foreach (Command.Command c in commands)
+	            {
+	                c.execute();
+	            }
+			}
+			catch (System.InvalidOperationException e) {
+				Console.WriteLine("Well, ain't that something!\n"+e.StackTrace);
+			}	
+			
             if (elapsedTime > POSITIONREFRESHTIME)
             {
                 sendPosition();
                 elapsedTime = 0;
             }
             commands.Clear();
-        }
+
+			foreach (Player p in GameEnvironment.Instance.Players) {
+				foreach (Character c in p.getCharacters()) {
+					c.Update(gameTime);
+				}
+			}
+		}
+
 
         private void sendPosition()
         {

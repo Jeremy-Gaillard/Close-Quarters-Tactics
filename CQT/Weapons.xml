@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 	ROT = Rate Of Fire, given in RPM (round per minute)
-	Imprecision = fraction of radians (eg for shotgun: imprecision = pi/10 radians)-->
+	Imprecision = fraction of radians (eg for shotgun: imprecision = pi/10 radians)
+	Reload Time : in seconds
+-->
 <weaponlist>
 	<weapon
 		type="Default"		
@@ -9,26 +11,30 @@
 		damage="1"
 		rot="0.017"
 		magsize="1"
-		imprecision="1" />
+		imprecision="1"
+		reloadtime="1" />
 	<weapon
 		type="Assault"
 		name="Assault rifle"
 		damage="10"
 		rot="700"
 		magsize="100"
-		imprecision="40" />
+		imprecision="40"
+		reloadtime="3" />
 	<weapon
 		type="Gun"		
 		name="Gun"
 		damage="10"
 		rot="100"
 		magsize="20"
-		imprecision="20" />
+		imprecision="20"
+		reloadtime="1" />
 	<weapon
 		type="Shotgun"		
 		name="Shotgun"
 		damage="50"
-		rot="30"
-		magsize="10"
-		imprecision="10" />
+		rot="60"
+		magsize="8"
+		imprecision="10"
+		reloadtime="5" />
 </weaponlist>
