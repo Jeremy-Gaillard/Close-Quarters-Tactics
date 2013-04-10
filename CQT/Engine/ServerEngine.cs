@@ -38,6 +38,7 @@ namespace CQT.Engine
 
             // Environment initialization
             XMLReader xmlTest = new XMLReader("../../../map.xml");
+			Constants.Instance.init();
 
             Map map = new Map(xmlTest.upperLeft, xmlTest.lowerRight, xmlTest.listObstacle, xmlTest.listWall);
             Player player = new Player("Champ");
@@ -148,7 +149,7 @@ namespace CQT.Engine
 
         internal void AddShoot(Player player, LightShoot lightShoot)
         {
-            Shoot shoot = new Shoot(Command.Command.Type.Shoot, player.getCharacter(), lightShoot.time);
+            Shoot shoot = new Shoot(player.getCharacter(), lightShoot.time);
             commands.Add(shoot);
             int index = GameEnvironment.Instance.Players.Count-1; 
             foreach ( Player p in GameEnvironment.Instance.Players )

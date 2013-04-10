@@ -31,8 +31,8 @@ namespace CQT.Command
 		protected Character shooter;
 		public readonly int time;
 
-		public Shoot(Type _type, Character _shooter, int _time)
-			: base(_type)
+		public Shoot(Character _shooter, int _time)
+            :base(Type.Shoot)
 		{
 			shooter = _shooter;
 			time = _time;
@@ -40,7 +40,9 @@ namespace CQT.Command
 
 		public override void execute ()
 		{
-			shooter.shoot (time);
+			if (shooter.isAlive){
+				shooter.shoot (time);
+			}
 		}
 	}
 }

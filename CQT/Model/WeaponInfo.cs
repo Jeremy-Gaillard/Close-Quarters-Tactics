@@ -1,81 +1,44 @@
 using System;
+using System.Xml.Linq;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace CQT.Model
 {
-	public static class WeaponInfo
+	public class WeaponInfo
 	{
-		public enum Type
-		{
-			None,
+		public enum Type {
+			Default,
 			Gun,
-			Shotgun,
-			Assault
-		}
-		public static uint getDamage (Type t)
+			Assault,
+			Shotgun
+		}	
+		public readonly WeaponInfo.Type type;
+		public readonly String name;
+		public readonly uint damage;
+		public readonly float ROT; // Rate Of Fire, in rounds per minute
+		public readonly uint magSize; //TODO: implement
+		public readonly float imprecision; // radians
+
+		public WeaponInfo(XElement weapon)
 		{
-			switch (t) {
-			case Type.Assault:
-				return 10;
-			case Type.Gun:
-				return 10;
-			case Type.Shotgun:
-				return 50;
-			default:
-				return 1;
-			}
-		}
-        public static float getImprecision(Type t) // in radians
-        {
-            switch (t)
-            {
-                case Type.Assault:
-                    return (float)Math.PI/40f;
-                case Type.Gun:
-                    return (float)Math.PI / 20f;
-                case Type.Shotgun:
-                    return (float)Math.PI / 10f;
-                default:
-                    return 1;
-            }
-        }
-		public static float getROT (Type t) // RPM
-		{
-			switch (t) {
-			case Type.Assault:
-				return 500;
-			case Type.Gun:
-				return 100;
-			case Type.Shotgun:
-				return 30;
-			default:
-				return 1/60;
-			}
-		}
-		public static string getName (Type t)
-		{
-			switch (t) {
-			case Type.Assault:
-				return "Assault rifle";
-			case Type.Gun:
-				return "Gun";
-			case Type.Shotgun:
-				return "Shotgun";
-			default:
-				return "Pea shooter";
-			}
-		}
-		public static uint getMagSize(Type t)
-		{
-			switch (t) {
-			case Type.Assault:
-				return 100;
-			case Type.Gun:
-				return 20;
-			case Type.Shotgun:
-				return 10;
-			default:
-				return 1;
-			}
+			name = (String)weapon.Attribute("name");
+			damage = (uint)weapon.Attribute("damage");
+			ROT = (float)weapon.Attribute("rot");
+			magSize = (uint)weapon.Attribute("magsize");
+			imprecision = (float)(Math.PI / (float)weapon.Attribute("imprecision"));
+
+//			Console.WriteLine("name is "+name);
+//			Console.WriteLine("damage is "+damage);
+//			Console.WriteLine("rot is "+ROT);
+//			Console.WriteLine("magsize is "+magSize);
+//			Console.WriteLine("imprecision is "+imprecision);
+//			
+//			Console.WriteLine("type in XML is "+weapon.Attribute("type"));
+			
+			type = (WeaponInfo.Type)Enum.Parse(typeof(WeaponInfo.Type), (String)weapon.Attribute("type"));
+			
+//			Console.WriteLine("type in enum became: "+type);
 		}
 	}
 }

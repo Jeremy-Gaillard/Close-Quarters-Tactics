@@ -30,6 +30,7 @@ namespace CQT.Engine
 
         public ClientEngine(IPEndPoint server/*player info*/)
         {
+			Constants.Instance.init();
             elapsedTime = 0;
             commands = new List<Command.Command>();
             communication = new ENetClient(this);
@@ -150,7 +151,7 @@ namespace CQT.Engine
         internal void AddShoot(LightShootPlayer lightShootPlayer)
         {
             Player p = GameEnvironment.Instance.Players.ElementAt(lightShootPlayer.playerIndex);
-            Shoot shoot = new Shoot(Command.Command.Type.Shoot, p.getCharacter(), lightShootPlayer.time);
+            Shoot shoot = new Shoot(p.getCharacter(), lightShootPlayer.time);
             commands.Add(shoot);
         }
     }

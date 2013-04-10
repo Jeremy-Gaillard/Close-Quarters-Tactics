@@ -127,7 +127,8 @@ namespace CQT.Engine
             spriteBatch.Begin(); // TODO rm useless?
 
             //graphicDevice.Clear(Color.CornflowerBlue);
-            graphicDevice.Clear(Color.Black);
+            //graphicDevice.Clear(Color.Black);
+            graphicDevice.Clear(Color.DarkGray);
 
             // Drawing vision cone
             Vision vision = VisionView.Draw(this, spriteBatch, graphics, cameraPosition, new CQT.Model.Point(followedCharacter.body.position), followedCharacter.getRotation(), map.getVisionBlockingLines());
