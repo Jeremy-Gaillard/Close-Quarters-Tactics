@@ -159,6 +159,18 @@ namespace CQT.Model
 			return false;
 		}
 
+        public bool drop()
+        {
+            if (currentWeapon != null)
+            {
+                currentWeapon.drop();
+                weapons.Remove(currentWeapon);
+                currentWeapon = null;
+                return true;
+            }
+            return false;
+        }
+
         //Random rand = new Random();
 		public void shoot (int now) {
             if (currentWeapon != null && currentWeapon.canShoot(info.ROTBonus, now))
@@ -279,6 +291,7 @@ namespace CQT.Model
 			if (damage >= hitPoints) {
 				hitPoints = 0;
 				Console.WriteLine("Blerg!");
+                textureName = "dead";   // TODO : change this asap
 				setState(State.Dead);
 			}
 			else {
