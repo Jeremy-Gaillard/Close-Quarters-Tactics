@@ -16,7 +16,6 @@ namespace CQT.View
         public MainMenu()
         {
             InitializeComponent();
-            System.Console.Write("Hello world");
         }
 
         [STAThread]
@@ -27,7 +26,7 @@ namespace CQT.View
 
         private void Form_Load(object sender, EventArgs e)
         {
-            System.Console.Write("Hello world");
+
         }
 
         private void bStart_Click(object sender, EventArgs e)
