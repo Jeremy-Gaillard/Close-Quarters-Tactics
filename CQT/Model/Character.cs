@@ -279,6 +279,7 @@ namespace CQT.Model
 			if (damage >= hitPoints) {
 				hitPoints = 0;
 				Console.WriteLine("Blerg!");
+                textureName = "dead";   // TODO : change this asap
 				setState(State.Dead);
 			}
 			else {
