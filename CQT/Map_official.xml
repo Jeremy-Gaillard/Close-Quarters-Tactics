@@ -43,42 +43,42 @@
 			<point x="1000" y="-1000"/>
 			<point x="1000" y="1000"/>
 			<point x="-1000" y="1000"/>
-			<point x="-1000" y="-995"/>
+			<point x="-1000" y="-985"/>
 		</wall>
 		<!--Lower left part-->
 		<wall thickness="25">
-			<point x="-1000" y="700"/>
+			<point x="-985" y="700"/>
 			<point x="-600" y="700"/>
 		</wall>
 		<wall thickness="25">
-			<point x="-600" y="1000"/>
+			<point x="-600" y="985"/>
 			<point x="-600" y="850"/>
 		</wall>	
 		<!--Upper left part-->
 		<wall thickness="25">
-			<point x="-600" y="-1000"/>
+			<point x="-600" y="-985"/>
 			<point x="-600" y="-750"/>
 		</wall>
 		<wall thickness="25">
-			<point x="-1000" y="-600"/>
+			<point x="-985" y="-600"/>
 			<point x="-600" y="-600"/>			
 		</wall>
 		<!--Upper Right part-->
 		<wall thickness="25">
-			<point x="600" y="-1000"/>
+			<point x="600" y="-985"/>
 			<point x="600" y="-750"/>			
 		</wall>
 		<wall thickness="25">
-			<point x="1000" y="-600"/>
+			<point x="985" y="-600"/>
 			<point x="600" y="-600"/>			
 		</wall>	
 		<!--Lower Right part-->
 		<wall thickness="25">
-			<point x="600" y="1000"/>
+			<point x="600" y="985"/>
 			<point x="600" y="750"/>			
 		</wall>	
 		<wall thickness="25">
-			<point x="1000" y="750"/>
+			<point x="985" y="750"/>
 			<point x="750" y="750"/>			
 		</wall>		
 		<wall thickness="25">

@@ -5,7 +5,7 @@
 	<character
 		type="Default"		
 		name="Redshirt"
-		maxhp="100"
+		maxhp="200"
 		speedbonus="1"
 		dmgbonus="1"
 		rotbonus="1"
@@ -13,7 +13,7 @@
 	<character
 		type="Commando"
 		name="Commando"
-		maxhp="100"
+		maxhp="200"
 		speedbonus="1.15"
 		dmgbonus="1"
 		rotbonus="1.2"
@@ -21,7 +21,7 @@
 	<character
 		type="Support"		
 		name="Support Specialist"
-		maxhp="125"
+		maxhp="400"
 		speedbonus="0.75"
 		dmgbonus="1.1"
 		rotbonus="1"
@@ -29,7 +29,7 @@
 	<character
 		type="Medic"		
 		name="Medic"
-		maxhp="75"
+		maxhp="150"
 		speedbonus="1"
 		dmgbonus="0.9"
 		rotbonus="0.9"
