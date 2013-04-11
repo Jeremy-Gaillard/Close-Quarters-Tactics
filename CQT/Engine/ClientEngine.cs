@@ -101,10 +101,10 @@ namespace CQT.Engine
 
             //Character character = new Character("patate", pengine, new Vector2(150, 300), new Vector2(50, 50));
             Character character = new Character("swattds", pengine, new Vector2(150, 300), new Vector2(75, 75), 55);
-            character.drop();
+            /*character.drop();
             Weapon sg = new Weapon(WeaponInfo.Type.Shotgun);
             character.pickUp(sg);
-            character.switchTo(sg); // TODO : remove
+            character.switchTo(sg); // TODO : remove*/
             local.addCharacter(character);
 
             foreach (LightPlayer lp in env.players)

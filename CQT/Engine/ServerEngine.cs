@@ -145,10 +145,10 @@ namespace CQT.Engine
             Player p = new Player(lp.name);
             Character c = new Character(lp.character.textureName, pengine, lp.character.position, lp.character.size, lp.character.size.X);
             p.addCharacter(c);
-            c.drop();
+            /*c.drop();
             Weapon sg = new Weapon(WeaponInfo.Type.Shotgun);
             c.pickUp(sg);
-            c.switchTo(sg); // TODO : remove
+            c.switchTo(sg); // TODO : remove*/
             GameEnvironment.Instance.AddPlayer(p);
             return p;
         }
