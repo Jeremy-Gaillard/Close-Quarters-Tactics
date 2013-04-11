@@ -18,7 +18,7 @@ namespace CQT.Engine
 {
     public class ClientEngine : GameEngine
     {
-        protected const int POSITIONREFRESHTIME = 50;
+        protected const int POSITIONREFRESHTIME = 0;
 
         protected ENetClient communication;
         protected int elapsedTime;
@@ -30,6 +30,7 @@ namespace CQT.Engine
 
         public ClientEngine(IPEndPoint server/*player info*/)
         {
+			Constants.Instance.init();
             elapsedTime = 0;
             commands = new List<Command.Command>();
             communication = new ENetClient(this);
@@ -44,17 +45,30 @@ namespace CQT.Engine
         {
             elapsedTime += gameTime.ElapsedGameTime.Milliseconds;
 
-            foreach (Command.Command c in commands)
-            {
-                //communication.SendReliable(c.Serialize());
-            }
+			try {
+	            foreach (Command.Command c in commands)
+	            {
+	                c.execute();
+	            }
+			}
+			catch (System.InvalidOperationException e) {
+				Console.WriteLine("Well, ain't that something!\n"+e.StackTrace);
+			}	
+			
             if (elapsedTime > POSITIONREFRESHTIME)
             {
                 sendPosition();
                 elapsedTime = 0;
             }
             commands.Clear();
-        }
+
+			foreach (Player p in GameEnvironment.Instance.Players) {
+				foreach (Character c in p.getCharacters()) {
+					c.Update(gameTime);
+				}
+			}
+		}
+
 
         private void sendPosition()
         {
@@ -66,6 +80,14 @@ namespace CQT.Engine
         public void AddCommand(Command.Command command)
         {
             commands.Add(command);
+
+            switch (command.type)
+            {
+                case Command.Command.Type.Shoot:
+                    LightShoot lightCommand = new LightShoot((Shoot)command);
+                    communication.SendReliable(lightCommand, NetFrame.FrameType.shootCommand);
+                    break;
+            }
         }
 
         public void setEnvironment(LightEnvironment env)
@@ -77,13 +99,15 @@ namespace CQT.Engine
             
             pengine = new PhysicsEngine(environment.Map);
 
-            Character character = new Character("patate", pengine, new Vector2(150, 300), new Vector2(50, 50));
+            //Character character = new Character("patate", pengine, new Vector2(150, 300), new Vector2(50, 50));
+            Character character = new Character("swattds", pengine, new Vector2(150, 300), new Vector2(75, 75), 55);
+
             local.addCharacter(character);
 
             foreach (LightPlayer lp in env.players)
             {
                 Player p = new Player(lp.name);
-                Character c = new Character(lp.character.textureName, pengine, lp.character.position, lp.character.size);
+                Character c = new Character(lp.character.textureName, pengine, lp.character.position, lp.character.size, lp.character.size.X);
                 p.addCharacter(c);
                 environment.AddPlayer(p);
             }
@@ -137,6 +161,13 @@ namespace CQT.Engine
                 }
                 i++;
             }
+        }
+
+        internal void AddShoot(LightShootPlayer lightShootPlayer)
+        {
+            Player p = GameEnvironment.Instance.Players.ElementAt(lightShootPlayer.playerIndex);
+            Shoot shoot = new Shoot(p.getCharacter(), lightShootPlayer.time);
+            commands.Add(shoot);
         }
     }
 }

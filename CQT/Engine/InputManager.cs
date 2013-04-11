@@ -68,31 +68,39 @@ namespace CQT.Engine
 
 			Character.MovementDirection d = Character.MovementDirection.None;
 
-			if (cks.IsKeyDown (Keys.Z)) {
-				if (! cks.IsKeyDown (Keys.S)) {
-					if (cks.IsKeyDown (Keys.Q) ^ cks.IsKeyDown (Keys.D)) {
-						d = (cks.IsKeyDown (Keys.Q) ? Character.MovementDirection.UpLeft : Character.MovementDirection.UpRight);
-					} else {
-						d = Character.MovementDirection.Up;
+			if (currentChar.isAlive) {
+				if (cks.IsKeyDown (Keys.Z)) {
+					if (! cks.IsKeyDown (Keys.S)) {
+						if (cks.IsKeyDown (Keys.Q) ^ cks.IsKeyDown (Keys.D)) {
+							d = (cks.IsKeyDown (Keys.Q) ? Character.MovementDirection.UpLeft : Character.MovementDirection.UpRight);
+						} else {
+							d = Character.MovementDirection.Up;
+						}
 					}
+				} else if (cks.IsKeyDown (Keys.S)) {
+					if (cks.IsKeyDown (Keys.Q) ^ cks.IsKeyDown (Keys.D)) {
+						d = (cks.IsKeyDown (Keys.Q) ? Character.MovementDirection.DownLeft : Character.MovementDirection.DownRight);
+					} else {
+						d = Character.MovementDirection.Down;
+					}
+				} else if (cks.IsKeyDown (Keys.Q) ^ cks.IsKeyDown (Keys.D)) {
+					d = (cks.IsKeyDown (Keys.Q) ? Character.MovementDirection.Left : Character.MovementDirection.Right);
 				}
-			} else if (cks.IsKeyDown (Keys.S)) {
-				if (cks.IsKeyDown (Keys.Q) ^ cks.IsKeyDown (Keys.D)) {
-					d = (cks.IsKeyDown (Keys.Q) ? Character.MovementDirection.DownLeft : Character.MovementDirection.DownRight);
-				} else {
-					d = Character.MovementDirection.Down;
+	
+				if (d != Character.MovementDirection.None) {
+					commands.Add (new Command.Move (d, currentChar));
 				}
-			} else if (cks.IsKeyDown (Keys.Q) ^ cks.IsKeyDown (Keys.D)) {
-				d = (cks.IsKeyDown (Keys.Q) ? Character.MovementDirection.Left : Character.MovementDirection.Right);
+	
+				if (currentMouseState.LeftButton == ButtonState.Pressed) {
+					if (currentChar.canShoot()){
+						commands.Add (new Command.Shoot(currentChar, (int)gameTime.TotalGameTime.TotalMilliseconds));
+					}					
+				}
+	
+				if (cks.IsKeyDown(Keys.R)) {
+					commands.Add(new Command.Reload(currentChar));
+				}
 			}
-
-			if (d != Character.MovementDirection.None) {
-				commands.Add (new Command.Move (Command.Command.Type.Move, d, currentChar, gameTime.ElapsedGameTime.Milliseconds));
-			}
-			if (currentMouseState.LeftButton == ButtonState.Pressed) {
-				commands.Add (new Command.Shoot(Command.Command.Type.Shoot, currentChar, (int)gameTime.TotalGameTime.TotalMilliseconds));
-			}
-
 			return commands;
 		}
 

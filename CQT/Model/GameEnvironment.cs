@@ -7,6 +7,7 @@ using System.Threading;
 using System.Media;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
+using CQT.Model.Geometry;
 
 namespace CQT.Model
 {
@@ -30,6 +31,8 @@ namespace CQT.Model
     {
         public readonly List<Point> bulletSparks = new List<Point>();
         public readonly List<Line> bulletTrails = new List<Line>();
+        public readonly List<Polyline> bloodStains = new List<Polyline>();
+
         //SoundPlayer gun_sound = new SoundPlayer("../../../sound/wpnfire_g43_plyr_blnc2.wav");
         SoundPlayer[] gunSoundChannels = new SoundPlayer[] {
             new SoundPlayer("../../../sound/cx_fire.wav"),
@@ -50,7 +53,7 @@ namespace CQT.Model
 		public Player LocalPlayer {
 			get { return localPlayer; }
 		}
-		protected ConcurrentBag<Player> players;
+		protected ConcurrentBag<Player> players;    // TODO : bag is bad (unordered), change it
 		public ConcurrentBag<Player> Players {
 			get { return players; }
 		}

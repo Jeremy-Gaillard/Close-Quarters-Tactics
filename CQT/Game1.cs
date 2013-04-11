@@ -51,8 +51,10 @@ namespace CQT
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 600;
+            //graphics.PreferredBackBufferWidth = 600;//1024;
+            //graphics.PreferredBackBufferHeight = 480;//768;
+            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferHeight = 768;
             gengine = eng;
             while (!eng.ready)
             {
@@ -136,7 +138,7 @@ namespace CQT
             List<Command.Command> commands = inputManager.getCommands(gameTime);
             foreach (Command.Command c in commands)
             {
-                c.execute();
+                gengine.AddCommand(c);
             }
 
 

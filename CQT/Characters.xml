@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+-->
+<charlist>
+	<character
+		type="Default"		
+		name="Redshirt"
+		maxhp="100"
+		speedbonus="1"
+		dmgbonus="1"
+		rotbonus="1"
+		reloadspeed="1" />
+	<character
+		type="Commando"
+		name="Commando"
+		maxhp="100"
+		speedbonus="1.15"
+		dmgbonus="1"
+		rotbonus="1.2"
+		reloadspeed="1.2" />
+	<character
+		type="Support"		
+		name="Support Specialist"
+		maxhp="125"
+		speedbonus="0.75"
+		dmgbonus="1.1"
+		rotbonus="1"
+		reloadspeed="1" />
+	<character
+		type="Medic"		
+		name="Medic"
+		maxhp="75"
+		speedbonus="1"
+		dmgbonus="0.9"
+		rotbonus="0.9"
+		reloadspeed="0.8" />
+</charlist>

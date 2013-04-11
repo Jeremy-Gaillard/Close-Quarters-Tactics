@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 
 using CQT.Model;
 using CQT.Model.Physics;
+using CQT.Command;
 
 namespace CQT.Engine
 {
@@ -16,5 +17,6 @@ namespace CQT.Engine
         GameEnvironment getEnvironment();
         void Exit();
         PhysicsEngine getPhysicsEngine();
+        void AddCommand(Command.Command command);
     }
 }

@@ -38,41 +38,51 @@ namespace CQT.Model
 			Right,
 			UpRight
 		}
-		protected CharacterInfo.Type type;
+		public enum State
+		{
+			Standing,
+			Reloading,
+			Dead
+		}
+		protected State currentState;
+		protected int timeInState;
+		
+		protected CharacterInfo info;
 
 		protected List<Weapon> weapons;
 		protected Weapon currentWeapon;
 
 		protected uint hitPoints;
 		public bool isAlive {
-			get { return (hitPoints > 0); }
+			get { return (currentState!=State.Dead); }
 		}
 
         public readonly Body body;
 
-        public Character (String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+        public Character (String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size, float bodySize)
 			: base(_texture, _size)
 		{
-			type = CharacterInfo.Type.None;
+			info = Constants.Instance.getCharacterInfo(CharacterInfo.Type.Default);
             initCharacter();
             //body.setPosition(_position);
-            body = new Body(_size.X, _position); // TODO: size as a FLOAT instead?!
+            body = new Body(bodySize, _position); // TODO: size as a FLOAT instead?!
             engine.AddBody(body);
 		}
 
-		public Character (CharacterInfo.Type _type, String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size)
+		public Character (CharacterInfo.Type _type, String _texture, PhysicsEngine engine, Vector2 _position, Vector2 _size, float bodySize)
 			: base(_texture, _size)
 		{
-			type = _type;
+			info = Constants.Instance.getCharacterInfo(_type);
 			initCharacter ();
             //body.setPosition(_position);
-            body = new Body(_size.X, _position); // TODO: size as a FLOAT instead?!
+            body = new Body(bodySize, _position); // TODO: size as a FLOAT instead?!
             engine.AddBody(body);
 		}
 
 		public void initCharacter ()
 		{
-			hitPoints = CharacterInfo.getMaxHP (type);
+			setState(State.Standing);
+			hitPoints = info.maxHP;
 			equipDefaultWeapons ();
 		}
 
@@ -112,6 +122,14 @@ namespace CQT.Model
 
 		}
 
+		public void reload()
+		{
+			if (currentWeapon!=null && !currentWeapon.Full) {
+				currentWeapon.reload();
+				setState(State.Reloading);
+			}
+		}
+		
 		/// <summary>
 		/// Makes this character equip the weapon he's told.
 		/// </summary>
@@ -143,7 +161,7 @@ namespace CQT.Model
 
         //Random rand = new Random();
 		public void shoot (int now) {
-            if (currentWeapon != null && currentWeapon.canShoot(CharacterInfo.getROTBonus(type), now))
+            if (currentWeapon != null && currentWeapon.canShoot(info.ROTBonus, now))
             {
                 /*
                 float imprec = WeaponInfo.getImprecision(currentWeapon.GetType());
@@ -157,10 +175,14 @@ namespace CQT.Model
 			}
 		}
 
+		public bool canShoot() {
+			return (isAlive && (currentState!=State.Reloading));
+		}		
+		
 		// END (WEAPON MANAGEMENT)
 
-//		public void Update (GameTime gameTime, List<Player.Commands> commands)
-//		{
+		public void Update (GameTime gameTime)
+		{
 //			if (commands.Contains (Player.Commands.MoveDown)) {
 //				if (commands.Contains (Player.Commands.MoveLeft)) {
 //					move (gameTime, MovementDirection.DownLeft);
@@ -182,10 +204,28 @@ namespace CQT.Model
 //			} else if (commands.Contains (Player.Commands.MoveRight)) {
 //				move (gameTime, MovementDirection.Right);
 //			}
-//
-//		}
+			timeInState+= gameTime.ElapsedGameTime.Milliseconds;
+			
+			switch (currentState) {
+			case State.Standing: break;
+			case State.Dead: break;
 
-		public void move (int milliseconds, MovementDirection direction) // TODO rm useless param "millisecond"
+			case State.Reloading:
+				float baseReloadTime = (currentWeapon==null ? 0 : currentWeapon.getInfo().reloadTime);
+				int reloadTime = 1000*(int)(baseReloadTime / info.reloadSpeed);
+//				Console.WriteLine("baseReloadTime:" + baseReloadTime + " --- reloadSpeed: "+info.reloadSpeed);
+//				Console.WriteLine("time in state: "+timeInState+" --- reloadTime: "+reloadTime);
+				if (timeInState > (reloadTime)) {
+					setState(State.Standing); // TODO: when we'll have 1 state/command, change this (ie with moving, ...)
+				}
+		
+				break;
+			
+			default: break;
+			}
+		}
+
+		public void move (MovementDirection direction) // TODONE rm useless param "millisecond"
 		{
 			//Console.Out.WriteLine("moving ! " + direction.ToString() );
 			Vector2 movement;
@@ -232,14 +272,14 @@ namespace CQT.Model
 			///movement = movement * milliseconds * speed; // ce n'est pas à Character de faire ce genre de trucs (millisecond)
 			//Console.Out.WriteLine (movement);
 			///position += movement;
-            body.tryMove(movement * CharacterInfo.getSpeed(type));
+            body.tryMove(movement * info.speedBonus);
 		}
 
 		public void harm(uint damage) {
 			if (damage >= hitPoints) {
 				hitPoints = 0;
-				// TODO die properly
 				Console.WriteLine("Blerg!");
+				setState(State.Dead);
 			}
 			else {
 				hitPoints-= damage;
@@ -255,8 +295,15 @@ namespace CQT.Model
 		{
 			return (getSize().X)/2F; // TODO: is that actually correct?
 		}
-		public CharacterInfo.Type getCharType() {
-			return type;
+		public CharacterInfo getInfo() {
+			return info;
+		}
+		
+		public void setState(State s) {
+			// could have used property setter, but what would be the name of the property... ? setter is just as good
+			Console.WriteLine("old state: "+currentState.ToString()+" --- new state: "+s.ToString());
+			currentState = s;
+			timeInState = 0;
 		}
 	}
 }
