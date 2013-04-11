@@ -51,6 +51,12 @@ namespace CQT.Model.Map
                 foreach (Line l in w.polyline.lineList)
                     visionBlockingLines.Add(l);
 
+            ////////////////
+            foreach (Obstacle obs in listObstacle)
+                foreach (Line l in obs.polyline.lineList)
+                    visionBlockingLines.Add(l);
+            ////////////////
+            
         }
 
         /// <summary>
