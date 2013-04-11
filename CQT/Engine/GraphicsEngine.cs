@@ -141,7 +141,7 @@ namespace CQT.Engine
             }
 
             // Drawing map
-            if (map != null)
+            if (map != null && followedCharacter.isAlive)
             {
                 MapView.Draw(map, this);
             }
