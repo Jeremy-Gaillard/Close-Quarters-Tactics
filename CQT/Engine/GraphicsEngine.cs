@@ -382,7 +382,7 @@ namespace CQT.Engine
 
         private void AddPolygon(List<Adjacency> pointList, Color color)
         {
-            while (pointList.Count != 2)
+            while (pointList.Count > 2)
             {
                 Adjacency a = pointList[0];
                 List<Adjacency> insidePoints = new List<Adjacency>();
