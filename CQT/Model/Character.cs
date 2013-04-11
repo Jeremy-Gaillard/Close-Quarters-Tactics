@@ -305,5 +305,13 @@ namespace CQT.Model
 			currentState = s;
 			timeInState = 0;
 		}
+
+		public override void setRotation (float _rotation)
+		{
+			if (isAlive) {
+				base.setRotation (_rotation);
+			}
+		}
+	
 	}
 }
