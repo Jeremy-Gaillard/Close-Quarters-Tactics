@@ -26,7 +26,7 @@ namespace CQT.Model
 		}
 
 
-		public void setRotation (Single _rotation)
+		public virtual void setRotation (Single _rotation) // TODO: part of presentation quick-fix
 		{
 			rotation = _rotation;
 		}
