@@ -20,7 +20,7 @@
 		rot="700"
 		magsize="100"
 		imprecision="40"
-		reloadtime="3" />
+		reloadtime="1.75" />
 	<weapon
 		type="Gun"		
 		name="Gun"
@@ -28,7 +28,7 @@
 		rot="100"
 		magsize="20"
 		imprecision="20"
-		reloadtime="1" />
+		reloadtime="0.75" />
 	<weapon
 		type="Shotgun"		
 		name="Shotgun"
@@ -36,5 +36,5 @@
 		rot="60"
 		magsize="8"
 		imprecision="10"
-		reloadtime="5" />
+		reloadtime="3" />
 </weaponlist>
