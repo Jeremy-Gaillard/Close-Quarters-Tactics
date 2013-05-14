@@ -333,6 +333,7 @@ namespace CQT.Engine
         {
             Adjacency a1 = insidePoints[0];
             Adjacency a2 = pointList[0];
+            
             List<Adjacency> polygon1 = new List<Adjacency>();
             List<Adjacency> polygon2 = new List<Adjacency>();
 
@@ -342,12 +343,18 @@ namespace CQT.Engine
             {
                 if (firstPolygon)
                 {
-                    if (a != a1)
+                    if (a != insidePoints[0])
                     {
                         polygon1.Add(a);
+                        // running through the polygon
+                        a = a.adj2;
                     }
                     else
                     {
+                        // running through the polygon first to avoid the following modifications to the adjacencies
+                        // to mess up with the run
+                        a = a.adj2;
+
                         // copying the two scission points
                         Adjacency a1Copy = new Adjacency();
                         Adjacency a2Copy = new Adjacency();
@@ -372,9 +379,9 @@ namespace CQT.Engine
                 else
                 {
                     polygon2.Add(a);
+                    // running through the polygon
+                    a = a.adj2;
                 }
-                // running through the polygon
-                a = a.adj2;
             }
             AddPolygon(polygon1, color);
             AddPolygon(polygon2, color);            
