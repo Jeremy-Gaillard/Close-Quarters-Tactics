@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -23,7 +24,9 @@ namespace CQT.Engine
 
         protected ENetServer communication;
         protected int elapsedTime;
-        protected List<Command.Command> commands;
+        protected ConcurrentQueue<Player> newPlayers;
+        protected ConcurrentQueue<Command.Command> commands;
+        protected ConcurrentQueue<KeyValuePair<Player, Position>> updatedPositions;
         protected GameEnvironment environment;
         protected PhysicsEngine pengine;
 
@@ -31,7 +34,9 @@ namespace CQT.Engine
         {
             // Server creation
             elapsedTime = 0;
-            commands = new List<Command.Command>();
+            commands = new ConcurrentQueue<Command.Command>();
+            updatedPositions = new ConcurrentQueue<KeyValuePair<Player, Position>>();
+            newPlayers = new ConcurrentQueue<Player>();
             communication = new ENetServer(serverPort, maxClients, this);
             communication.Launch();
 
@@ -59,11 +64,36 @@ namespace CQT.Engine
         {
 			elapsedTime += gameTime.ElapsedGameTime.Milliseconds;
 			try {
-	            foreach (Command.Command c in commands)
-	            {
-	                c.execute();
-	                //communication.SendReliable(c.Serialize());
-	            }		
+                // Handling new players and other network-related events
+                while (!newPlayers.IsEmpty)
+                {
+                    Player p;
+                    if(newPlayers.TryDequeue(out p))
+                    {
+                        GameEnvironment.Instance.AddPlayer(p);
+                        }
+                }
+
+                // Updating state of environment
+                while (!updatedPositions.IsEmpty)
+                {
+                    KeyValuePair<Player, Position> playerPos;
+                    if (updatedPositions.TryDequeue(out playerPos))
+                    {
+                        Player player = playerPos.Key;
+                        Position position = playerPos.Value;
+                        player.getCharacter().body.setPosition(position.pos);
+                        player.getCharacter().setRotation(position.rot);
+                    }
+                }
+                while (!commands.IsEmpty)
+                {
+                    Command.Command c;
+                    if (commands.TryDequeue(out c))
+                    {
+                        c.execute();
+                    }
+                }
 			}
 			catch (System.InvalidOperationException e) {
 				Console.WriteLine("Well, ain't that something!\n"+e.StackTrace);
@@ -74,7 +104,6 @@ namespace CQT.Engine
                 sendPositions();
                 elapsedTime = 0;
             }
-            commands.Clear();
 
 			foreach (Player p in GameEnvironment.Instance.Players) {
 				foreach (Character c in p.getCharacters()) {
@@ -112,11 +141,11 @@ namespace CQT.Engine
 
         public void AddCommand(Command.Command command)
         {
-            commands.Add(command);
+            commands.Enqueue(command);
             switch (command.type)
             {
                 case Command.Command.Type.Shoot:
-                    LightShootPlayer lightCommand = new LightShootPlayer((Shoot)command, GameEnvironment.Instance.Players.Count-2); // On client, player max-1 = server
+                    LightShootPlayer lightCommand = new LightShootPlayer((Shoot)command, GameEnvironment.Instance.Players.Count-1); // On client, player max-1 = server
                     // TODO : change this ! (cf GameEnvironment)
                     // TODO : use broadcast ?
                     foreach (Player p in GameEnvironment.Instance.Players)
@@ -145,11 +174,7 @@ namespace CQT.Engine
             Player p = new Player(lp.name);
             Character c = new Character(lp.character.textureName, pengine, lp.character.position, lp.character.size, lp.character.size.X);
             p.addCharacter(c);
-            /*c.drop();
-            Weapon sg = new Weapon(WeaponInfo.Type.Shotgun);
-            c.pickUp(sg);
-            c.switchTo(sg); // TODO : remove*/
-            GameEnvironment.Instance.AddPlayer(p);
+            newPlayers.Enqueue(p);
             return p;
         }
 
@@ -160,25 +185,25 @@ namespace CQT.Engine
 
         internal void UpdatePosition(Player player, Position position)
         {
-            player.getCharacter().body.setPosition(position.pos);
-            player.getCharacter().setRotation(position.rot);
+            updatedPositions.Enqueue(new KeyValuePair<Player, Position>(player, position));
         }
 
         internal void AddShoot(Player player, LightShoot lightShoot)
         {
             Shoot shoot = new Shoot(player.getCharacter(), lightShoot.time);
-            commands.Add(shoot);
-            int index = GameEnvironment.Instance.Players.Count-1; 
+            commands.Enqueue(shoot);
+            int index = 0;//GameEnvironment.Instance.Players.Count-1; 
             foreach ( Player p in GameEnvironment.Instance.Players )
             {
                 if ( p==player )
                 {
                     break;
                 }
-                index--;
+                index++;
             }
             index--; // On server, player max = server | On client, player max = client, player max-1 = server
                 // TODO : change this ! (cf GameEnvironment)
+            Console.WriteLine(index);
             LightShootPlayer lsp = new LightShootPlayer(shoot, index);
             foreach (Player p in GameEnvironment.Instance.Players)
             {

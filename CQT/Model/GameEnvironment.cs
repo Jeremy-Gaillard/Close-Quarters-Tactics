@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Collections.Concurrent;
 using System.Threading;
 using System.Media;
 using Microsoft.Xna.Framework.Audio;
@@ -53,8 +52,8 @@ namespace CQT.Model
 		public Player LocalPlayer {
 			get { return localPlayer; }
 		}
-		protected ConcurrentBag<Player> players;    // TODO : bag is bad (unordered), change it
-		public ConcurrentBag<Player> Players {
+		protected List<Player> players;
+		public List<Player> Players {
 			get { return players; }
 		}
 
@@ -71,7 +70,7 @@ namespace CQT.Model
 
         public void init(Map.Map _map, Player _localPlayer)
         {
-            players = new ConcurrentBag<Player>();
+            players = new List<Player>();
             map = _map;
             localPlayer = _localPlayer;
 			players.Add(localPlayer);

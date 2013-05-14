@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Net;
@@ -22,7 +23,8 @@ namespace CQT.Engine
 
         protected ENetClient communication;
         protected int elapsedTime;
-        protected List<Command.Command> commands;
+        protected ConcurrentQueue<Command.Command> commands;
+        protected ConcurrentQueue<Positions> updatedPositions;
         protected GameEnvironment environment;
         protected PhysicsEngine pengine;
 
@@ -32,7 +34,8 @@ namespace CQT.Engine
         {
 			Constants.Instance.init();
             elapsedTime = 0;
-            commands = new List<Command.Command>();
+            commands = new ConcurrentQueue<Command.Command>();
+            updatedPositions = new ConcurrentQueue<Positions>();
             communication = new ENetClient(this);
             if (!communication.Connect(server))
             {
@@ -46,9 +49,21 @@ namespace CQT.Engine
             elapsedTime += gameTime.ElapsedGameTime.Milliseconds;
 
 			try {
-	            foreach (Command.Command c in commands)
+                while (!updatedPositions.IsEmpty)
+                {
+                    Positions playerPos;
+                    if (updatedPositions.TryDequeue(out playerPos))
+                    {
+                        applyPositionUpdate(playerPos);
+                    }
+                }
+                while( !commands.IsEmpty )
 	            {
-	                c.execute();
+                    Command.Command c;
+                    if (commands.TryDequeue(out c))
+                    {
+                        c.execute();
+                    }
 	            }
 			}
 			catch (System.InvalidOperationException e) {
@@ -60,7 +75,6 @@ namespace CQT.Engine
                 sendPosition();
                 elapsedTime = 0;
             }
-            commands.Clear();
 
 			foreach (Player p in GameEnvironment.Instance.Players) {
 				foreach (Character c in p.getCharacters()) {
@@ -79,7 +93,7 @@ namespace CQT.Engine
 
         public void AddCommand(Command.Command command)
         {
-            commands.Add(command);
+            commands.Enqueue(command);
 
             switch (command.type)
             {
@@ -101,10 +115,6 @@ namespace CQT.Engine
 
             //Character character = new Character("patate", pengine, new Vector2(150, 300), new Vector2(50, 50));
             Character character = new Character("swattds", pengine, new Vector2(150, 300), new Vector2(75, 75), 55);
-            /*character.drop();
-            Weapon sg = new Weapon(WeaponInfo.Type.Shotgun);
-            character.pickUp(sg);
-            character.switchTo(sg); // TODO : remove*/
             local.addCharacter(character);
 
             foreach (LightPlayer lp in env.players)
@@ -152,25 +162,31 @@ namespace CQT.Engine
             return pengine;
         }
 
-        internal void UpdatePosition(Positions positions)
+        protected void applyPositionUpdate(Positions positions)
         {
-            int i = 0;
-            foreach(Player p in GameEnvironment.Instance.Players)
+            // TODO : change this
+            int i = GameEnvironment.Instance.Players.Count-1;
+            foreach (Player p in GameEnvironment.Instance.Players)
             {
                 if (p != GameEnvironment.Instance.LocalPlayer)
                 {
                     p.getCharacter().body.position = positions.positions[i].pos;
                     p.getCharacter().setRotation(positions.positions[i].rot);
                 }
-                i++;
+                i--;
             }
+        }
+
+        internal void UpdatePosition(Positions positions)
+        {
+            updatedPositions.Enqueue(positions);
         }
 
         internal void AddShoot(LightShootPlayer lightShootPlayer)
         {
             Player p = GameEnvironment.Instance.Players.ElementAt(lightShootPlayer.playerIndex);
             Shoot shoot = new Shoot(p.getCharacter(), lightShootPlayer.time);
-            commands.Add(shoot);
+            commands.Enqueue(shoot);
         }
     }
 }
