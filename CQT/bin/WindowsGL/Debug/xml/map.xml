@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map name ="firstMap">
+	<frame>
+		<upperLeft x="-1000" y="-1000"/>
+		<lowerRight x="1000" y="1000"/>
+	</frame>
+	<object>
+		<obstacle height="5">
+			<point x="450" y="-190"/>
+			<point x="250" y="-235"/>
+			<point x="400" y="-60"/>
+		</obstacle>
+		
+		<!--Old triangle-->
+		<obstacle height="5">
+			<point x="550" y="-600"/>
+			<point x="550" y="-500"/>
+			<point x="250" y="-550"/>
+			<point x="200" y="-600"/>
+		</obstacle>
+		
+		<obstacle height="5">
+			<point x="-750" y="-400"/>
+			<point x="-450" y="-400"/>
+			<point x="-450" y="-200"/>
+			<point x="-750" y="-200"/>
+		</obstacle>	
+		
+		
+		<obstacle height="5">
+			<point x="450" y="100"/>
+			<point x="490" y="140"/>
+			<point x="530" y="180"/>
+			<point x="530" y="220"/>
+			<point x="490" y="260"/>
+			<point x="450" y="300"/>
+			<point x="410" y="260"/>
+			<point x="380" y="220"/>
+			<point x="410" y="180"/>
+			<point x="450" y="140"/>
+		</obstacle>
+		<!--Strange Obstacle
+		<obstacle height="5">
+			<point x="650" y="200"/>
+			<point x="670" y="120"/>
+			<point x="650" y="140"/>
+			<point x="650" y="160"/>
+			<point x="670" y="180"/>
+			<point x="650" y="200"/>
+			<point x="630" y="180"/>
+			<point x="610" y="160"/>
+			<point x="610" y="140"/>
+			<point x="630" y="220"/>
+		</obstacle>-->
+		
+		<!--Delimitation-->
+		<wall thickness="25">
+			<point x="-1000" y="-1000"/>
+			<point x="1000" y="-1000"/>
+			<point x="1000" y="1000"/>
+			<point x="-1000" y="1000"/>
+			<point x="-1000" y="-987"/>
+		</wall>
+		<!--Lower left part-->
+		<wall thickness="25">
+			<point x="-987" y="700"/>
+			<point x="-600" y="700"/>
+		</wall>
+		<wall thickness="25">
+			<point x="-600" y="987"/>
+			<point x="-600" y="850"/>
+		</wall>	
+		<!--Upper left part-->
+		<wall thickness="25">
+			<point x="-600" y="-987"/>
+			<point x="-600" y="-750"/>
+		</wall>
+		<wall thickness="25">
+			<point x="-987" y="-600"/>
+			<point x="-600" y="-600"/>			
+		</wall>
+		<!--Upper Right part-->
+		<wall thickness="25">
+			<point x="600" y="-987"/>
+			<point x="600" y="-750"/>			
+		</wall>
+		<wall thickness="25">
+			<point x="987" y="-600"/>
+			<point x="600" y="-600"/>			
+		</wall>	
+		<!--Lower Right part-->
+		<wall thickness="25">
+			<point x="600" y="987"/>
+			<point x="600" y="750"/>			
+		</wall>	
+		<wall thickness="25">
+			<point x="987" y="750"/>
+			<point x="750" y="750"/>			
+		</wall>		
+		<wall thickness="25">
+			<point x="-300" y="-500"/>
+			<point x="-300" y="600"/>			
+		</wall>	
+		<wall thickness="25">
+			<point x="700" y="-400"/>
+			<point x="700" y="600"/>			
+		</wall>	
+		
+		
+		<!--Middle-->
+		
+		
+		<wall thickness="15">
+			<point x="-100" y="-270"/>
+			<point x="80" y="-160"/>
+		</wall>
+		<wall thickness="10">
+			<point x="75" y="-120"/>
+			<point x="-150" y="-150"/>
+			<point x="0" y="100"/>
+		</wall>
+		
+		<obstacle height="5">
+			<point x="-100" y="100"/>
+			<point x="-95" y="200"/>
+			<point x="0" y="250"/>
+		</obstacle>
+		
+		
+	</object>
+</map>

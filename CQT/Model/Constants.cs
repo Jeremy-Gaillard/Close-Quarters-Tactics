@@ -6,8 +6,8 @@ namespace CQT.Model
 {
 	public class Constants
 	{
-		private String weaponFile = "../../../Weapons.xml";
-		private String charFile = "../../../Characters.xml";
+		private String weaponFile = "xml/Weapons.xml";
+        private String charFile = "xml/Characters.xml";
 		
 		private static Constants instance;
 		private Constants() {}

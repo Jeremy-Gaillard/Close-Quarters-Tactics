@@ -34,10 +34,10 @@ namespace CQT.Model
 
         //SoundPlayer gun_sound = new SoundPlayer("../../../sound/wpnfire_g43_plyr_blnc2.wav");
         SoundPlayer[] gunSoundChannels = new SoundPlayer[] {
-            new SoundPlayer("../../../sound/cx_fire.wav"),
-            new SoundPlayer("../../../sound/cx_fire.wav"),
-            new SoundPlayer("../../../sound/cx_fire.wav"),
-            new SoundPlayer("../../../sound/cx_fire.wav")
+            new SoundPlayer("sound/cx_fire.wav"),
+            new SoundPlayer("sound/cx_fire.wav"),
+            new SoundPlayer("sound/cx_fire.wav"),
+            new SoundPlayer("sound/cx_fire.wav")
         };
         int gunSoundCurrentIndex = 0;
         //SoundEffect soundEffect = Content.Load<SoundEffect>("../../../sound/wpnfire_g43_plyr_blnc2.wav");
